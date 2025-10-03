@@ -1,0 +1,33 @@
+name: Test and Build Workflow   # Nom du workflow
+
+# Déclencheurs
+on:
+  push:            # Lance le workflow quand on pousse du code
+  pull_request:    # Lance aussi quand quelqu’un ouvre une PR
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest   # Machine virtuelle Linux gratuite
+
+    steps:
+      # 1. Récupérer le code du dépôt
+      - name: Récupérer le code
+        uses: actions/checkout@v3
+
+      # 2. Installer Node.js
+      - name: Installer Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Installer les dépendances du projet
+      - name: Installer les dépendances
+        run: npm install
+
+      # 4. Lancer les tests automatiques
+      - name: Lancer les tests
+        run: npm test
+
+      # 5. Construire le projet (build)
+      - name: Construire le projet
+        run: npm run build
