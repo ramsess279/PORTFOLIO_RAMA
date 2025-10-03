@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 340 85% 25%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 340 85% 25%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 85% 25%;
+
+    --primary: 210 85% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --primary-light: 210 90% 70%;
+    --primary-glow: 210 100% 65%;
+
+    --secondary: 350 100% 88%;
+    --secondary-foreground: 340 85% 25%;
+
+    --muted: 0 0% 95%;
+    --muted-foreground: 340 30% 50%;
+
+    --accent: 210 85% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 340 20% 90%;
+    --input: 340 20% 90%;
+    --ring: 345 85% 55%;
+
+    --radius: 1rem;
+
+    --glass-bg: 0 0% 100% / 0.6;
+    --glass-border: 0 0% 100% / 0.2;
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Custom tokens */
+    --blue-glow: 210 85% 55%;
+    --gradient-primary: linear-gradient(135deg, hsl(210 85% 55%) 0%, hsl(214 80% 50%) 100%);
+    --gradient-accent: linear-gradient(90deg, hsl(210 85% 55% / 0.1) 0%, hsl(210 85% 55% / 0.05) 100%);
+  }
+
+  .dark {
+    --background: 340 50% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 340 40% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 340 40% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 345 85% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 40% 15%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 340 40% 15%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 210 85% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 340 40% 20%;
+    --input: 340 40% 20%;
+    --ring: 345 85% 55%;
+    
+    --glass-bg: 340 40% 8% / 0.6;
+    --glass-border: 0 0% 100% / 0.1;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hover-glow {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-glow:hover {
+    transform: translateY(-2px) scale(1.05);
+  }
+
+  .text-glow {
+    /* Removed shadow, using animation instead */
+  }
+
+
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+  
+  
+  /* Section Transition */
+  .section-transition {
+    animation: section-fade-in 0.6s ease-out;
+  }
+  
+  @keyframes section-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animations des flèches de navigation */
+  .animate-slide-left {
+    animation: slide-left 2s ease-in-out infinite;
+  }
+
+  .animate-slide-right {
+    animation: slide-right 2s ease-in-out infinite;
+  }
+
+  .animate-dust-trail-left {
+    animation: dust-trail-left 3s linear infinite;
+  }
+
+  .animate-dust-trail-right {
+    animation: dust-trail-right 3s linear infinite;
+  }
+
+  @keyframes slide-left {
+    0%, 100% {
+      transform: translateX(0) translateY(-50%);
+    }
+    50% {
+      transform: translateX(-15px) translateY(-50%);
+    }
+  }
+
+  @keyframes slide-right {
+    0%, 100% {
+      transform: translateX(0) translateY(-50%);
+    }
+    50% {
+      transform: translateX(15px) translateY(-50%);
+    }
+  }
+
+  @keyframes dust-trail-left {
+    0% {
+      opacity: 0;
+      transform: translateX(0) scale(1);
+    }
+    10% {
+      opacity: 1;
+      transform: translateX(-20px) scale(1.2);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateX(-60px) scale(0.8);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-120px) scale(0.3);
+    }
+  }
+
+  @keyframes dust-trail-right {
+    0% {
+      opacity: 0;
+      transform: translateX(0) scale(1);
+    }
+    10% {
+      opacity: 1;
+      transform: translateX(20px) scale(1.2);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateX(60px) scale(0.8);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(120px) scale(0.3);
+    }
+  }
+}
