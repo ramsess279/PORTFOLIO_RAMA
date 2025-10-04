@@ -15,7 +15,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-5 md:py-10 pr-4 -ml-2.5">
+    <div className="min-h-screen flex items-center justify-center pt-5 md:pt-10 pb-20 md:pb-32 pr-4 -ml-2.5">
       <div className="container max-w-6xl">
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 md:mb-8 text-primary">Contact</h2>
         <p className="text-center text-base md:text-lg text-muted-foreground mb-8 md:mb-12">
@@ -35,14 +35,14 @@ const Contact = () => {
                 <Mail className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                 <div>
                   <div className="text-sm text-muted-foreground">Email</div>
-                  <div className="font-semibold">ramatoulaye.gueye@email.com</div>
+                  <a href="mailto:ramatoulaye.rtg@gmail.com" className="font-semibold hover:text-primary/80 transition-colors">ramatoulaye.rtg@gmail.com</a>
                 </div>
               </div>
               <div className="flex items-center gap-3 md:gap-4 bg-background/60 rounded-lg p-3 md:p-4">
                 <Phone className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                 <div>
                   <div className="text-sm text-muted-foreground">Téléphone</div>
-                  <div className="font-semibold">+221 77 123 45 67</div>
+                  <a href="https://wa.me/221771279062" target="_blank" rel="noopener noreferrer" className="font-semibold hover:text-primary/80 transition-colors">+221 77 127 90 62</a>
                 </div>
               </div>
               <div className="flex items-center gap-3 md:gap-4 bg-background/60 rounded-lg p-3 md:p-4">
@@ -63,7 +63,9 @@ const Contact = () => {
                   <Github className="h-5 w-5" /> GitHub
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/rama-gueye-"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-background/60 hover:bg-primary/10 transition"
                 >
                   <Linkedin className="h-5 w-5" /> LinkedIn
