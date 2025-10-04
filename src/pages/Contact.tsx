@@ -1,7 +1,9 @@
 import { Mail, Github, Linkedin, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Contact = () => {
+  const isMobile = useIsMobile();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -13,15 +15,15 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-5 md:py-10 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <div className="min-h-screen flex items-center justify-center py-5 md:py-10 pr-4 -ml-2.5">
+      <div className="container max-w-6xl">
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 md:mb-8 text-primary">Contact</h2>
         <p className="text-center text-base md:text-lg text-muted-foreground mb-8 md:mb-12">
           N'hésitez pas à me contacter pour toute opportunité ou collaboration
         </p>
         <div className="grid md:grid-cols-2 gap-6 md:gap-10">
           {/* Bloc infos de contact */}
-          <div className="glass rounded-2xl p-6 md:p-8 flex flex-col gap-6 md:gap-8 shadow-xl">
+          <div className={`glass rounded-2xl ${isMobile ? 'p-4' : 'p-6 md:p-8'} flex flex-col gap-6 md:gap-8 shadow-xl order-2 md:order-1 ${isMobile ? 'mx-2.5' : ''}`}>
             <h3 className="text-xl md:text-2xl font-bold mb-2 text-foreground">
               Informations de contact
             </h3>
@@ -72,7 +74,7 @@ const Contact = () => {
           {/* Bloc formulaire */}
           <form
             onSubmit={handleSubmit}
-            className="glass rounded-2xl p-6 md:p-8 flex flex-col gap-4 md:gap-6 shadow-xl"
+            className={`glass rounded-2xl ${isMobile ? 'p-4' : 'p-6 md:p-8'} flex flex-col gap-4 md:gap-6 shadow-xl order-1 md:order-2 ${isMobile ? 'mx-2.5' : ''}`}
           >
             <h3 className="text-xl md:text-2xl font-bold mb-2 text-foreground">
               Envoyez-moi un message

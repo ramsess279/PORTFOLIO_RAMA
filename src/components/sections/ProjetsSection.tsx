@@ -3,18 +3,19 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Clock, User, ChevronLeft, ChevronRight } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const ProjetsSection = () => {
+  const isMobile = useIsMobile();
   const [currentPage, setCurrentPage] = useState(1);
-  const projectsPerPage = 2;
 
   const projets = [
     {
       titre: "Esite",
       tech: ["HTML", "CSS"],
       description: "Site vitrine pour la vente de colliers et accessoires. Interface élégante et responsive pour présenter les produits.",
-      duree: "1 semaine",
-      referent: "Birame Baila Wane - +221 XX XXX XX XX | WhatsApp",
+      duree: "2 jours",
+      referent: "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
       difficulty: 1
@@ -23,18 +24,18 @@ const ProjetsSection = () => {
       titre: "Gestion apprenant",
       tech: ["PHP", "HTML", "CSS"],
       description: "Application complète de gestion des apprenants de l'ODC. Système de suivi des étudiants avec fonctionnalités CRUD.",
-      duree: "3 semaines",
-      referent: "Aly Tall Niang - +221 XX XXX XX XX | WhatsApp",
+      duree: "4 semaines",
+      referent: "Birame Baila Wane - +221 77 766 95 95 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
-      difficulty: 2
+      difficulty: 4
     },
     {
       titre: "Todolist",
       tech: ["Node.js", "Express", "Prisma", "Zod", "TypeScript", "React", "JavaScript", "Tailwind"],
       description: "Application monolithique distribuée avec API backend et frontend interactif. Gestion des tâches avec authentification.",
-      duree: "4 semaines",
-      referent: "Birame Baila Wane - +221 XX XXX XX XX | WhatsApp",
+      duree: "2 semaines",
+      referent: "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
       difficulty: 3
@@ -43,8 +44,8 @@ const ProjetsSection = () => {
       titre: "Maxit (Version Personnelle)",
       tech: ["React", "JavaScript", "Tailwind", "PHP", "SOLID", "OOP", "MVC"],
       description: "Version personnelle et améliorée du site de shopping Maxit SA. Développement avec ma touche personnelle, intégrant des fonctionnalités innovantes et une expérience utilisateur optimisée.",
-      duree: "5 semaines",
-      referent: "Aly Tall Niang - +221 XX XXX XX XX | WhatsApp",
+      duree: "4 semaines",
+      referent: "Birame Baila Wane - +221 77 766 95 95 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
       difficulty: 4
@@ -53,49 +54,50 @@ const ProjetsSection = () => {
       titre: "Shopping card",
       tech: ["React", "JavaScript", "Tailwind", "PHP", "SOLID", "OOP", "MVC"],
       description: "Site de shopping inspiré de Maxit SA avec intégration d'APIs (AppWofoyal pour paiements électricité, AppDaff pour vérification cartes d'identité). Projet de compétition avec modélisation complète.",
-      duree: "6 semaines",
-      referent: "Aly Tall Niang - +221 XX XXX XX XX | WhatsApp",
+      duree: "3 jours",
+      referent: "Aly Tall Niang - +221 +221 77 182 54 14 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
-      difficulty: 5
+      difficulty: 2
     },
     {
       titre: "GP Monde",
       tech: ["TypeScript", "Tailwind", "HTML", "PHP"],
       description: "Application de livraison internationale utilisant les voies maritime, aérienne et routière. Système complet de gestion logistique avec suivi en temps réel et optimisation des trajets.",
-      duree: "8 semaines",
-      referent: "Birame Baila Wane - +221 XX XXX XX XX | WhatsApp",
+      duree: "1 semaines",
+      referent: "Aly Tall Niang - +221 +221 77 182 54 14 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
-      difficulty: 6
+      difficulty: 3
     },
     {
       titre: "Gestion d'Entreprise",
       tech: ["React", "JavaScript", "Tailwind", "Zod", "Prisma", "Express", "Node.js", "TypeScript"],
       description: "Application monolithique distribuée permettant aux chefs d'entreprise de créer leurs comptes et de gérer leurs employés et leurs salaires. Système complet de gestion RH avec fonctionnalités avancées.",
       duree: "1 semaine",
-      referent: "Aly Tall Niang - +221 XX XXX XX XX | WhatsApp",
+      referent: "Aly Tall Niang - +221 +221 77 182 54 14 | WhatsApp",
       image: "/placeholder.svg",
       demo: "#", // À ajouter plus tard
-      difficulty: 7
+      difficulty: 4
     }
   ].sort((a, b) => a.difficulty - b.difficulty); // Tri par difficulté croissante
 
+  const projectsPerPage = isMobile ? projets.length : 2;
   const totalPages = Math.ceil(projets.length / projectsPerPage);
   const startIndex = (currentPage - 1) * projectsPerPage;
   const currentProjects = projets.slice(startIndex, startIndex + projectsPerPage);
 
 
   return (
-    <section className="min-h-screen flex items-center justify-center py-20 pb-32 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <h2 className="text-5xl font-bold text-center mb-16 text-foreground animate-fade-in">
-          Projets Professionnels - Sonatel Academy
+    <section className={`min-h-screen flex items-center justify-center py-20 pb-32 ${isMobile ? 'px-2' : 'px-4'}`}>
+      <div className={`container mx-auto ${isMobile ? 'max-w-full' : 'max-w-6xl'}`}>
+        <h2 className="text-4xl font-bold text-center mb-16 text-foreground animate-fade-in">
+          Mes projets
         </h2>
         {/* Container avec flèches de navigation */}
         <div className="relative">
           {/* Flèche gauche */}
-          {currentPage > 1 && (
+          {currentPage > 1 && !isMobile && (
             <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 animate-slide-left" style={{ left: '-120px' }}>
               <Button
                 variant="outline"
@@ -113,7 +115,7 @@ const ProjetsSection = () => {
             {currentProjects.map((projet, index) => (
               <Card
                 key={index}
-                className="glass hover-glow p-6 rounded-2xl animate-scale-in group cursor-pointer relative overflow-hidden"
+                className={`glass hover-glow ${isMobile ? 'p-4' : 'p-6'} rounded-2xl animate-scale-in group cursor-pointer relative overflow-hidden`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -168,7 +170,7 @@ const ProjetsSection = () => {
           </div>
 
           {/* Flèche droite */}
-          {currentPage < totalPages && (
+          {currentPage < totalPages && !isMobile && (
             <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 animate-slide-right" style={{ right: '-120px' }}>
               <Button
                 variant="outline"
@@ -183,7 +185,7 @@ const ProjetsSection = () => {
         </div>
 
         {/* Indicateur de page */}
-        {totalPages > 1 && (
+        {totalPages > 1 && !isMobile && (
           <div className="flex justify-center mt-8">
             <div className="flex items-center gap-2 px-4 py-2 rounded-full glass bg-background/50 backdrop-blur-sm">
               <span className="text-sm text-muted-foreground">

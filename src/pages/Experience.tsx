@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Building, Award, Briefcase, GraduationCap, BookOpen, ScrollText } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Experience = () => {
   const experiences = [
@@ -58,17 +59,19 @@ const Experience = () => {
     }
   };
 
+  const isMobile = useIsMobile();
+
   return (
-    <div className="min-h-screen py-20 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <h2 className="text-5xl font-bold text-center mb-16 text-foreground animate-fade-in">
+    <div className={`min-h-screen py-20 ${isMobile ? 'px-2' : 'px-4'}`}>
+      <div className={`container mx-auto ${isMobile ? 'max-w-full' : 'max-w-6xl'}`}>
+        <h2 className="text-4xl font-bold text-center mb-16 text-foreground animate-fade-in">
           Expériences & Parcours
         </h2>
 
         {/* Timeline */}
         <div className="relative">
           {/* Ligne verticale de la timeline */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-primary/20"></div>
+          {!isMobile && <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-primary/20"></div>}
 
           <div className="space-y-12">
             {experiences.map((exp, index) => {
@@ -76,12 +79,12 @@ const Experience = () => {
               return (
                 <div key={index} className="relative flex items-start animate-fade-in" style={{ animationDelay: `${index * 0.2}s` }}>
                   {/* Point de la timeline */}
-                  <div className="relative z-10 flex items-center justify-center w-16 h-16 bg-background border-4 border-primary/30 rounded-full shadow-lg">
+                  {!isMobile && <div className="relative z-10 flex items-center justify-center w-16 h-16 bg-background border-4 border-primary/30 rounded-full shadow-lg">
                     <IconComponent className="h-6 w-6 text-primary" />
-                  </div>
+                  </div>}
 
                   {/* Contenu de l'expérience */}
-                  <Card className="ml-8 glass hover-glow p-8 rounded-2xl flex-1 animate-scale-in relative overflow-hidden group">
+                  <Card className={`${isMobile ? 'p-4' : 'ml-8 p-8'} glass hover-glow rounded-2xl flex-1 animate-scale-in relative overflow-hidden group`}>
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors duration-500" />
 
                     <div className="relative z-10">
@@ -162,7 +165,7 @@ const Experience = () => {
             { label: "Stages Effectués", value: "1+", icon: Building }
           ].map((stat, index) => (
             <Card key={index} className="glass hover-glow p-6 rounded-xl text-center animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
-              <stat.icon className="h-8 w-8 text-primary mx-auto mb-3" />
+              <stat.icon className="h-6 w-6 text-primary mx-auto mb-3" />
               <div className="text-2xl font-bold text-foreground mb-1">{stat.value}</div>
               <div className="text-sm text-muted-foreground">{stat.label}</div>
             </Card>

@@ -66,7 +66,7 @@ const Skills = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-gradient-to-br from-background to-primary/10">
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-5xl font-bold text-center mb-16 text-foreground animate-fade-in">
+        <h2 className="text-4xl font-bold text-center mb-16 text-foreground animate-fade-in">
           Compétences
         </h2>
         <div className="grid md:grid-cols-2 gap-10">

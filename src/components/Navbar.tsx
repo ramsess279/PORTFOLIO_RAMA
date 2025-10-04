@@ -14,16 +14,16 @@ const menuItems = [
 
 export const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/70 border-b border-border/50 shadow-lg">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <nav className="fixed md:top-0 bottom-0 md:bottom-auto left-0 right-0 z-50 backdrop-blur-md bg-background/70 border-t md:border-b border-border/50 shadow-lg">
+      <div className="container mx-auto px-2">
+        <div className="flex items-center justify-center h-16 min-w-max">
           {/* Logo/Brand */}
           <div className="flex items-center gap-2">
             {/* Avatar supprimé */}
           </div>
 
           {/* Navigation Items */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {menuItems.map((item) => (
               <NavLink
                 key={item.title}
@@ -42,10 +42,6 @@ export const Navbar = () => {
               </NavLink>
             ))}
 
-            {/* Theme Toggle */}
-            <div className="ml-2 pl-2 border-l border-border/50">
-              <ThemeToggle />
-            </div>
           </div>
         </div>
       </div>

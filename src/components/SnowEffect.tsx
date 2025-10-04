@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Snowflake {
   id: number;
@@ -9,6 +10,7 @@ interface Snowflake {
 }
 
 export const SnowEffect = () => {
+  const isMobile = useIsMobile();
   const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
 
   useEffect(() => {
@@ -22,7 +24,7 @@ export const SnowEffect = () => {
     setSnowflakes(flakes);
   }, []);
 
-  return (
+  return isMobile ? null : (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
       {snowflakes.map((flake) => (
         <div

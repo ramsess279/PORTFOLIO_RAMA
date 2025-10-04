@@ -28,7 +28,7 @@ const Education = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-20 px-4">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-5xl font-bold text-center mb-16 text-foreground animate-fade-in">
+        <h2 className="text-4xl font-bold text-center mb-16 text-foreground animate-fade-in">
           Formation
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -41,9 +41,9 @@ const Education = () => {
               <div className="relative flex flex-col items-center">
                 {/* Icone graduation cap */}
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary/20 flex items-center justify-center mb-4 shadow-xl border-4 border-primary/30">
-                  <FaGraduationCap className="text-primary" style={{ width: '2.5rem', height: '2.5rem' }} />
+                  <FaGraduationCap className="text-primary" style={{ width: '2rem', height: '2rem' }} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                <h3 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
                   {formation.titre}
                 </h3>
                 <p className="text-primary font-bold mb-1 text-lg md:text-xl">

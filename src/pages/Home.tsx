@@ -10,7 +10,7 @@ const Home = () => {
         <div className="space-y-6 flex flex-col">
           <div className="space-y-2">
             <p className="text-muted-foreground text-lg animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>Bonjour, je suis</p>
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground animate-slide-in-left" style={{ animationDelay: '2.2s', animationFillMode: 'both' }}>
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground animate-slide-in-left" style={{ animationDelay: '2.2s', animationFillMode: 'both' }}>
               <TypewriterEffect text="RAMATOULAYE GUEYE" />
             </h1>
           </div>
