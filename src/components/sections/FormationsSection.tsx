@@ -1,28 +1,8 @@
 import { Card } from "@/components/ui/card";
+ import educationData from "@/data/education.json";
 
 const FormationsSection = () => {
-  const formations = [
-    {
-      titre: "Développement FullStack Web/Mobile",
-      etablissement: "Orange Digital Center",
-      periode: "2025 - En cours"
-    },
-    {
-      titre: "Licence 2 IDA",
-      etablissement: "Université Cheikh Hamidou Kane",
-      periode: "2022 - En cours"
-    },
-    {
-      titre: "DST en Génie Informatique",
-      etablissement: "ESP",
-      periode: "2022 - En cours"
-    },
-    {
-      titre: "Bac S2",
-      etablissement: "Complexe Symbiose",
-      periode: "2021 - 2022"
-    }
-  ];
+  const formations = educationData.educations;
 
   return (
     <section className="min-h-screen flex items-center justify-center py-20 pb-32 px-4">
@@ -46,13 +26,13 @@ const FormationsSection = () => {
                   </svg>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {formation.titre}
+                  {formation.title}
                 </h3>
                 <p className="text-primary font-bold mb-1 text-lg md:text-xl">
-                  {formation.etablissement}
+                  {formation.institution}
                 </p>
                 <p className="text-muted-foreground text-base md:text-lg">
-                  {formation.periode}
+                  {formation.period}
                 </p>
               </div>
             </Card>

@@ -14,7 +14,7 @@ const menuItems = [
 
 export const Navbar = () => {
   return (
-    <nav className="fixed md:top-0 bottom-0 md:bottom-auto left-0 right-0 z-50 backdrop-blur-md bg-background/70 border-t md:border-b border-border/50 shadow-lg">
+    <nav className="fixed md:top-0 bottom-0 md:bottom-auto left-0 right-0 z-50 glass border-t md:border-b border-border/50 shadow-lg">
       <div className="container mx-auto px-2">
         <div className="flex items-center justify-center h-16 min-w-max">
           {/* Logo/Brand */}
@@ -30,10 +30,10 @@ export const Navbar = () => {
                 to={item.url}
                 end
                 className={({ isActive }) =>
-                  `flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm ${
+                  `flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
                     isActive
-                      ? "bg-primary/20 text-primary border border-primary/50 shadow-glow-sm"
-                      : "bg-background/50 hover:bg-primary/10 border border-transparent hover:border-primary/30"
+                      ? "bg-primary/10 border border-primary/30"
+                      : "hover:bg-primary/10 border border-transparent hover:border-primary/30"
                   }`
                 }
               >

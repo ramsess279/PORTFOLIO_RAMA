@@ -1,0 +1,17 @@
+{
+  "phrases": [
+    "Rama Gueye",
+    "Développeuse Fullstack",
+    "Passionnée par l'innovation",
+    "Créatrice d'expériences web"
+  ],
+  "description": "Développeuse fullstack passionnée par la création d'expériences web modernes et innovantes.",
+  "location": "Dakar, Sénégal",
+  "socialLinks": {
+    "email": "mailto:contact@example.com",
+    "github": "https://github.com",
+    "linkedin": "https://linkedin.com"
+  },
+  "profileImage": "/photo_rama.png",
+  "fallbackInitials": "RG"
+}

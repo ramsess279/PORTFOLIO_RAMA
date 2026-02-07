@@ -64,10 +64,6 @@ const Experience = () => {
   return (
     <div className={`min-h-screen py-20 ${isMobile ? 'px-2' : 'px-4'}`}>
       <div className={`container mx-auto ${isMobile ? 'max-w-full' : 'max-w-6xl'}`}>
-        <h2 className="text-4xl font-bold text-center mb-16 text-foreground animate-fade-in">
-          Expériences & Parcours
-        </h2>
-
         {/* Timeline */}
         <div className="relative">
           {/* Ligne verticale de la timeline */}

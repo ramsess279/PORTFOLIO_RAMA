@@ -137,6 +137,86 @@ All colors MUST be HSL.
   .hover-lift:hover {
     transform: translateY(-4px) scale(1.02);
   }
+
+  /* Animation de shine pour le titre */
+  .shine-text {
+    position: relative;
+    color: hsl(var(--primary));
+    display: inline-block;
+    overflow: hidden;
+    margin-right: 1rem;
+  }
+
+  .shine-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 120%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+    animation: text-shine 8s infinite;
+    mix-blend-mode: overlay;
+  }
+
+  @keyframes text-shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  /* Animation de flottement pour l'image */
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Pulsation subtile au survol */
+  .hover-pulse:hover {
+    animation: subtle-pulse 2s infinite;
+  }
+
+  @keyframes subtle-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Glow dynamique pour l'image */
+  .dynamic-glow {
+    animation: color-glow 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes color-glow {
+    0% { filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.3)); }
+    25% { filter: drop-shadow(0 0 15px rgba(78, 205, 196, 0.4)); }
+    50% { filter: drop-shadow(0 0 20px rgba(69, 189, 209, 0.3)); }
+    75% { filter: drop-shadow(0 0 15px rgba(150, 206, 180, 0.4)); }
+    100% { filter: drop-shadow(0 0 10px rgba(255, 234, 167, 0.3)); }
+  }
+
+  /* Rotation lente pour les icônes */
+  .slow-rotate {
+    animation: slow-rotate 8s linear infinite;
+  }
+
+  @keyframes slow-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Parallaxe léger */
+  .parallax-bg {
+    transform: translateZ(0);
+    animation: subtle-parallax 20s ease-in-out infinite;
+  }
+
+  @keyframes subtle-parallax {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+  }
   
   
   /* Section Transition */

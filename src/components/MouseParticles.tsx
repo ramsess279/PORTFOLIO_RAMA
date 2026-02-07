@@ -1,10 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const MouseParticles = () => {
   const [particles, setParticles] = useState([]);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
+      if (!mountedRef.current) return;
+
       // Créer une nouvelle particule
       const newParticle = {
         id: Date.now() + Math.random(),
@@ -27,6 +37,8 @@ const MouseParticles = () => {
   // Animation des particules
   useEffect(() => {
     const interval = setInterval(() => {
+      if (!mountedRef.current) return;
+
       setParticles(prev => prev.map(particle => ({
         ...particle,
         x: particle.x + particle.vx,

@@ -1,0 +1,28 @@
+{
+  "educations": [
+    {
+      "id": 1,
+      "title": "Développement FullStack Web/Mobile",
+      "institution": "Orange Digital Center",
+      "period": "2025 - En cours"
+    },
+    {
+      "id": 2,
+      "title": "Licence 2 IDA",
+      "institution": "Université Cheikh Hamidou Kane",
+      "period": "2022 - En cours"
+    },
+    {
+      "id": 3,
+      "title": "DST en Génie Informatique",
+      "institution": "ESP",
+      "period": "2022 - En cours"
+    },
+    {
+      "id": 4,
+      "title": "Bac S2",
+      "institution": "Complexe Symbiose",
+      "period": "2021 - 2022"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "experiences": [
+    {
+      "id": 1,
+      "title": "Développement Web",
+      "company": "Multimédia, TGI",
+      "period": "Juin 2024 - Juillet 2024",
+      "description": "Développement d'un projet de gestion d'une flotte automobile avec interface multi-rôles. Conception et implémentation de fonctionnalités avancées pour la gestion des véhicules, des conducteurs et des missions."
+    }
+  ]
+}

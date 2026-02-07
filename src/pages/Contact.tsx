@@ -1,27 +1,69 @@
 import { Mail, Github, Linkedin, MapPin, Phone } from "lucide-react";
-import { useState } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+  import { useState } from "react";
+  import { useIsMobile } from "@/hooks/use-mobile";
+  import { useToast } from "@/hooks/use-toast";
+  import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const isMobile = useIsMobile();
+  const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Initialiser EmailJS
+  emailjs.init('uAT3KZe3BBX3kPeuH');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Ici, tu peux ajouter l'envoi du message (emailjs, API, etc.)
-    setForm({ name: "", email: "", message: "" });
+    setIsLoading(true);
+    console.log('Formulaire soumis avec les données:', form);
+
+    try {
+      console.log('Début de l\'envoi réel via EmailJS...');
+      // Envoi réel via EmailJS
+      await emailjs.send(
+        'service_d9jqt1l',
+        'template_vxe8mpu',
+        {
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }
+      );
+      console.log('Email envoyé avec succès via EmailJS');
+
+      // Afficher le toast de succès
+      toast({
+        title: "Message envoyé !",
+        description: "Merci pour votre message. Je vous répondrai dans les plus brefs délais.",
+        duration: 5000,
+      });
+
+      // Réinitialiser le formulaire
+      setForm({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi:', error);
+      // Afficher le toast d'erreur
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      console.log('Fin du processus d\'envoi, loading à false');
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center pt-5 md:pt-10 pb-20 md:pb-32 pr-4 -ml-2.5">
-      <div className="container max-w-6xl">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 md:mb-8 text-primary">Contact</h2>
-        <p className="text-center text-base md:text-lg text-muted-foreground mb-8 md:mb-12">
-          N'hésitez pas à me contacter pour toute opportunité ou collaboration
-        </p>
-        <div className="grid md:grid-cols-2 gap-6 md:gap-10">
+    <div className="min-h-screen flex items-center justify-center pt-5 md:pt-10 pb-20 md:pb-32 px-4">
+      <div className="container max-w-7xl">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-10">
           {/* Bloc infos de contact */}
           <div className={`glass rounded-2xl ${isMobile ? 'p-4' : 'p-6 md:p-8'} flex flex-col gap-6 md:gap-8 shadow-xl order-2 md:order-1 ${isMobile ? 'mx-2.5' : ''}`}>
             <h3 className="text-xl md:text-2xl font-bold mb-2 text-foreground">
@@ -97,9 +139,10 @@ const Contact = () => {
                   name="name"
                   type="text"
                   required
+                  disabled={isLoading}
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-border bg-background/60 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full rounded-lg border border-border bg-background/60 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                 />
               </div>
               <div>
@@ -114,9 +157,10 @@ const Contact = () => {
                   name="email"
                   type="email"
                   required
+                  disabled={isLoading}
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-border bg-background/60 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full rounded-lg border border-border bg-background/60 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                 />
               </div>
               <div>
@@ -131,17 +175,23 @@ const Contact = () => {
                   name="message"
                   required
                   rows={5}
+                  disabled={isLoading}
                   value={form.message}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-border bg-background/60 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full rounded-lg border border-border bg-background/60 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary resize-none disabled:opacity-50"
                 />
               </div>
             </div>
             <button
               type="submit"
-              className="mt-2 bg-primary text-primary-foreground font-semibold rounded-lg px-6 py-3 hover:bg-primary/90 transition justify-center"
+              disabled={isLoading}
+              className={`mt-2 font-semibold rounded-lg px-6 py-3 transition justify-center glass border border-primary/50 ${
+                isLoading
+                  ? "bg-primary/60 text-white cursor-not-allowed"
+                  : "bg-primary/80 text-white hover:bg-primary/90"
+              }`}
             >
-              Envoyer le message
+              {isLoading ? "Envoi en cours..." : "Envoyer le message"}
             </button>
           </form>
         </div>

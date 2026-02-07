@@ -1,0 +1,221 @@
+{
+  "projects": [
+    {
+      "id": 0,
+      "title": "MiniBloom Store - Application E-commerce Bébé & Enfants",
+      "technologies": ["React", "Node.js", "Express", "MongoDB", "TailwindCSS"],
+      "description": "Je vous présente MiniBloom Store. C'est une mini application e-commerce, développée le temps d'un week-end, entre deux tasses de café, avec une envie simple : transformer une idée en quelque chose de concret, utilisable et réel. MiniBloom Store est une application dédiée à l'univers bébé et enfants. Elle permet : de parcourir un catalogue de produits, de filtrer par catégories, d'ajouter des articles au panier, de gérer les commandes côté utilisateur, et côté administration : gérer les produits, suivre les commandes, surveiller les stocks, visualiser quelques indicateurs clés. L'application est déployée et fonctionnelle.",
+      "fullDescription": "Je vous présente MiniBloom Store. C'est une mini application e-commerce, développée le temps d'un week-end, entre deux tasses de café, avec une envie simple : transformer une idée en quelque chose de concret, utilisable et réel. MiniBloom Store est une application dédiée à l'univers bébé et enfants. Elle permet : de parcourir un catalogue de produits, de filtrer par catégories, d'ajouter des articles au panier, de gérer les commandes côté utilisateur, et côté administration : gérer les produits, suivre les commandes, surveiller les stocks, visualiser quelques indicateurs clés. L'application est déployée et fonctionnelle.",
+      "duration": "3 jours",
+      "referent": "",
+      "media": [
+        {"type": "image", "src": "/images/projects/minibloom/minibloom1.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom2.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom3.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom4.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom5.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom6.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom7.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom8.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom9.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom10.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom11.png"},
+        {"type": "image", "src": "/images/projects/minibloom/minibloom12.png"},
+        {"type": "video", "src": "/images/projects/minibloom/MiniBloomstore.webm"}
+      ],
+      "demo": "https://minibloom-sand.vercel.app/",
+      "difficulty": 5
+    },
+    {
+      "id": 1,
+      "title": "Gestion d'Entreprise – SaaS RH",
+      "technologies": ["React", "Node.js", "Express", "Prisma", "TypeScript", "TailwindCSS"],
+      "description": "Développement d'une plateforme SaaS pour la gestion des employés, de la paie et des rôles d'accès. Mise en place de l'authentification sécurisée, de la gestion des autorisations et d'un tableau de bord RH. Conception d'une architecture monolithique distribuée et automatisation des processus internes.",
+      "duration": "2025",
+      "referent": "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img1.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img2.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img3.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img4.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img5.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img6.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img7.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img8.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img9.png"},
+        {"type": "image", "src": "/images/projects/gess_entreprise_sass/img10.png"},
+        {"type": "video", "src": "/images/projects/gess_entreprise_sass/ges_entreprise.webm"}
+      ],
+      "demo": "https://ges-entreprise-frontend-e6qf.vercel.app/",
+      "difficulty": 5
+    },
+    {
+      "id": 2,
+      "commented": true,
+      "title": "Maxit – Refonte de l'application MAX IT",
+      "technologies": ["React", "PHP", "TailwindCSS", "SOLID", "MVC"],
+      "description": "Refonte du site Maxit SA avec modernisation de l'interface utilisateur et intégration d'API externes (APPDAF - APPWOYOFAL). Réorganisation complète du front-end avec React et respect des principes SOLID & MVC côté backend. Optimisation du responsive design et amélioration globale des performances.",
+      "duration": "1 semaine",
+      "referent": "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/maxit-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 5
+    },
+    {
+      "id": 3,
+      "commented": true,
+      "title": "GP Monde – Application de logistique internationale",
+      "technologies": ["PHP", "TypeScript", "TailwindCSS"],
+      "description": "Développement d'un système de gestion des transports (maritime, aérien, routier). Mise en place du suivi des colis en temps réel et optimisation des itinéraires logistiques. Création d'interfaces dédiées pour les différents acteurs (expéditeur, transporteur).",
+      "duration": "1 semaine",
+      "referent": "Birame Baila Wane - +221 77 766 95 95 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/gpmonde-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 4
+    },
+    {
+      "id": 4,
+      "commented": true,
+      "title": "Gestion Apprenant – Sonatel Academy",
+      "technologies": ["PHP", "HTML", "CSS", "MVC"],
+      "description": "Conception d'une application interne pour le suivi administratif et pédagogique des étudiants. Mise en place d'un CRUD complet, suivi des présences, gestion des performances, gestion des promotions, référentiels et étudiants actifs. Optimisation du design et uniformisation des processus internes de gestion.",
+      "duration": "1 semaine",
+      "referent": "Birame Baila Wane - +221 77 766 95 95 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/sonatel-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 4
+    },
+    {
+      "id": 5,
+      "commented": true,
+      "title": "Ompay – Application Mobile modulaire",
+      "technologies": ["Laravel", "MVC", "SOLID", "Docker", "Postgres", "Render", "Dart", "Flutter"],
+      "description": "Développement d'une application complète backend et frontend. Avec partie backend développée en tant qu'API REST complète appliquant les principes SOLID, MVC, avec une documentation swagger et une base de donnée postgres déployée. Et un frontend développé en mobile via Flutter.",
+      "duration": "1 semaine",
+      "referent": "Birame Baila Wane - +221 77 766 95 95 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/ompay-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 5
+    },
+    {
+      "id": 6,
+      "commented": true,
+      "title": "Esite",
+      "technologies": ["HTML", "CSS"],
+      "description": "Site vitrine pour la vente de colliers et accessoires. Interface élégante et responsive pour présenter les produits.",
+      "duration": "1 semaine",
+      "referent": "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/esite-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 1
+    },
+    {
+      "id": 7,
+      "commented": true,
+      "title": "Todolist",
+      "technologies": ["Node.js", "Express", "Prisma", "Zod", "TypeScript", "React", "JavaScript", "Tailwind"],
+      "description": "Application monolithique distribuée avec API backend et frontend interactif. Gestion des tâches avec authentification.",
+      "duration": "1 semaine",
+      "referent": "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/todolist-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 3
+    },
+    {
+      "id": 8,
+      "commented": true,
+      "title": "Shopping card",
+      "technologies": ["React", "Node.js", "Express", "Prisma", "TypeScript", "TailwindCSS"],
+      "description": "Site de shopping inspiré de Maxit SA avec intégration d'APIs (AppWofoyal pour paiements électricité, AppDaff pour vérification cartes d'identité). Projet de compétition avec modélisation complète.",
+      "duration": "1 semaine",
+      "referent": "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
+      "media": [
+        {"type": "image", "src": "/images/projects/shopping-1.png"}
+      ],
+      "demo": "#",
+      "difficulty": 2
+    },
+    {
+      "id": 9,
+      "title": "Sénégal Travel - Guide de Voyage Interactif",
+      "technologies": ["React", "Next.js", "TailwindCSS", "Vercel"],
+      "description": "Application de voyage interactive pour découvrir le Sénégal. Fonctionnalités la découverte de lieux touristiques, les informations pratiques, et un guide complet pour les voyageurs.",
+      "duration": "1 semaine",
+      "referent": "",
+      "media": [
+        {"type": "image", "src": "/images/projects/senegal_travel/image1.png"},
+        {"type": "image", "src": "/images/projects/senegal_travel/image2.png"},
+        {"type": "image", "src": "/images/projects/senegal_travel/image3.png"},
+        {"type": "image", "src": "/images/projects/senegal_travel/image4.png"},
+        {"type": "image", "src": "/images/projects/senegal_travel/image5.png"},
+        {"type": "image", "src": "/images/projects/senegal_travel/image6.png"},
+        {"type": "image", "src": "/images/projects/senegal_travel/image7.png"}
+      ],
+      "demo": "https://senegal-travel.vercel.app/",
+      "difficulty": 4
+    },
+    {
+      "id": 10,
+      "title": "Murafa Creation - Site Vitrine Créatif",
+      "technologies": ["React", "Next.js", "TailwindCSS", "Vercel"],
+      "description": "Site vitrine pour une agence créative. Présentation elegante des services et realisations avec une interface moderne et responsive.",
+      "duration": "1 semaine",
+      "referent": "",
+      "media": [
+        {"type": "image", "src": "/images/projects/murafa/image1.png"},
+        {"type": "image", "src": "/images/projects/murafa/image.png"},
+        {"type": "image", "src": "/images/projects/murafa/image2.png"},
+        {"type": "image", "src": "/images/projects/murafa/image3.png"},
+        {"type": "image", "src": "/images/projects/murafa/image4.png"},
+        {"type": "image", "src": "/images/projects/murafa/image5.png"}
+      ],
+      "demo": "https://murafacreation.vercel.app/",
+      "difficulty": 3
+    },
+    {
+      "id": 11,
+      "title": "Luxury Jet - Services de Jet Prive",
+      "technologies": ["React", "Next.js", "TailwindCSS", "Vercel"],
+      "description": "Plateforme de services de jets prives de luxe. Interface premium pour la reservation et la gestion de vols prives.",
+      "duration": "1 semaine",
+      "referent": "",
+      "media": [
+        {"type": "image", "src": "/images/projects/luxury_jet/image1.png"},
+        {"type": "image", "src": "/images/projects/luxury_jet/image.png"},
+        {"type": "image", "src": "/images/projects/luxury_jet/image copy.png"},
+        {"type": "image", "src": "/images/projects/luxury_jet/image copy 2.png"},
+        {"type": "image", "src": "/images/projects/luxury_jet/image copy 3.png"},
+        {"type": "image", "src": "/images/projects/luxury_jet/image copy 4.png"},
+        {"type": "image", "src": "/images/projects/luxury_jet/image copy 5.png"}
+      ],
+      "demo": "https://luxury-jet.vercel.app/",
+      "difficulty": 4
+    },
+    {
+      "id": 12,
+      "commented": true,
+      "title": "Hackathon Musée Cheikh Anta Diop",
+      "technologies": ["React", "Next.js", "TailwindCSS", "Vercel"],
+      "description": "Site développé lors d'un hackathon pour le Musée Cheikh Anta Diop. Présente l'histoire et les collections du musée de manière interactive.",
+      "duration": "1 semaine",
+      "referent": "",
+      "media": [
+        {"type": "image", "src": "/placeholder.svg"}
+      ],
+      "demo": "https://hackathon-musee-cheikh.vercel.app/",
+      "difficulty": 3
+    }
+  ]
+}

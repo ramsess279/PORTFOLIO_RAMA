@@ -1,15 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Mail, Github, Linkedin, MapPin, Phone } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
-
-const phrases = [
-  "Rama Gueye",
-  "Développeuse Fullstack",
-  "Passionnée par l'innovation",
-  "Créatrice d'expériences web"
-];
+ import { Card } from "@/components/ui/card";
+ import { Button } from "@/components/ui/button";
+ import { Mail, Github, Linkedin, MapPin, Phone } from "lucide-react";
+ import { useIsMobile } from "@/hooks/use-mobile";
+ import heroData from "@/data/hero.json";
 
 const HeroSection = () => {
   const isMobile = useIsMobile();
@@ -22,10 +16,10 @@ const HeroSection = () => {
     setTypedText("");
     setCurrentPhraseIndex(0);
     setIsDeleting(false);
-  }, [phrases]);
+  }, [heroData.phrases]);
 
   useEffect(() => {
-    const currentPhrase = phrases[currentPhraseIndex];
+    const currentPhrase = heroData.phrases[currentPhraseIndex];
     const typingSpeed = isDeleting ? 50 : 100;
     const pauseTime = isDeleting ? 1000 : 2000;
 
@@ -34,7 +28,7 @@ const HeroSection = () => {
         setTimeout(() => setIsDeleting(true), pauseTime);
       } else if (isDeleting && typedText === "") {
         setIsDeleting(false);
-        setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
+        setCurrentPhraseIndex((prev) => (prev + 1) % heroData.phrases.length);
       } else {
         setTypedText(
           isDeleting
@@ -45,7 +39,7 @@ const HeroSection = () => {
     }, typingSpeed);
 
     return () => clearTimeout(timeout);
-  }, [typedText, isDeleting, currentPhraseIndex, phrases]);
+  }, [typedText, isDeleting, currentPhraseIndex, heroData.phrases]);
 
   return (
     <section className="min-h-screen flex items-center justify-center px-2 sm:px-4 py-10 sm:py-20 pb-24 sm:pb-32 relative overflow-x-hidden">
@@ -66,26 +60,32 @@ const HeroSection = () => {
             </div>
             <p className={`text-base sm:text-lg md:text-xl text-muted-foreground ${isMobile ? 'text-center' : ''}`}
               style={{maxWidth: isMobile ? 320 : 'none', margin: isMobile ? '0 auto' : undefined}}>
-              Développeuse fullstack passionnée par la création d'expériences web modernes et innovantes.
+              {heroData.description}
             </p>
             <div className={`flex gap-2 sm:gap-4 flex-wrap max-w-xs ${isMobile ? 'justify-center' : ''}`}>
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground hover-glow group flex-1 min-w-0 text-sm sm:text-base py-2 sm:py-3">
-                <Mail className="mr-2 h-4 w-4 group-hover:scale-125 transition-transform duration-200" />
-                <span className="hidden sm:inline">Contact</span>
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground hover-glow group flex-1 min-w-0 text-sm sm:text-base py-2 sm:py-3" asChild>
+                <a href={`mailto:${heroData.socialLinks.email}`}>
+                  <Mail className="mr-2 h-4 w-4 group-hover:scale-125 transition-transform duration-200" />
+                  <span className="hidden sm:inline">Contact</span>
+                </a>
               </Button>
-              <Button variant="outline" className="border-primary/50 text-foreground hover:bg-primary hover:text-primary-foreground hover-glow group flex-1 min-w-0 text-sm sm:text-base py-2 sm:py-3">
-                <Github className="mr-2 h-4 w-4 group-hover:scale-125 transition-transform duration-200" />
-                <span className="hidden sm:inline">GitHub</span>
+              <Button variant="outline" className="border-primary/50 text-foreground hover:bg-primary hover:text-primary-foreground hover-glow group flex-1 min-w-0 text-sm sm:text-base py-2 sm:py-3" asChild>
+                <a href={heroData.socialLinks.github} target="_blank" rel="noopener noreferrer">
+                  <Github className="mr-2 h-4 w-4 group-hover:scale-125 transition-transform duration-200" />
+                  <span className="hidden sm:inline">GitHub</span>
+                </a>
               </Button>
-              <Button variant="outline" className="border-primary/50 text-foreground hover:bg-primary hover:text-primary-foreground hover-glow group flex-1 min-w-0 text-sm sm:text-base py-2 sm:py-3">
-                <Linkedin className="mr-2 h-4 w-4 group-hover:scale-125 transition-transform duration-200" />
-                <span className="hidden sm:inline">LinkedIn</span>
+              <Button variant="outline" className="border-primary/50 text-foreground hover:bg-primary hover:text-primary-foreground hover-glow group flex-1 min-w-0 text-sm sm:text-base py-2 sm:py-3" asChild>
+                <a href={heroData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+                  <Linkedin className="mr-2 h-4 w-4 group-hover:scale-125 transition-transform duration-200" />
+                  <span className="hidden sm:inline">LinkedIn</span>
+                </a>
               </Button>
             </div>
             <div className="flex flex-col gap-2 text-muted-foreground">
               <div className="flex items-center gap-2 justify-center md:justify-start">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>Dakar, Sénégal</span>
+                <span>{heroData.location}</span>
               </div>
             </div>
           </div>
@@ -94,14 +94,14 @@ const HeroSection = () => {
               {/* Responsive: taille de la photo adaptée */}
               {!imgError ? (
                 <img
-                  src="/photo_rama.png"
+                  src={heroData.profileImage}
                   alt="Photo de profil"
                   className="w-32 h-32 sm:w-40 sm:h-40 md:w-64 md:h-64 rounded-full object-cover mb-4 mx-auto"
                   onError={() => setImgError(true)}
                 />
               ) : (
                 <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-64 md:h-64 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent mb-4">
-                  <span className="text-4xl sm:text-5xl md:text-7xl font-bold text-primary">RG</span>
+                  <span className="text-4xl sm:text-5xl md:text-7xl font-bold text-primary">{heroData.fallbackInitials}</span>
                 </div>
               )}
             </Card>

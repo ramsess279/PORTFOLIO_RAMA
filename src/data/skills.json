@@ -1,0 +1,64 @@
+{
+  "skillCategories": [
+    {
+      "category": "Langages",
+      "items": [
+        { "name": "JavaScript", "icon": "FaJs" },
+        { "name": "TypeScript", "icon": "SiTypescript" },
+        { "name": "C", "icon": "SiC" },
+        { "name": "PHP", "icon": "SiPhp" },
+        { "name": "Laravel", "icon": "SiLaravel" },
+        { "name": "Dart", "icon": "SiDart" },
+        { "name": "HTML", "icon": "FaHtml5" },
+        { "name": "CSS", "icon": "FaCss3Alt" }
+      ]
+    },
+    {
+      "category": "Paradigmes & Méthodes",
+      "items": [
+        { "name": "POO" },
+        { "name": "SOLID" },
+        { "name": "MVC" }
+      ]
+    },
+    {
+      "category": "Frameworks & Librairies",
+      "items": [
+        { "name": "React", "icon": "FaReact" },
+        { "name": "Node.js", "icon": "FaNodeJs" },
+        { "name": "Express", "icon": "SiExpress" },
+        { "name": "Tailwind CSS", "icon": "SiTailwindcss" },
+        { "name": "Prisma", "icon": "SiPrisma" },
+        { "name": "Zod", "icon": "SiZod" },
+        { "name": "Eloquent" }
+      ]
+    },
+    {
+      "category": "Bases de données",
+      "items": [
+        { "name": "PostgreSQL", "icon": "SiPostgresql" },
+        { "name": "MySQL", "icon": "SiMysql" }
+      ]
+    },
+    {
+      "category": "Outils & DevOps",
+      "items": [
+        { "name": "Git", "icon": "FaGitAlt" },
+        { "name": "GitHub", "icon": "FaGithub" },
+        { "name": "Docker", "icon": "FaDocker" },
+        { "name": "Figma", "icon": "FaFigma" },
+        { "name": "Canva", "icon": "SiCanva" },
+        { "name": "Illustrator" },
+        { "name": "JSON Server" }
+      ]
+    },
+    {
+      "category": "Architecture & Modélisation",
+      "items": [
+        { "name": "REST API" },
+        { "name": "StartUML" },
+        { "name": "Mermaid" }
+      ]
+    }
+  ]
+}
