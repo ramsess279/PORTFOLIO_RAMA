@@ -99,7 +99,9 @@ const Contact = () => {
               <h4 className="text-lg font-semibold mb-2">Réseaux sociaux</h4>
               <div className="flex gap-4">
                 <a
-                  href="#"
+                  href="https://github.com/rama-lpb"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-background/60 hover:bg-primary/10 transition"
                 >
                   <Github className="h-5 w-5" /> GitHub
