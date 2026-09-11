@@ -1,147 +1,163 @@
+import { useEffect, useRef } from "react";
+import { Lightbulb, Users, BookOpen } from "lucide-react";
+
+const values = [
+  {
+    num: "01",
+    title: "Innovation",
+    desc: "Toujours à la recherche de solutions créatives et modernes.",
+    icon: Lightbulb,
+  },
+  {
+    num: "02",
+    title: "Collaboration",
+    desc: "Le travail d'équipe est essentiel pour réussir de grands projets.",
+    icon: Users,
+  },
+  {
+    num: "03",
+    title: "Apprentissage continu",
+    desc: "Le développement est un voyage sans fin d'apprentissage.",
+    icon: BookOpen,
+  },
+];
+
+const stats = [
+  { value: "2+", label: "Années d'expérience" },
+  { value: "15+", label: "Projets réalisés" },
+  { value: "8+", label: "Technologies maîtrisées" },
+  { value: "100%", label: "Passionnée par le code" },
+];
+
+const interests = [
+  "Veille technologique (nouveaux frameworks, outils IA)",
+  "Design & créativité (identité visuelle, expérience utilisateur)",
+  "Jeux de réflexion et de stratégie",
+  "Musique",
+];
+
+const goals = [
+  "Évoluer vers un rôle d'architecte logiciel / tech lead",
+  "Approfondir le Domain-Driven Design et l'architecture hexagonale sur des projets réels",
+  "Renforcer la double compétence Développement / Business Analyst",
+  "Explorer le développement assisté par l'IA (agents, outils de vibecoding)",
+  "Contribuer à des projets à impact social, comme Naatalvote",
+  "Partager mes connaissances et mentorer d'autres développeurs",
+];
+
+const useReveal = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const container = ref.current;
+    if (!container) return;
+    const targets = container.querySelectorAll<HTMLElement>(".reveal-blur");
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.target.classList.toggle("in-view", e.isIntersecting)),
+      { threshold: 0.25 }
+    );
+    targets.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+  return ref;
+};
+
 const About = () => {
+  const ref = useReveal();
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
-      <div className="max-w-6xl w-full space-y-12 animate-fade-in mb-8">
-        {/* Section principale */}
-        <div className="glass rounded-2xl p-8">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl font-semibold text-primary">Qui suis-je ?</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Développeuse Full Stack et Business Analyst, je prends en charge un projet de bout en
-                bout : à partir d'un cahier des charges, je conçois, je développe, je mets en production
-                et j'assure la maintenance. Je combine expertise technique, analyse du besoin métier et
-                sens du détail.
-              </p>
+    <div ref={ref} className="pt-28 pb-24">
+      {/* Intro */}
+      <section className="max-w-5xl mx-auto px-6 md:px-8">
+        <div className="grid md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-start">
+          <div className="reveal-blur order-2 md:order-1">
+            <span className="inline-block text-xs tracking-[0.22em] uppercase text-primary mb-4">
+              Qui suis-je
+            </span>
+            <h1 className="text-4xl md:text-5xl font-normal leading-tight mb-8">
+              Une seule personne,
+              <br />
+              <em className="accent-italic">plusieurs métiers</em>.
+            </h1>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-5">
+              Développeuse Full Stack et Business Analyst, je prends en charge un projet de bout en
+              bout : à partir d'un cahier des charges, je conçois, je développe, je mets en production
+              et j'assure la maintenance. Je combine expertise technique, analyse du besoin métier et
+              sens du détail.
+            </p>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Portée par une forte capacité d'apprentissage et une réelle curiosité technologique,
+              j'évolue constamment à travers des projets concrets, l'adoption des bonnes pratiques
+              et le partage de connaissances au sein de la communauté.
+            </p>
 
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Portée par une forte capacité d'apprentissage et une réelle curiosité technologique,
-                j'évolue constamment à travers des projets concrets, l'adoption des bonnes pratiques
-                et le partage de connaissances au sein de la communauté.
-              </p>
-
-              {/* Statistiques intégrées */}
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="glass rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-primary mb-1">2+</div>
-                  <div className="text-sm text-muted-foreground">Années d'expérience</div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 border-t border-border mt-10">
+              {stats.map((stat) => (
+                <div key={stat.label} className="border-b border-r last:border-r-0 border-border py-6 pr-4">
+                  <div className="text-2xl font-display text-primary mb-1">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground leading-snug">{stat.label}</div>
                 </div>
-                <div className="glass rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-primary mb-1">15+</div>
-                  <div className="text-sm text-muted-foreground">Projets réalisés</div>
-                </div>
-                <div className="glass rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-primary mb-1">8+</div>
-                  <div className="text-sm text-muted-foreground">Technologies maîtrisées</div>
-                </div>
-                <div className="glass rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-primary mb-1">100%</div>
-                  <div className="text-sm text-muted-foreground">Passionnée par le code</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <img
-                src="/photo_rama.png"
-                alt="Ramatoulaye Gueye"
-                className="w-[80%] h-[95%] object-cover object-center rounded-lg border border-primary shadow-lg shadow-pink-600/60"
-                style={{ objectPosition: 'center 10%' }}
-              />
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Valeurs et principes */}
-        <div className="glass rounded-2xl p-8">
-          <h2 className="text-3xl font-semibold text-primary mb-6 text-center">Mes valeurs</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center animate-fade-in" style={{ animationDelay: '0.5s' }}>
-              <div className="w-16 h-16 glass rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/30">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Innovation</h3>
-              <p className="text-muted-foreground">Toujours à la recherche de solutions créatives et modernes</p>
-            </div>
-            <div className="text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <div className="w-16 h-16 glass rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/30">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Collaboration</h3>
-              <p className="text-muted-foreground">Le travail d'équipe est essentiel pour réussir de grands projets</p>
-            </div>
-            <div className="text-center animate-fade-in" style={{ animationDelay: '0.7s' }}>
-              <div className="w-16 h-16 glass rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/30">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Apprentissage continu</h3>
-              <p className="text-muted-foreground">Le développement est un voyage sans fin d'apprentissage</p>
-            </div>
+          <div className="reveal-blur order-1 md:order-2 mx-auto md:mx-0">
+            <img
+              src="/avatar-rg.png"
+              alt="Ramatoulaye Gueye"
+              className="w-56 sm:w-64 md:w-80 h-auto"
+              style={{ filter: "drop-shadow(0 30px 40px rgba(0,0,0,0.35))" }}
+            />
           </div>
         </div>
+      </section>
 
-        {/* Loisirs et intérêts */}
-        <div className="glass rounded-2xl p-8">
-          <h2 className="text-3xl font-semibold text-primary mb-6 text-center">En dehors du code</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Centres d'intérêt</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Veille technologique (nouveaux frameworks, outils IA)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Design & créativité (identité visuelle, expérience utilisateur)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Jeux de réflexion et de stratégie
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Musique
-                </li>
-              </ul>
+      {/* Values */}
+      <section className="max-w-5xl mx-auto px-6 md:px-8 mt-28 md:mt-36">
+        <h2 className="text-3xl md:text-4xl font-normal text-center mb-14">Mes valeurs</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-border">
+          {values.map((value, i) => (
+            <div
+              key={value.title}
+              className="pillar-card reveal-blur border-b md:border-r border-border md:last:border-r-0 p-8 hover:bg-muted/40 transition-colors text-center md:text-left"
+              style={{ transitionDelay: `${i * 0.08}s` }}
+            >
+              <span className="text-sm text-primary font-display block mb-3">{value.num}</span>
+              <value.icon className="pillar-icon h-6 w-6 text-primary mb-3.5 opacity-85 mx-auto md:mx-0" strokeWidth={1.4} />
+              <h3 className="text-xl mb-2">{value.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{value.desc}</p>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Objectifs</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Évoluer vers un rôle d'architecte logiciel / tech lead
+          ))}
+        </div>
+      </section>
+
+      {/* Beyond code */}
+      <section className="max-w-5xl mx-auto px-6 md:px-8 mt-28 md:mt-36">
+        <h2 className="text-3xl md:text-4xl font-normal text-center mb-14">En dehors du code</h2>
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+          <div className="reveal-blur">
+            <h3 className="text-lg mb-5 text-primary">Centres d'intérêt</h3>
+            <ul className="space-y-3">
+              {interests.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-muted-foreground border-b border-border/60 pb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                  {item}
                 </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Approfondir le Domain-Driven Design et l'architecture hexagonale sur des projets réels
+              ))}
+            </ul>
+          </div>
+          <div className="reveal-blur">
+            <h3 className="text-lg mb-5 text-primary">Objectifs</h3>
+            <ul className="space-y-3">
+              {goals.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-muted-foreground border-b border-border/60 pb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                  {item}
                 </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Renforcer la double compétence Développement / Business Analyst
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Explorer le développement assisté par l'IA (agents, outils de vibecoding)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Contribuer à des projets à impact social, comme Naatalvote
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Partager mes connaissances et mentorer d'autres développeurs
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

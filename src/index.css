@@ -8,14 +8,14 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 340 85% 25%;
+    --background: 350 45% 96%;
+    --foreground: 340 85% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 340 85% 25%;
+    --card-foreground: 340 85% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 340 85% 25%;
+    --popover-foreground: 340 85% 20%;
 
     --primary: 340 70% 42%;
     --primary-foreground: 0 0% 100%;
@@ -26,8 +26,8 @@ All colors MUST be HSL.
     --secondary: 350 100% 88%;
     --secondary-foreground: 340 85% 25%;
 
-    --muted: 0 0% 95%;
-    --muted-foreground: 340 30% 50%;
+    --muted: 350 35% 92%;
+    --muted-foreground: 340 30% 42%;
 
     --accent: 210 70% 50%;
     --accent-foreground: 0 0% 100%;
@@ -35,7 +35,7 @@ All colors MUST be HSL.
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 340 20% 90%;
+    --border: 340 30% 85%;
     --input: 340 20% 90%;
     --ring: 340 70% 42%;
 
@@ -122,10 +122,16 @@ All colors MUST be HSL.
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.05);
+    background: hsl(var(--card) / 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 4px 24px -8px hsl(var(--foreground) / 0.08);
+  }
+
+  .dark .glass {
+    background: hsl(var(--card) / 0.4);
+    box-shadow: none;
   }
 
   .glass-dark {
