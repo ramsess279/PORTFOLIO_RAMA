@@ -18,11 +18,12 @@ const Home = () => {
             </h1>
           </div>
           <h2 className="text-2xl md:text-3xl font-semibold text-primary shine-text animate-slide-in-right" style={{ animationDelay: '1.5s', animationFillMode: 'both' }}>
-            Développeuse Fullstack
+            Développeuse Fullstack & Business Analyst
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed animate-fade-in" style={{ animationDelay: '2s', animationFillMode: 'both' }}>
-            Développeuse fullstack passionnée par la création d'expériences web modernes et innovantes.
-            Je combine compétences techniques et sens du service pour créer des solutions modernes et centrées utilisateur.
+            D'un cahier des charges à la mise en production et la maintenance, je prends en charge le projet
+            de bout en bout. Je combine expertise technique, analyse du besoin métier et sens du service pour
+            créer des solutions modernes et centrées utilisateur.
           </p>
           {/* Boutons visibles uniquement sur desktop */}
           <div className="hidden md:flex gap-4 pt-4 animate-scale-in" style={{ animationDelay: '2.5s', animationFillMode: 'both' }}>

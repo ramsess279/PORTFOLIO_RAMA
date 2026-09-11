@@ -7,6 +7,18 @@ const Experience = () => {
   const experiences = [
     {
       type: "stage",
+      title: "Développeuse Fullstack & Business Analyst",
+      company: "Digital Media Mobile",
+      location: "Dakar, Sénégal",
+      period: "Décembre 2025 - Aujourd'hui",
+      duration: "En cours",
+      description: "Prise en charge de projets de bout en bout : recueil du besoin et rédaction du cahier des charges, conception, développement, jusqu'à la mise en production et la maintenance applicative.",
+      achievements: [],
+      technologies: [],
+      icon: Briefcase
+    },
+    {
+      type: "stage",
       title: "Développement Fullstack - Gestion de Flotte Automobile",
       company: "Multimédia, TGI",
       location: "Dakar, Sénégal",
@@ -118,32 +130,36 @@ const Experience = () => {
                       </p>
 
                       {/* Réalisations */}
-                      <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                          <Award className="h-5 w-5 text-primary" />
-                          Réalisations clés
-                        </h4>
-                        <ul className="space-y-2">
-                          {exp.achievements.map((achievement, achIndex) => (
-                            <li key={achIndex} className="flex items-start gap-2 text-muted-foreground">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                              <span>{achievement}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      {exp.achievements.length > 0 && (
+                        <div className="mb-6">
+                          <h4 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                            <Award className="h-5 w-5 text-primary" />
+                            Réalisations clés
+                          </h4>
+                          <ul className="space-y-2">
+                            {exp.achievements.map((achievement, achIndex) => (
+                              <li key={achIndex} className="flex items-start gap-2 text-muted-foreground">
+                                <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                                <span>{achievement}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
                       {/* Technologies */}
-                      <div>
-                        <h4 className="text-lg font-semibold text-foreground mb-3">Technologies utilisées</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {exp.technologies.map((tech, techIndex) => (
-                            <Badge key={techIndex} variant="secondary" className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors">
-                              {tech}
-                            </Badge>
-                          ))}
+                      {exp.technologies.length > 0 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-foreground mb-3">Technologies utilisées</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {exp.technologies.map((tech, techIndex) => (
+                              <Badge key={techIndex} variant="secondary" className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors">
+                                {tech}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </Card>
                 </div>
@@ -158,7 +174,7 @@ const Experience = () => {
             { label: "Projets Réalisés", value: "10+", icon: Briefcase },
             { label: "Mois de Formation", value: "24+", icon: Calendar },
             { label: "Technologies", value: "12+", icon: Award },
-            { label: "Stages Effectués", value: "1+", icon: Building }
+            { label: "Stages Effectués", value: "2", icon: Building }
           ].map((stat, index) => (
             <Card key={index} className="glass hover-glow p-6 rounded-xl text-center animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <stat.icon className="h-6 w-6 text-primary mx-auto mb-3" />

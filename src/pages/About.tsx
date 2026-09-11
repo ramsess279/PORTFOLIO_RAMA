@@ -8,8 +8,10 @@ const About = () => {
             <div className="space-y-6">
               <h2 className="text-3xl font-semibold text-primary">Qui suis-je ?</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Développeuse Full Stack passionnée, je crée des applications web modernes, robustes et
-                centrées sur l'utilisateur, en combinant expertise technique et sens du détail.
+                Développeuse Full Stack et Business Analyst, je prends en charge un projet de bout en
+                bout : à partir d'un cahier des charges, je conçois, je développe, je mets en production
+                et j'assure la maintenance. Je combine expertise technique, analyse du besoin métier et
+                sens du détail.
               </p>
 
               <p className="text-lg text-muted-foreground leading-relaxed">
@@ -92,19 +94,19 @@ const About = () => {
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Lecture de livres techniques et de science-fiction
+                  Veille technologique (nouveaux frameworks, outils IA)
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Participation à des meetups tech
+                  Design & créativité (identité visuelle, expérience utilisateur)
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Contribution à des projets open source
+                  Jeux de réflexion et de stratégie
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Pratique du sport pour l'équilibre
+                  Musique
                 </li>
               </ul>
             </div>
@@ -113,19 +115,27 @@ const About = () => {
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Devenir Lead Developer
+                  Évoluer vers un rôle d'architecte logiciel / tech lead
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Contribuer à des projets à impact social
+                  Approfondir le Domain-Driven Design et l'architecture hexagonale sur des projets réels
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Partager mes connaissances
+                  Renforcer la double compétence Développement / Business Analyst
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-primary rounded-full"></span>
-                  Travailler sur des technologies émergentes
+                  Explorer le développement assisté par l'IA (agents, outils de vibecoding)
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-primary rounded-full"></span>
+                  Contribuer à des projets à impact social, comme Naatalvote
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-primary rounded-full"></span>
+                  Partager mes connaissances et mentorer d'autres développeurs
                 </li>
               </ul>
             </div>

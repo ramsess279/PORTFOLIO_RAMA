@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
-import { FaReact, FaDocker, FaGithub, FaNodeJs, FaDatabase, FaFigma, FaGitAlt, FaJs, FaHtml5, FaCss3Alt, FaAngular } from "react-icons/fa";
-import { SiTypescript, SiTailwindcss, SiExpress, SiPrisma, SiZod, SiPostgresql, SiMysql, SiPhp, SiC, SiCanva, SiMongodb } from "react-icons/si";
+import { FaReact, FaDocker, FaGithub, FaNodeJs, FaDatabase, FaFigma, FaGitAlt, FaJs, FaHtml5, FaCss3Alt, FaJava } from "react-icons/fa";
+import { SiTypescript, SiTailwindcss, SiExpress, SiPrisma, SiZod, SiPostgresql, SiMysql, SiPhp, SiC, SiCanva, SiSymfony, SiSpringboot, SiApachemaven, SiGradle, SiJunit5, SiJira, SiNotion } from "react-icons/si";
 
 const competences = [
   {
@@ -8,6 +8,7 @@ const competences = [
     items: [
       { label: "JavaScript", icon: <FaJs className="text-yellow-400" /> },
       { label: "TypeScript", icon: <SiTypescript className="text-blue-500" /> },
+      { label: "Java", icon: <FaJava className="text-red-500" /> },
       { label: "C", icon: <SiC className="text-blue-700" /> },
       { label: "PHP", icon: <SiPhp className="text-indigo-500" /> },
       { label: "HTML", icon: <FaHtml5 className="text-orange-500" /> },
@@ -19,16 +20,17 @@ const competences = [
     items: [
       { label: "PostgreSQL", icon: <SiPostgresql className="text-blue-700" /> },
       { label: "MySQL", icon: <SiMysql className="text-blue-400" /> },
-      { label: "MongoDB", icon: <SiMongodb className="text-blue-400" /> },
     ],
   },
   {
     categorie: "Frameworks & Librairies",
     items: [
       { label: "React", icon: <FaReact className="text-cyan-400" /> },
-      { label: "Angular", icon: <FaAngular className="text-cyan-400" /> },
       { label: "Node.js", icon: <FaNodeJs className="text-green-600" /> },
       { label: "Express", icon: <SiExpress className="text-gray-700" /> },
+      { label: "Symfony", icon: <SiSymfony className="text-gray-500" /> },
+      { label: "Spring Boot", icon: <SiSpringboot className="text-green-600" /> },
+      { label: "Spring Data JPA", icon: <SiSpringboot className="text-green-600" /> },
       { label: "Tailwind CSS", icon: <SiTailwindcss className="text-cyan-500" /> },
       { label: "Prisma", icon: <SiPrisma className="text-black" /> },
       { label: "Zod", icon: <SiZod className="text-green-700" /> },
@@ -40,7 +42,15 @@ const competences = [
       { label: "POO" },
       { label: "SOLID" },
       { label: "MVC" },
-      { label: "" },
+    ],
+  },
+  {
+    categorie: "Architecture & Modélisation",
+    items: [
+      { label: "REST API" },
+      { label: "Architecture Hexagonale (DDD)" },
+      { label: "StartUML" },
+      { label: "Mermaid" },
     ],
   },
   {
@@ -49,18 +59,31 @@ const competences = [
       { label: "Git", icon: <FaGitAlt className="text-orange-500" /> },
       { label: "GitHub", icon: <FaGithub className="text-black" /> },
       { label: "Docker", icon: <FaDocker className="text-blue-400" /> },
-      { label: "Figma", icon: <FaFigma className="text-pink-500" /> },
-      { label: "Canva", icon: <SiCanva className="text-blue-400" /> },
-      { label: "Illustrator" },
+      { label: "Maven", icon: <SiApachemaven className="text-red-600" /> },
+      { label: "Gradle", icon: <SiGradle className="text-cyan-700" /> },
+      { label: "JUnit", icon: <SiJunit5 className="text-green-700" /> },
       { label: "JSON Server" },
     ],
   },
   {
-    categorie: "Architecture & Modélisation",
+    categorie: "Business Analyst",
     items: [
-      { label: "REST API" },
-      { label: "StartUML" },
-      { label: "Mermaid" },
+      { label: "Recueil de besoins & cahier des charges" },
+      { label: "Rédaction de user stories" },
+      { label: "Modélisation UML" },
+      { label: "BPMN" },
+      { label: "Méthode MoSCoW" },
+      { label: "Agile / Scrum" },
+      { label: "Jira", icon: <SiJira className="text-blue-500" /> },
+      { label: "Notion", icon: <SiNotion className="text-foreground" /> },
+    ],
+  },
+  {
+    categorie: "Design & UX",
+    items: [
+      { label: "Figma", icon: <FaFigma className="text-pink-500" /> },
+      { label: "Canva", icon: <SiCanva className="text-blue-400" /> },
+      { label: "Illustrator" },
     ],
   },
 ];

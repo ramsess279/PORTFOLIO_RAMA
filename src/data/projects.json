@@ -204,6 +204,20 @@
       "difficulty": 4
     },
     {
+      "id": -1,
+      "title": "Naatalvote - Digitalisation du processus de vote",
+      "technologies": ["Java", "Spring Boot", "Architecture Hexagonale (DDD)", "PostgreSQL"],
+      "description": "Projet personnel de soutenance visant à digitaliser le processus de vote au Sénégal. Backend conçu en Java avec Spring Boot, en appliquant une architecture hexagonale (Domain-Driven Design) pour séparer clairement le métier de l'infrastructure technique.",
+      "fullDescription": "Naatalvote est un projet personnel de soutenance visant à digitaliser le processus de vote au Sénégal. Le backend est développé en Java avec Spring Boot, en appliquant les principes du Domain-Driven Design et une architecture hexagonale, afin de garantir une séparation claire entre la logique métier et les détails techniques (base de données, frameworks). Le projet est encore en cours de finalisation avant déploiement.",
+      "duration": "Projet de soutenance",
+      "referent": "",
+      "media": [
+        {"type": "image", "src": "/placeholder.svg"}
+      ],
+      "demo": "#",
+      "difficulty": 5
+    },
+    {
       "id": 12,
       "commented": true,
       "title": "Hackathon Musée Cheikh Anta Diop",

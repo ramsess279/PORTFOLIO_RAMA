@@ -4,14 +4,19 @@ import { FaGraduationCap } from "react-icons/fa";
 const Education = () => {
   const formations = [
     {
+      titre: "Licence 3 Développement Web/Mobile & Génie Logiciel",
+      etablissement: "ESP 221 (École Supérieure Professionnelle 221)",
+      periode: "2026 - En cours"
+    },
+    {
       titre: "Développement FullStack Web/Mobile",
       etablissement: "Orange Digital Center",
-      periode: "2025 - En cours"
+      periode: "2025"
     },
     {
       titre: "Licence 2 IDA",
       etablissement: "Université Cheikh Hamidou Kane",
-      periode: "2022 - En cours"
+      periode: "2022 - 2025"
     },
     {
       titre: "DST en Génie Informatique",
