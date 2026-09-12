@@ -1,61 +1,69 @@
-import { Card } from "@/components/ui/card";
-import { FaGraduationCap } from "react-icons/fa";
+import { GraduationCap } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
+import { useReveal } from "@/hooks/useReveal";
+
+const formations = [
+  {
+    titre: "Licence 3 Développement Web/Mobile & Génie Logiciel",
+    etablissement: "ESP 221 (École Supérieure Professionnelle 221)",
+    periode: "2026 - En cours",
+  },
+  {
+    titre: "Développement FullStack Web/Mobile",
+    etablissement: "Orange Digital Center",
+    periode: "2025",
+  },
+  {
+    titre: "Licence 2 IDA",
+    etablissement: "Université Cheikh Hamidou Kane",
+    periode: "2022 - 2025",
+  },
+  {
+    titre: "DST en Génie Informatique",
+    etablissement: "ESP",
+    periode: "2022 - 2024",
+  },
+  {
+    titre: "Bac S2",
+    etablissement: "Complexe Symbiose",
+    periode: "2021 - 2022",
+  },
+];
 
 const Education = () => {
-  const formations = [
-    {
-      titre: "Licence 3 Développement Web/Mobile & Génie Logiciel",
-      etablissement: "ESP 221 (École Supérieure Professionnelle 221)",
-      periode: "2026 - En cours"
-    },
-    {
-      titre: "Développement FullStack Web/Mobile",
-      etablissement: "Orange Digital Center",
-      periode: "2025"
-    },
-    {
-      titre: "Licence 2 IDA",
-      etablissement: "Université Cheikh Hamidou Kane",
-      periode: "2022 - 2025"
-    },
-    {
-      titre: "DST en Génie Informatique",
-      etablissement: "ESP",
-      periode: "2022 - 2024"
-    },
-    {
-      titre: "Bac S2",
-      etablissement: "Complexe Symbiose",
-      periode: "2021 - 2022"
-    }
-  ];
+  const ref = useReveal();
 
   return (
-    <div className="flex justify-center pt-24 pb-6 px-4">
-      <div className="container mx-auto max-w-6xl text-center">
-        <div className="grid md:grid-cols-2 gap-6 justify-center">
+    <div ref={ref} className="pt-28 pb-24 px-6 md:px-8">
+      <div className="max-w-3xl mx-auto">
+        <PageHeader
+          eyebrow="Mon cursus"
+          title={
+            <>
+              Une <em className="accent-italic">formation</em> continue
+            </>
+          }
+        />
+
+        <div className="border-t border-border">
           {formations.map((formation, index) => (
-            <Card
+            <div
               key={index}
-              className="glass hover-glow p-6 rounded-2xl animate-scale-in group cursor-pointer"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="reveal-blur flex items-center gap-5 py-6 border-b border-border group"
+              style={{ transitionDelay: `${index * 0.06}s` }}
             >
-              <div className="relative flex flex-col items-center">
-                {/* Icone graduation cap */}
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary/20 flex items-center justify-center mb-4 shadow-xl border-2 border-primary/30">
-                  <FaGraduationCap className="text-white/70" style={{ width: '2rem', height: '2rem' }} />
-                </div>
-                <h3 className="text-xl md:text-2xl font-semibold text-white/80 mb-2">
-                  {formation.titre}
-                </h3>
-                <p className="text-primary font-bold mb-1 text-lg md:text-xl">
-                  {formation.etablissement}
-                </p>
-                <p className="text-white/70 text-base md:text-lg">
-                  {formation.periode}
-                </p>
+              <GraduationCap
+                className="h-6 w-6 text-primary flex-shrink-0 transition-transform group-hover:scale-110"
+                strokeWidth={1.5}
+              />
+              <div className="flex-1">
+                <h3 className="text-lg leading-snug">{formation.titre}</h3>
+                <p className="text-primary text-sm font-medium mt-0.5">{formation.etablissement}</p>
               </div>
-            </Card>
+              <span className="text-sm text-muted-foreground flex-shrink-0 text-right">
+                {formation.periode}
+              </span>
+            </div>
           ))}
         </div>
       </div>

@@ -1,6 +1,7 @@
-import { Card } from "@/components/ui/card";
-import { FaReact, FaDocker, FaGithub, FaNodeJs, FaDatabase, FaFigma, FaGitAlt, FaJs, FaHtml5, FaCss3Alt, FaJava } from "react-icons/fa";
+import { FaReact, FaDocker, FaGithub, FaNodeJs, FaFigma, FaGitAlt, FaJs, FaHtml5, FaCss3Alt, FaJava } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss, SiExpress, SiPrisma, SiZod, SiPostgresql, SiMysql, SiPhp, SiC, SiCanva, SiSymfony, SiSpringboot, SiApachemaven, SiGradle, SiJunit5, SiJira, SiNotion } from "react-icons/si";
+import { PageHeader } from "@/components/PageHeader";
+import { useReveal } from "@/hooks/useReveal";
 
 const competences = [
   {
@@ -89,32 +90,38 @@ const competences = [
 ];
 
 const Skills = () => {
+  const ref = useReveal();
+
   return (
-    <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-gradient-to-br from-background to-primary/2">
-      <div className="container mx-auto max-w-6xl">
-        <div className="grid md:grid-cols-3 gap-6">
+    <div ref={ref} className="pt-28 pb-24 px-6 md:px-8">
+      <div className="max-w-6xl mx-auto">
+        <PageHeader
+          eyebrow="Ce que je maîtrise"
+          title={
+            <>
+              Compétences <em className="accent-italic">techniques</em> & humaines
+            </>
+          }
+        />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {competences.map((cat, i) => (
-            <Card
+            <div
               key={cat.categorie}
-              className={`glass hover-glow p-8 rounded-2xl animate-fade-in group flex flex-col gap-4 shadow-xl border-0`}
-              style={{ animationDelay: `${i * 0.1}s` }}
+              className="reveal-blur border border-border rounded-2xl p-7 hover:border-primary/40 transition-colors"
+              style={{ transitionDelay: `${i * 0.06}s` }}
             >
-              <h3 className="text-xl font-semibold mb-2 text-primary flex items-center gap-2 border-b border-primary/20 pb-2">
+              <h3 className="text-lg mb-4 text-primary border-b border-border pb-3">
                 {cat.categorie}
               </h3>
-              <ul className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-2.5">
                 {cat.items.map((skill, idx) => (
-                  <li key={idx} className="flex items-center gap-3 text-lg text-foreground/90 font-medium">
-                    {skill.icon && (
-                      <span className={`text-2xl ${skill.label === 'React' ? 'slow-rotate' : ''}`}>
-                        {skill.icon}
-                      </span>
-                    )}
-                    <span>{skill.label}</span>
+                  <li key={idx} className="flex items-center gap-3 text-foreground/90">
+                    {skill.icon && <span className="text-lg flex-shrink-0">{skill.icon}</span>}
+                    <span className="text-sm">{skill.label}</span>
                   </li>
                 ))}
               </ul>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

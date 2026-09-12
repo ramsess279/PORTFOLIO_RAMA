@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Code2, TrendingUp, Layers, Sparkles, ArrowRight } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 const phrases = [
   "Bonjour, je suis Ramatoulaye.",
@@ -34,28 +35,6 @@ const pillars = [
     icon: Sparkles,
   },
 ];
-
-const useRevealOnScroll = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const targets = container.querySelectorAll<HTMLElement>(".reveal-blur");
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          entry.target.classList.toggle("in-view", entry.isIntersecting);
-        });
-      },
-      { threshold: 0.3 }
-    );
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  return containerRef;
-};
 
 const Home = () => {
   // Dialogue typewriter / evaporate effect
@@ -153,7 +132,7 @@ const Home = () => {
     ? `translate(${dragPos.x}px, ${dragPos.y}px)`
     : `perspective(900px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`;
 
-  const revealRef = useRevealOnScroll();
+  const revealRef = useReveal();
 
   return (
     <div ref={revealRef}>

@@ -6,10 +6,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { ExternalLink, Clock, User, ChevronLeft, ChevronRight, Eye, Play, Maximize } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { PageHeader } from "@/components/PageHeader";
+import { useReveal } from "@/hooks/useReveal";
 import projectsData from "@/data/projects.json";
 
 const ProjetsSection = () => {
   const isMobile = useIsMobile();
+  const ref = useReveal();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProject, setSelectedProject] = useState(null);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -67,14 +70,22 @@ const ProjetsSection = () => {
     return () => clearInterval(interval);
   }, [carouselApi]);
 
-  const truncateDescription = (description, maxLength = 300) => {
+  const truncateDescription = (description, maxLength = isMobile ? 100 : 300) => {
     if (description.length <= maxLength) return description;
     return description.substring(0, maxLength) + "...";
   };
 
   return (
-    <section className={`min-h-screen flex items-center justify-center py-12 pb-32 ${isMobile ? 'px-2' : 'px-4'}`}>
+    <section ref={ref} className={`pt-28 pb-20 ${isMobile ? 'px-2' : 'px-4'}`}>
       <div className={`container mx-auto ${isMobile ? 'max-w-full' : 'max-w-6xl'}`}>
+        <PageHeader
+          eyebrow="Mes réalisations"
+          title={
+            <>
+              Des idées, <em className="accent-italic">livrées</em>
+            </>
+          }
+        />
         {/* Container avec flèches de navigation */}
         <div className="relative">
           {/* Flèche gauche */}
@@ -92,22 +103,21 @@ const ProjetsSection = () => {
           )}
 
           {/* Grille des projets */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentProjects.map((projet, index) => (
               <Card
                 key={index}
-                className={`glass hover-glow ${isMobile ? 'p-4' : 'p-6'} rounded-2xl animate-scale-in group cursor-pointer relative overflow-hidden`}
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="reveal-blur border border-border hover:border-primary/40 p-3 md:p-6 rounded-2xl group cursor-pointer relative overflow-hidden transition-colors shadow-none"
+                style={{ transitionDelay: `${index * 0.08}s` }}
                 onClick={() => openProjectModal(projet)}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative z-10">
                   {/* Image */}
                   <div className="mb-4 overflow-hidden rounded-lg">
                     {projet.media?.[0]?.type === "video" ? (
                       <video
                         src={projet.media[0].src}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                         muted
                         loop
                         onMouseEnter={(e) => e.currentTarget.play()}
@@ -117,14 +127,14 @@ const ProjetsSection = () => {
                       <img
                         src={projet.media?.[0]?.src || "/placeholder.svg"}
                         alt={projet.title}
-                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-40 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     )}
                   </div>
 
                   {/* Titre et lien demo */}
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-lg md:text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                       {projet.title}
                     </h3>
                     <a href={projet.demo !== "#" ? projet.demo : "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
@@ -133,16 +143,16 @@ const ProjetsSection = () => {
                   </div>
 
                   {/* Technologies */}
-                  <div className="flex flex-wrap gap-2 mb-3">
+                  <div className="flex flex-wrap gap-1 md:gap-2 mb-2">
                     {projet.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="secondary" className="bg-primary/20 text-white/80 border-primary/30 text-xs">
+                      <Badge key={techIndex} variant="outline" className="text-muted-foreground border-border text-[10px] md:text-xs bg-transparent">
                         {tech}
                       </Badge>
                     ))}
                   </div>
 
                   {/* Description tronquée */}
-                  <p className="text-muted-foreground text-sm mb-4">
+                  <p className="text-muted-foreground text-xs md:text-sm mb-2">
                     {truncateDescription(projet.description)}
                   </p>
 
@@ -280,7 +290,7 @@ const ProjetsSection = () => {
                   {/* Technologies */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {selectedProject.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="secondary" className="bg-primary/20 text-white/80 border-primary/30">
+                      <Badge key={techIndex} variant="outline" className="text-muted-foreground border-border bg-transparent">
                         {tech}
                       </Badge>
                     ))}

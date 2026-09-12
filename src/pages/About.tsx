@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import { Lightbulb, Users, BookOpen } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 const values = [
   {
@@ -44,22 +44,6 @@ const goals = [
   "Contribuer à des projets à impact social, comme Naatalvote",
   "Partager mes connaissances et mentorer d'autres développeurs",
 ];
-
-const useReveal = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const container = ref.current;
-    if (!container) return;
-    const targets = container.querySelectorAll<HTMLElement>(".reveal-blur");
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.target.classList.toggle("in-view", e.isIntersecting)),
-      { threshold: 0.25 }
-    );
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-  return ref;
-};
 
 const About = () => {
   const ref = useReveal();
