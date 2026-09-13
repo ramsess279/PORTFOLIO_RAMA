@@ -1,6 +1,7 @@
 import { Home, User, Briefcase, Code, GraduationCap, Mail, FolderOpen } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
+import { useTheme } from "@/hooks/useTheme";
 
 const menuItems = [
   { title: "Accueil", url: "/", icon: Home },
@@ -13,13 +14,19 @@ const menuItems = [
 ];
 
 export const Navbar = () => {
+  const { theme } = useTheme();
+
   return (
     <nav className="fixed md:top-0 bottom-0 md:bottom-auto left-0 right-0 z-50 glass border-t md:border-b border-border/50 shadow-lg">
       <div className="container mx-auto px-2">
         <div className="flex items-center h-16 min-w-max relative">
           {/* Logo/Brand */}
           <div className="hidden md:flex items-center absolute left-2">
-            <span className="logo-mark text-3xl leading-none">RG</span>
+            <img
+              src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"}
+              alt="RG"
+              className="h-10 w-auto"
+            />
           </div>
 
           {/* Navigation Items */}

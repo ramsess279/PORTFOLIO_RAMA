@@ -49,7 +49,7 @@ const Education = () => {
           {formations.map((formation, index) => (
             <div
               key={index}
-              className="reveal-blur flex items-center gap-5 py-6 border-b border-border group"
+              className="reveal-blur flex items-center gap-5 py-6 px-4 -mx-4 rounded-xl border-b border-border group transition-all duration-300 hover:bg-muted/50 hover:px-6"
               style={{ transitionDelay: `${index * 0.06}s` }}
             >
               <GraduationCap

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Code2, TrendingUp, Layers, Sparkles, ArrowRight } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
+import { useTheme } from "@/hooks/useTheme";
 
 const phrases = [
   "Bonjour, je suis Ramatoulaye.",
@@ -133,22 +134,49 @@ const Home = () => {
     : `perspective(900px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`;
 
   const revealRef = useReveal();
+  const { theme } = useTheme();
+
+  // Giant background watermark: fades in on load, drifts gently with the cursor
+  const [watermarkIn, setWatermarkIn] = useState(false);
+  const [watermarkOffset, setWatermarkOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const t = setTimeout(() => setWatermarkIn(true), 300);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 30;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      setWatermarkOffset({ x, y });
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
 
   return (
     <div ref={revealRef}>
       {/* Hero */}
       <section className="relative min-h-screen flex items-center overflow-hidden px-4 sm:px-8 md:px-[5vw] py-24 md:py-0">
-        <span
-          className="logo-mark absolute select-none pointer-events-none opacity-10 leading-none"
-          style={{ fontSize: "min(30vw, 420px)", top: "4vh", left: "28%" }}
+        <img
+          src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"}
+          alt=""
           aria-hidden="true"
-        >
-          RG
-        </span>
+          className="absolute select-none pointer-events-none w-[min(46vw,640px)] h-auto"
+          style={{
+            top: "4vh",
+            left: "28%",
+            opacity: watermarkIn ? 0.12 : 0,
+            transform: `translate(${watermarkOffset.x}px, ${watermarkOffset.y}px)`,
+            transition: "opacity 2s ease, transform 0.2s ease-out",
+          }}
+        />
 
         <div className="relative z-10 mx-auto max-w-[1680px] w-full flex flex-col md:flex-row items-center gap-10 md:gap-[clamp(3rem,10vw,10rem)]">
           {/* Avatar + dialogue */}
           <div className="flex-none w-full md:w-[480px] flex flex-col items-center md:items-start">
+           <div className="relative flex flex-col items-center md:items-start">
             <div
               ref={avatarRef}
               className={`avatar-figure relative w-[220px] md:w-[440px] select-none ${
@@ -170,7 +198,8 @@ const Home = () => {
               onMouseDown={handleMouseDown}
               onAnimationEnd={() => setPoked(false)}
             >
-              <img src="/avatar-rg.png" alt="Ramatoulaye Gueye" className="w-full h-auto block pointer-events-none" draggable={false} />
+              <div className="avatar-glow" aria-hidden="true" />
+              <img src="/avatar-rg.png" alt="Ramatoulaye Gueye" className="w-full h-auto block pointer-events-none relative" draggable={false} />
               {sparkles.map((s) => (
                 <span
                   key={s.id}
@@ -184,7 +213,7 @@ const Home = () => {
               ))}
             </div>
 
-            <div className="dialogue-box relative mt-5 w-full max-w-[280px] md:max-w-[240px] rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md px-5 py-4">
+            <div className="dialogue-box mt-5 md:mt-0 md:absolute md:top-[4%] md:-right-[8%] w-full max-w-[280px] md:max-w-[240px] rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md px-5 py-4">
               <div className="text-[10px] tracking-[0.16em] uppercase text-primary mb-1.5">
                 Ramatoulaye Gueye
               </div>
@@ -200,6 +229,7 @@ const Home = () => {
                 continuer ▸
               </div>
             </div>
+           </div>
           </div>
 
           {/* Text */}

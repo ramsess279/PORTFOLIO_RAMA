@@ -8,8 +8,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 350 45% 96%;
-    --foreground: 340 85% 20%;
+    --background: 30 20% 98%;
+    --foreground: 340 85% 18%;
 
     --card: 0 0% 100%;
     --card-foreground: 340 85% 20%;
@@ -26,8 +26,8 @@ All colors MUST be HSL.
     --secondary: 350 100% 88%;
     --secondary-foreground: 340 85% 25%;
 
-    --muted: 350 35% 92%;
-    --muted-foreground: 340 30% 42%;
+    --muted: 30 15% 93%;
+    --muted-foreground: 340 20% 40%;
 
     --accent: 210 70% 50%;
     --accent-foreground: 0 0% 100%;
@@ -35,8 +35,8 @@ All colors MUST be HSL.
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 340 30% 85%;
-    --input: 340 20% 90%;
+    --border: 340 15% 87%;
+    --input: 340 15% 90%;
     --ring: 340 70% 42%;
 
     --radius: 1rem;
@@ -354,13 +354,16 @@ All colors MUST be HSL.
   }
 
   /* Dialogue box (Accueil) */
-  .dialogue-box::after {
-    content: '';
-    position: absolute; bottom: -8px; left: 36px; width: 14px; height: 14px;
-    background: inherit;
-    border-right: 1px solid hsl(var(--border));
-    border-bottom: 1px solid hsl(var(--border));
-    transform: rotate(45deg);
+  .dialogue-box { position: relative; }
+  @media (min-width: 768px) {
+    .dialogue-box::after {
+      content: '';
+      position: absolute; bottom: -8px; left: 36px; width: 14px; height: 14px;
+      background: inherit;
+      border-right: 1px solid hsl(var(--border));
+      border-bottom: 1px solid hsl(var(--border));
+      transform: rotate(45deg);
+    }
   }
   .dialogue-text {
     opacity: 1; filter: blur(0); transform: translateY(0) scale(1);
@@ -394,6 +397,37 @@ All colors MUST be HSL.
   .pillar-card:hover .pillar-arrow { opacity: 1; transform: translateX(0); }
   .pillar-card .pillar-icon { transition: transform 0.4s ease; }
   .pillar-card:hover .pillar-icon { transform: scale(1.12) rotate(-4deg); }
+
+  /* Page transitions */
+  @keyframes page-enter {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page-enter { animation: page-enter 0.55s cubic-bezier(.2,.8,.2,1); }
+
+  /* Lively hover for cards across the site */
+  .hover-glow-card {
+    transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.3s ease;
+  }
+  .hover-glow-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -20px hsl(var(--primary) / 0.35);
+  }
+
+  /* Soft glow anchored behind the hero avatar, not a page-wide gradient wash */
+  .avatar-glow {
+    position: absolute;
+    inset: -10%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.22), transparent 70%);
+    filter: blur(30px);
+    animation: avatar-glow-pulse 5s ease-in-out infinite;
+  }
+  @keyframes avatar-glow-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.06); }
+  }
 
   @keyframes dust-trail-right {
     0% {

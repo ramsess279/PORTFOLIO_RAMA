@@ -107,7 +107,7 @@ const Skills = () => {
           {competences.map((cat, i) => (
             <div
               key={cat.categorie}
-              className="reveal-blur border border-border rounded-2xl p-7 hover:border-primary/40 transition-colors"
+              className="reveal-blur hover-glow-card border border-border rounded-2xl p-7 hover:border-primary/40"
               style={{ transitionDelay: `${i * 0.06}s` }}
             >
               <h3 className="text-lg mb-4 text-primary border-b border-border pb-3">
@@ -115,9 +115,13 @@ const Skills = () => {
               </h3>
               <ul className="flex flex-col gap-2.5">
                 {cat.items.map((skill, idx) => (
-                  <li key={idx} className="flex items-center gap-3 text-foreground/90">
-                    {skill.icon && <span className="text-lg flex-shrink-0">{skill.icon}</span>}
-                    <span className="text-sm">{skill.label}</span>
+                  <li key={idx} className="group flex items-center gap-3 text-foreground/90">
+                    {skill.icon && (
+                      <span className="text-lg flex-shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-6">
+                        {skill.icon}
+                      </span>
+                    )}
+                    <span className="text-sm transition-colors group-hover:text-primary">{skill.label}</span>
                   </li>
                 ))}
               </ul>

@@ -81,8 +81,8 @@ const Experience = () => {
 
         <div className="space-y-14">
           {experiences.map((exp, index) => (
-            <div key={index} className="reveal-blur relative pl-8 border-l border-border">
-              <div className="absolute left-0 top-1 -translate-x-1/2 w-3 h-3 rounded-full bg-primary" />
+            <div key={index} className="reveal-blur group relative pl-8 border-l border-border transition-colors duration-300 hover:border-primary">
+              <div className="absolute left-0 top-1 -translate-x-1/2 w-3 h-3 rounded-full bg-primary transition-transform duration-300 group-hover:scale-150" />
               <div className="flex items-center gap-3 flex-wrap mb-2">
                 <span className="text-[11px] tracking-[0.14em] uppercase text-primary border border-primary/40 rounded-full px-3 py-1">
                   {typeLabel[exp.type]}

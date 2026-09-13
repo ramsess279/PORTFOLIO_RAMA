@@ -107,7 +107,7 @@ const ProjetsSection = () => {
             {currentProjects.map((projet, index) => (
               <Card
                 key={index}
-                className="reveal-blur border border-border hover:border-primary/40 p-3 md:p-6 rounded-2xl group cursor-pointer relative overflow-hidden transition-colors shadow-none"
+                className="reveal-blur hover-glow-card border border-border hover:border-primary/40 p-3 md:p-6 rounded-2xl group cursor-pointer relative overflow-hidden shadow-none"
                 style={{ transitionDelay: `${index * 0.08}s` }}
                 onClick={() => openProjectModal(projet)}
               >
