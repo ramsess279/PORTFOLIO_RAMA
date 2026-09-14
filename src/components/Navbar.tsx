@@ -1,62 +1,58 @@
-import { Home, User, Briefcase, Code, GraduationCap, Mail, FolderOpen } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "@/hooks/useTheme";
 
-const menuItems = [
-  { title: "Accueil", url: "/", icon: Home },
-  { title: "À propos", url: "/about", icon: User },
-  { title: "Compétences", url: "/skills", icon: Code },
-  { title: "Projets", url: "/projects", icon: FolderOpen },
-  { title: "Expériences", url: "/experience", icon: Briefcase },
-  { title: "Formation", url: "/education", icon: GraduationCap },
-  { title: "Contact", url: "/contact", icon: Mail },
+const links = [
+  { label: "Projets", href: "#projets" },
+  { label: "Méthode", href: "#methode" },
+  { label: "À propos", href: "#apropos" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export const Navbar = () => {
   const { theme } = useTheme();
+  const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 24);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
+  const homeHref = (hash: string) => pathname === "/" ? hash : `/${hash}`;
 
   return (
-    <nav className="fixed md:top-0 bottom-0 md:bottom-auto left-0 right-0 z-50 glass border-t md:border-b border-border/50 shadow-lg">
-      <div className="container mx-auto px-2">
-        <div className="flex items-center h-16 min-w-max relative">
-          {/* Logo/Brand */}
-          <div className="hidden md:flex items-center absolute left-2">
-            <img
-              src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"}
-              alt="RG"
-              className="h-10 w-auto"
-            />
-          </div>
+    <header className={`site-nav ${scrolled ? "is-scrolled" : ""}`}>
+      <div className="site-nav__inner">
+        <Link to="/" className="brand-mark" aria-label="Accueil — Ramatoulaye Gueye">
+          <img src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"} alt="" />
+          <span>Ramatoulaye Gueye</span>
+        </Link>
 
-          {/* Navigation Items */}
-          <div className="flex items-center gap-1 mx-auto">
-            {menuItems.map((item) => (
-              <NavLink
-                key={item.title}
-                to={item.url}
-                end
-                className={({ isActive }) =>
-                  `flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                    isActive
-                      ? "bg-primary/10 border border-primary/30"
-                      : "hover:bg-primary/10 border border-transparent hover:border-primary/30"
-                  }`
-                }
-              >
-                <item.icon className="h-4 w-4" />
-                <span className="hidden md:inline">{item.title}</span>
-              </NavLink>
-            ))}
+        <nav className="site-nav__links" aria-label="Navigation principale">
+          {links.map((item) => <a key={item.href} href={homeHref(item.href)}>{item.label}</a>)}
+        </nav>
 
-          </div>
-
-          {/* Theme toggle */}
-          <div className="absolute right-2 flex items-center">
-            <ThemeToggle />
-          </div>
+        <div className="site-nav__actions">
+          <ThemeToggle />
+          <a href={homeHref("#contact")} className="nav-cta">Travaillons ensemble <ArrowUpRight aria-hidden="true" /></a>
+          <button type="button" className="menu-toggle" aria-label={open ? "Fermer le menu" : "Ouvrir le menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+            {open ? <X /> : <Menu />}
+          </button>
         </div>
       </div>
-    </nav>
+
+      <div className={`mobile-menu ${open ? "is-open" : ""}`} aria-hidden={!open}>
+        {links.map((item, index) => (
+          <a key={item.href} href={homeHref(item.href)} onClick={() => setOpen(false)}><span>0{index + 1}</span>{item.label}</a>
+        ))}
+      </div>
+    </header>
   );
 };

@@ -1,309 +1,172 @@
+import { ArrowDown, ArrowRight, ArrowUpRight, Github, Linkedin, MapPin, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Code2, TrendingUp, Layers, Sparkles, ArrowRight } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
-import { useTheme } from "@/hooks/useTheme";
+import projectsData from "@/data/projects.json";
 
-const phrases = [
-  "Bonjour, je suis Ramatoulaye.",
-  "Je conçois, je développe, je livre.",
-  "Du cahier des charges à la production.",
+const featuredIds = [-1, 0, 1, 9];
+const projectMeta: Record<number, { index: string; type: string; accent: string }> = {
+  [-1]: { index: "01", type: "Civic tech · Architecture", accent: "Un système de vote pensé autour du métier et de la confiance." },
+  0: { index: "02", type: "E-commerce · Fullstack", accent: "Une boutique pensée et livrée en 72 heures." },
+  1: { index: "03", type: "SaaS RH · Produit métier", accent: "Des processus RH complexes rendus simples." },
+  9: { index: "04", type: "Travel · Expérience digitale", accent: "Le Sénégal raconté comme une destination vivante." },
+};
+
+const process = [
+  { num: "01", verb: "Comprendre", title: "Le besoin avant la solution", text: "J’écoute, je questionne et je transforme les enjeux métier en objectifs, parcours et priorités clairs." },
+  { num: "02", verb: "Concevoir", title: "Donner une forme à l’idée", text: "Architecture, user flows, maquettes et prototype : chaque décision prépare un produit cohérent et utile." },
+  { num: "03", verb: "Construire", title: "Développer avec méthode", text: "Du front au back, je crée des interfaces robustes, accessibles et maintenables avec une vision produit." },
+  { num: "04", verb: "Livrer", title: "Aller jusqu’au réel", text: "Déploiement, validation, documentation et amélioration continue : le projet ne s’arrête pas à la démo." },
 ];
 
-const pillars = [
-  {
-    num: "01",
-    title: "Développement",
-    desc: "React, Node, PHP, Java & Spring Boot, architecture hexagonale.",
-    icon: Code2,
-  },
-  {
-    num: "02",
-    title: "Business Analyst",
-    desc: "Cahier des charges, user stories, UML, Agile.",
-    icon: TrendingUp,
-  },
-  {
-    num: "03",
-    title: "Design & UX",
-    desc: "Maquettes Figma, web et mobile.",
-    icon: Layers,
-  },
-  {
-    num: "04",
-    title: "IA & Automatisation",
-    desc: "Développement assisté par l'IA, outils et agents (vibecoding).",
-    icon: Sparkles,
-  },
+const expertise = [
+  ["01", "Product thinking", "Cahier des charges, ateliers, user stories, UML, priorisation MoSCoW et méthodes Agile."],
+  ["02", "Engineering", "React, TypeScript, Node.js, PHP, Java, Spring Boot, API REST, PostgreSQL et Docker."],
+  ["03", "Design & expérience", "Figma, direction visuelle, prototypes, design responsive et micro-interactions utiles."],
+  ["04", "IA & automatisation", "Agents, outils d’assistance et workflows IA intégrés avec discernement au processus produit."],
 ];
 
 const Home = () => {
-  // Dialogue typewriter / evaporate effect
-  const [started, setStarted] = useState(false);
-  const [phraseIndex, setPhraseIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [evaporating, setEvaporating] = useState(false);
-  const [showHint, setShowHint] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
+  const revealRef = useReveal<HTMLDivElement>();
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  const featured = featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
 
   useEffect(() => {
-    const t = setTimeout(() => setStarted(true), 1400);
-    return () => clearTimeout(t);
+    const timer = window.setTimeout(() => setLoaded(true), 160);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    if (!started || evaporating) return;
-    const current = phrases[phraseIndex];
-    if (charIndex < current.length) {
-      setSpeaking(true);
-      const t = setTimeout(() => setCharIndex((c) => c + 1), 42);
-      return () => clearTimeout(t);
-    }
-    setSpeaking(false);
-    setShowHint(true);
-    const t = setTimeout(() => {
-      setShowHint(false);
-      setEvaporating(true);
-      setTimeout(() => {
-        setEvaporating(false);
-        setCharIndex(0);
-        setPhraseIndex((p) => (p + 1) % phrases.length);
-      }, 550);
-    }, 1900);
-    return () => clearTimeout(t);
-  }, [started, charIndex, phraseIndex, evaporating]);
-
-  // Avatar interactions: hover tilt, double-click sparkle burst, drag + spring back
-  const avatarRef = useRef<HTMLDivElement>(null);
-  const [hovering, setHovering] = useState(false);
-  const [poked, setPoked] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [sparkles, setSparkles] = useState<{ id: number; dx: number; dy: number }[]>([]);
-  const [dragging, setDragging] = useState(false);
-  const [springBack, setSpringBack] = useState(false);
-  const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
-  const dragStart = useRef({ x: 0, y: 0 });
-
-  const handleAvatarMouseMove = (e: React.MouseEvent) => {
-    if (dragging || !avatarRef.current) return;
-    const rect = avatarRef.current.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width - 0.5;
-    const py = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: px * 10, y: -py * 8 });
+  const handlePortraitMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!portraitRef.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = portraitRef.current.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    portraitRef.current.style.setProperty("--portrait-x", `${x * 10}deg`);
+    portraitRef.current.style.setProperty("--portrait-y", `${y * -7}deg`);
   };
 
-  const handleDoubleClick = () => {
-    setPoked(false);
-    requestAnimationFrame(() => setPoked(true));
-    const burst = Array.from({ length: 10 }).map((_, i) => {
-      const angle = (Math.PI * 2 * i) / 10 + Math.random() * 0.4;
-      const dist = 60 + Math.random() * 40;
-      return { id: Date.now() + i, dx: Math.cos(angle) * dist, dy: Math.sin(angle) * dist };
-    });
-    setSparkles(burst);
-    setTimeout(() => setSparkles([]), 750);
+  const resetPortrait = () => {
+    portraitRef.current?.style.setProperty("--portrait-x", "0deg");
+    portraitRef.current?.style.setProperty("--portrait-y", "0deg");
   };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setDragging(true);
-    setSpringBack(false);
-    dragStart.current = { x: e.clientX - dragPos.x, y: e.clientY - dragPos.y };
-  };
-
-  useEffect(() => {
-    if (!dragging) return;
-    const onMove = (e: MouseEvent) => {
-      setDragPos({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y });
-    };
-    const onUp = () => {
-      setDragging(false);
-      setSpringBack(true);
-      setDragPos({ x: 0, y: 0 });
-      setTimeout(() => setSpringBack(false), 700);
-    };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-    };
-  }, [dragging]);
-
-  const avatarTransform = dragging
-    ? `translate(${dragPos.x}px, ${dragPos.y}px)`
-    : `perspective(900px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`;
-
-  const revealRef = useReveal();
-  const { theme } = useTheme();
-
-  // Giant background watermark: fades in on load, drifts gently with the cursor
-  const [watermarkIn, setWatermarkIn] = useState(false);
-  const [watermarkOffset, setWatermarkOffset] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const t = setTimeout(() => setWatermarkIn(true), 300);
-    return () => clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 30;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      setWatermarkOffset({ x, y });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
 
   return (
-    <div ref={revealRef}>
-      {/* Hero */}
-      <section className="relative min-h-screen flex items-center overflow-hidden px-4 sm:px-8 md:px-[5vw] py-24 md:py-0">
-        <img
-          src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"}
-          alt=""
-          aria-hidden="true"
-          className="absolute select-none pointer-events-none w-[min(46vw,640px)] h-auto"
-          style={{
-            top: "4vh",
-            left: "28%",
-            opacity: watermarkIn ? 0.12 : 0,
-            transform: `translate(${watermarkOffset.x}px, ${watermarkOffset.y}px)`,
-            transition: "opacity 2s ease, transform 0.2s ease-out",
-          }}
-        />
+    <div id="top" ref={revealRef} className={`portfolio-home ${loaded ? "is-loaded" : ""}`}>
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="hero-grid" aria-hidden="true" />
+        <div className="hero-orbit hero-orbit--one" aria-hidden="true" />
+        <div className="hero-orbit hero-orbit--two" aria-hidden="true" />
 
-        <div className="relative z-10 mx-auto max-w-[1680px] w-full flex flex-col md:flex-row items-center gap-10 md:gap-[clamp(3rem,10vw,10rem)]">
-          {/* Avatar + dialogue */}
-          <div className="flex-none w-full md:w-[480px] flex flex-col items-center md:items-start">
-           <div className="relative flex flex-col items-center md:items-start">
-            <div
-              ref={avatarRef}
-              className={`avatar-figure relative w-[220px] md:w-[440px] select-none ${
-                hovering ? "hovering" : ""
-              } ${dragging ? "dragging" : ""} ${poked ? "poked" : ""} ${speaking ? "speaking" : ""}`}
-              style={{
-                transform: avatarTransform,
-                transition: springBack
-                  ? "transform 0.7s cubic-bezier(.34,1.56,.64,1)"
-                  : undefined,
-              }}
-              onMouseEnter={() => setHovering(true)}
-              onMouseLeave={() => {
-                setHovering(false);
-                setTilt({ x: 0, y: 0 });
-              }}
-              onMouseMove={handleAvatarMouseMove}
-              onDoubleClick={handleDoubleClick}
-              onMouseDown={handleMouseDown}
-              onAnimationEnd={() => setPoked(false)}
-            >
-              <div className="avatar-glow" aria-hidden="true" />
-              <img src="/avatar-rg.png" alt="Ramatoulaye Gueye" className="w-full h-auto block pointer-events-none relative" draggable={false} />
-              {sparkles.map((s) => (
-                <span
-                  key={s.id}
-                  className="sparkle-particle"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    ["--sparkle-end" as string]: `translate(${s.dx}px, ${s.dy}px)`,
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="dialogue-box mt-5 md:mt-0 md:absolute md:top-[4%] md:-right-[8%] w-full max-w-[280px] md:max-w-[240px] rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md px-5 py-4">
-              <div className="text-[10px] tracking-[0.16em] uppercase text-primary mb-1.5">
-                Ramatoulaye Gueye
-              </div>
-              <div className={`dialogue-text text-sm leading-relaxed min-h-[2.7em] ${evaporating ? "evaporating" : ""}`}>
-                {phrases[phraseIndex].slice(0, charIndex)}
-                <span className="dialogue-cursor" />
-              </div>
-              <div
-                className={`text-[10px] text-muted-foreground text-right mt-2 transition-opacity duration-300 ${
-                  showHint ? "opacity-70" : "opacity-0"
-                }`}
-              >
-                continuer ▸
-              </div>
-            </div>
-           </div>
+        <div className="hero-copy">
+          <div className="availability hero-reveal"><span className="availability__dot" /> Disponible pour de nouvelles opportunités</div>
+          <p className="eyebrow hero-reveal">Fullstack Developer · Business Analyst</p>
+          <h1 id="hero-title" className="hero-title">
+            <span className="hero-line"><span>Du besoin</span></span>
+            <span className="hero-line"><span>au produit</span></span>
+            <span className="hero-line hero-line--accent"><span>livré.</span></span>
+          </h1>
+          <p className="hero-intro hero-reveal">Je transforme des problématiques métier en expériences numériques utiles, élégantes et prêtes à vivre dans le monde réel.</p>
+          <div className="hero-actions hero-reveal">
+            <a className="button-primary" href="#projets">Découvrir mes projets <ArrowDown /></a>
+            <a className="text-link" href="#methode">Ma façon de travailler <ArrowRight /></a>
           </div>
+        </div>
 
-          {/* Text */}
-          <div className="flex-1 text-center md:text-left">
-            <span className="inline-block text-[11px] md:text-xs tracking-[0.22em] uppercase text-primary mb-5">
-              Développeuse Fullstack & Business Analyst
-            </span>
-            <h1 className="text-4xl sm:text-5xl md:text-[clamp(2.8rem,6.2vw,6rem)] font-normal leading-[1.05] text-foreground">
-              Je conçois,
-              <br />
-              je <em className="accent-italic">construis</em>,
-              <br />
-              je livre.
-            </h1>
-            <p className="mt-6 text-base md:text-[clamp(1.05rem,1.3vw,1.35rem)] text-muted-foreground leading-relaxed max-w-[640px] mx-auto md:mx-0">
-              D'un cahier des charges à la mise en production et la maintenance —
-              développement, analyse métier et design produit réunis en une seule personne.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-6 items-center justify-center md:justify-start">
-              <Button variant="primary" to="/projects" label="Voir mes projets" />
-              <Link
-                to="/contact"
-                className="text-xs tracking-[0.14em] uppercase text-foreground border-b border-border pb-1.5 hover:border-foreground transition-colors"
-              >
-                Me contacter
-              </Link>
-            </div>
+        <div className="hero-visual hero-reveal">
+          <div className="portrait-halo" aria-hidden="true" />
+          <div ref={portraitRef} className="portrait-stage" onPointerMove={handlePortraitMove} onPointerLeave={resetPortrait}>
+            <span className="portrait-label portrait-label--top">Designing with intent</span>
+            <img src="/avatar-rg.png" alt="Portrait illustré de Ramatoulaye Gueye" />
+            <span className="portrait-label portrait-label--bottom"><Sparkles /> Based in Dakar</span>
+          </div>
+          <span className="hero-signature" aria-hidden="true">RG</span>
+        </div>
+
+        <div className="hero-foot hero-reveal">
+          <span><MapPin /> Dakar, Sénégal</span><span className="hero-foot__line" /><span>2026 · Portfolio sélectionné</span>
+        </div>
+      </section>
+
+      <section className="manifesto section-shell" aria-label="Manifeste">
+        <p className="manifesto-index reveal-blur">01 — Manifeste</p>
+        <p className="manifesto-copy reveal-blur">Je ne me contente pas d’écrire du code. Je relie <em>les personnes</em>, <em>les enjeux métier</em> et <em>la technologie</em> pour créer des produits qui ont du sens — du premier échange jusqu’à la mise en production.</p>
+      </section>
+
+      <section id="projets" className="projects-showcase section-shell">
+        <header className="section-heading reveal-blur">
+          <div><p className="section-index">02 — Sélection</p><h2>Projets<br /><em>choisis.</em></h2></div>
+          <p>Quatre projets, quatre univers, une même exigence : comprendre avant de construire.</p>
+        </header>
+        <div className="project-list">
+          {featured.map((project, index) => {
+            const meta = projectMeta[project.id];
+            return (
+              <article className="project-story reveal-blur" key={project.id}>
+                <Link to="/projects" className="project-media" aria-label={`Découvrir ${project.title}`}>
+                  {project.id === -1 ? <NaatalCover /> : <img src={project.media[0]?.src || "/placeholder.svg"} alt="" loading={index > 1 ? "lazy" : "eager"} />}
+                  <span className="project-open">Voir le projet <ArrowUpRight /></span><span className="project-number">{meta.index}</span>
+                </Link>
+                <div className="project-content">
+                  <p className="project-type">{meta.type}</p><h3>{project.title.split(" - ")[0].split(" – ")[0]}</h3><p className="project-accent">{meta.accent}</p>
+                  <div className="project-tags">{project.technologies.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <div className="projects-more reveal-blur"><Link to="/projects">Voir toutes les réalisations <ArrowUpRight /></Link></div>
+      </section>
+
+      <section id="methode" className="method-section">
+        <div className="section-shell">
+          <header className="method-intro reveal-blur"><p className="section-index">03 — Ma méthode</p><h2>Une idée n’est forte<br />que lorsqu’elle devient <em>réelle.</em></h2></header>
+          <div className="process-grid">
+            {process.map((step) => (
+              <article className="process-card reveal-blur" key={step.num}><div className="process-top"><span>{step.num}</span><span className="process-dot" /></div><p className="process-verb">{step.verb}</p><h3>{step.title}</h3><p>{step.text}</p></article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Intro lede */}
-      <section className="max-w-[920px] mx-auto px-8 py-24 md:py-32 text-center">
-        <p className="reveal-blur font-normal text-xl md:text-2xl lg:text-3xl leading-relaxed text-foreground">
-          Je ne me contente pas d'écrire du code. Je pars d'un{" "}
-          <em className="accent-italic">besoin réel</em>, je le structure, je le conçois
-          visuellement, puis je le développe — jusqu'à la mise en production et au-delà.
-        </p>
+      <section className="expertise-section section-shell">
+        <div className="expertise-sticky reveal-blur"><p className="section-index">04 — Expertise</p><h2>Une vision<br /><em>à 360°.</em></h2><p>Le produit, la technique et l’expérience réunis dans une même démarche.</p></div>
+        <div className="expertise-list">
+          {expertise.map(([num, title, text]) => <article className="expertise-item reveal-blur" key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div><ArrowUpRight /></article>)}
+        </div>
       </section>
 
-      {/* Pillars */}
-      <section className="max-w-[1080px] mx-auto px-8 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-4 border-t border-border">
-          {pillars.map((pillar, i) => (
-            <div
-              key={pillar.title}
-              className="pillar-card reveal-blur border-b md:border-r border-border md:last:border-r-0 p-8 hover:bg-muted/40 transition-colors"
-              style={{ transitionDelay: `${i * 0.08}s` }}
-            >
-              <span className="text-sm text-primary font-display block mb-3">{pillar.num}</span>
-              <pillar.icon className="pillar-icon h-6 w-6 text-primary mb-3.5 opacity-85" strokeWidth={1.4} />
-              <h3 className="text-xl mb-2 font-normal">{pillar.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{pillar.desc}</p>
-              <span className="pillar-arrow absolute bottom-4 right-5 text-primary text-base">→</span>
-            </div>
-          ))}
+      <section id="apropos" className="about-section section-shell">
+        <div className="about-portrait reveal-blur"><span className="about-portrait__word" aria-hidden="true">curieuse</span><img src="/photo_ramaa.png" alt="Ramatoulaye Gueye" loading="lazy" /></div>
+        <div className="about-copy reveal-blur">
+          <p className="section-index">05 — Derrière l’écran</p><h2>Développeuse par métier.<br /><em>Créatrice par nature.</em></h2>
+          <p>Je suis Ramatoulaye, développeuse Fullstack et Business Analyst basée à Dakar. Ma force est de pouvoir circuler entre les conversations métier, la conception et le code sans perdre le fil du produit.</p>
+          <p>J’aime les problèmes complexes, les interfaces qui paraissent évidentes et les technologies utilisées avec intention.</p>
+          <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>4</strong><span>disciplines réunies</span></div></div>
+          <div className="about-links"><Link to="/experience">Voir mon parcours <ArrowRight /></Link><Link to="/skills">Explorer mes compétences <ArrowRight /></Link></div>
+        </div>
+      </section>
+
+      <section id="contact" className="contact-section">
+        <div className="contact-glow" aria-hidden="true" />
+        <div className="section-shell contact-inner reveal-blur">
+          <p className="section-index">06 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
+          <a className="contact-email" href="mailto:ramatoulaye.rtg@gmail.com">ramatoulaye.rtg@gmail.com <ArrowUpRight /></a>
+          <footer><span>© 2026 Ramatoulaye Gueye</span><div><a href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><Github /> GitHub</a><a href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a></div><a href="#top">Retour en haut ↑</a></footer>
         </div>
       </section>
     </div>
   );
 };
 
-const Button = ({ to, label, variant }: { to: string; label: string; variant: "primary" }) => (
-  <Link
-    to={to}
-    className="group relative inline-flex items-center gap-2 rounded-full border border-primary px-7 py-3 text-xs tracking-[0.14em] uppercase text-foreground overflow-hidden transition-colors hover:text-primary-foreground"
-  >
-    <span
-      className="absolute inset-0 -z-10 origin-left scale-x-0 rounded-full transition-transform duration-500 ease-out group-hover:scale-x-100"
-      style={{ background: "var(--gradient-primary)" }}
-    />
-    {label}
-    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
-  </Link>
+const NaatalCover = () => (
+  <div className="naatal-cover" aria-hidden="true">
+    <div className="naatal-grid" />
+    <span className="naatal-kicker">Sénégal · Civic technology</span>
+    <strong>Naatal<br />vote</strong>
+    <div className="naatal-ballot"><span /><span /><span /></div>
+    <span className="naatal-domain">Domain-driven<br />by design.</span>
+  </div>
 );
 
 export default Home;

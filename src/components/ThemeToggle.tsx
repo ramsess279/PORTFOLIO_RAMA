@@ -10,8 +10,8 @@ export const ThemeToggle = () => {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full hover:bg-accent"
-      aria-label="Toggle theme"
+      className="rounded-full hover:bg-primary/10 focus-visible:ring-primary"
+      aria-label={theme === "dark" ? "Activer le thème clair" : "Activer le thème sombre"}
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5 text-primary" />
