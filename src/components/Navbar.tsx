@@ -7,6 +7,8 @@ import { useTheme } from "@/hooks/useTheme";
 const links = [
   { label: "Projets", href: "#projets" },
   { label: "Méthode", href: "#methode" },
+  { label: "Compétences", href: "#competences" },
+  { label: "Parcours", href: "#parcours" },
   { label: "À propos", href: "#apropos" },
   { label: "Contact", href: "#contact" },
 ];

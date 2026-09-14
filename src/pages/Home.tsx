@@ -26,6 +26,29 @@ const expertise = [
   ["04", "IA & automatisation", "Agents, outils d’assistance et workflows IA intégrés avec discernement au processus produit."],
 ];
 
+const skillGroups = [
+  { title: "Langages", items: ["JavaScript", "TypeScript", "Java", "PHP", "C", "HTML", "CSS"] },
+  { title: "Front & Back", items: ["React", "Node.js", "Express", "Symfony", "Spring Boot", "Tailwind CSS"] },
+  { title: "Data & qualité", items: ["PostgreSQL", "MySQL", "Prisma", "Zod", "JUnit", "API REST"] },
+  { title: "Architecture", items: ["POO", "SOLID", "MVC", "Architecture hexagonale", "DDD", "UML", "BPMN"] },
+  { title: "Outils & DevOps", items: ["Git", "GitHub", "Docker", "Maven", "Gradle", "Jira", "Notion"] },
+  { title: "Design & produit", items: ["Figma", "Canva", "Illustrator", "User stories", "MoSCoW", "Agile / Scrum"] },
+];
+
+const experiences = [
+  { period: "2025 — Aujourd’hui", title: "Développeuse Fullstack & Business Analyst", place: "Digital Media Mobile · Dakar", text: "Recueil du besoin, cahier des charges, conception, développement, mise en production et maintenance applicative." },
+  { period: "2024", title: "Développement Fullstack — Gestion de flotte", place: "Multimédia, TGI · Dakar", text: "Application multi-rôles pour gérer les véhicules, conducteurs, missions, suivi GPS et rapports de maintenance." },
+  { period: "2024", title: "Formation intensive Fullstack", place: "Sonatel Academy · Dakar", text: "Onze mois de pratique, plus de dix projets réalisés et déployés, APIs et applications complexes." },
+];
+
+const education = [
+  ["2026 — En cours", "Licence 3 Développement Web/Mobile & Génie Logiciel", "ESP 221"],
+  ["2025", "Développement FullStack Web/Mobile", "Orange Digital Center"],
+  ["2022 — 2025", "Licence 2 IDA", "Université Cheikh Hamidou Kane"],
+  ["2022 — 2024", "DST en Génie Informatique", "ESP"],
+  ["2021 — 2022", "Baccalauréat S2", "Complexe Symbiose"],
+];
+
 const Home = () => {
   const revealRef = useReveal<HTMLDivElement>();
   const portraitRef = useRef<HTMLDivElement>(null);
@@ -103,7 +126,7 @@ const Home = () => {
             const meta = projectMeta[project.id];
             return (
               <article className="project-story reveal-blur" key={project.id}>
-                <Link to="/projects" className="project-media" aria-label={`Découvrir ${project.title}`}>
+                <Link to={`/projects/${project.id}`} className="project-media" aria-label={`Découvrir ${project.title}`}>
                   {project.id === -1 ? <NaatalCover /> : <img src={project.media[0]?.src || "/placeholder.svg"} alt="" loading={index > 1 ? "lazy" : "eager"} />}
                   <span className="project-open">Voir le projet <ArrowUpRight /></span><span className="project-number">{meta.index}</span>
                 </Link>
@@ -136,10 +159,30 @@ const Home = () => {
         </div>
       </section>
 
+      <section id="competences" className="skills-section">
+        <div className="section-shell">
+          <header className="skills-heading reveal-blur"><p className="section-index">05 — Boîte à outils</p><h2>Des compétences qui<br /><em>travaillent ensemble.</em></h2><p>Je choisis la technologie en fonction du produit — jamais l’inverse.</p></header>
+          <div className="skills-grid">
+            {skillGroups.map((group, index) => (
+              <article className="skill-group reveal-blur" key={group.title}><span>0{index + 1}</span><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="parcours" className="journey-section section-shell">
+        <header className="journey-heading reveal-blur"><p className="section-index">06 — Parcours</p><h2>Apprendre.<br />Pratiquer. <em>Évoluer.</em></h2><p>Un parcours construit entre formation continue et projets concrets.</p></header>
+        <div className="journey-columns">
+          <div className="journey-column"><h3>Expériences</h3>{experiences.map((item) => <article className="journey-item reveal-blur" key={`${item.period}-${item.title}`}><time>{item.period}</time><div><h4>{item.title}</h4><strong>{item.place}</strong><p>{item.text}</p></div></article>)}</div>
+          <div className="journey-column"><h3>Formations</h3>{education.map(([period, title, place]) => <article className="journey-item reveal-blur" key={`${period}-${title}`}><time>{period}</time><div><h4>{title}</h4><strong>{place}</strong></div></article>)}</div>
+        </div>
+        <div className="journey-links reveal-blur"><Link to="/experience">Parcours détaillé <ArrowRight /></Link><Link to="/education">Toutes les formations <ArrowRight /></Link><Link to="/skills">Compétences détaillées <ArrowRight /></Link></div>
+      </section>
+
       <section id="apropos" className="about-section section-shell">
         <div className="about-portrait reveal-blur"><span className="about-portrait__word" aria-hidden="true">curieuse</span><img src="/photo_ramaa.png" alt="Ramatoulaye Gueye" loading="lazy" /></div>
         <div className="about-copy reveal-blur">
-          <p className="section-index">05 — Derrière l’écran</p><h2>Développeuse par métier.<br /><em>Créatrice par nature.</em></h2>
+          <p className="section-index">07 — Derrière l’écran</p><h2>Développeuse par métier.<br /><em>Créatrice par nature.</em></h2>
           <p>Je suis Ramatoulaye, développeuse Fullstack et Business Analyst basée à Dakar. Ma force est de pouvoir circuler entre les conversations métier, la conception et le code sans perdre le fil du produit.</p>
           <p>J’aime les problèmes complexes, les interfaces qui paraissent évidentes et les technologies utilisées avec intention.</p>
           <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>4</strong><span>disciplines réunies</span></div></div>
@@ -150,7 +193,7 @@ const Home = () => {
       <section id="contact" className="contact-section">
         <div className="contact-glow" aria-hidden="true" />
         <div className="section-shell contact-inner reveal-blur">
-          <p className="section-index">06 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
+          <p className="section-index">08 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
           <a className="contact-email" href="mailto:ramatoulaye.rtg@gmail.com">ramatoulaye.rtg@gmail.com <ArrowUpRight /></a>
           <footer><span>© 2026 Ramatoulaye Gueye</span><div><a href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><Github /> GitHub</a><a href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a></div><a href="#top">Retour en haut ↑</a></footer>
         </div>

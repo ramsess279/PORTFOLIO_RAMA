@@ -41,11 +41,7 @@ const ProjetsSection = () => {
               </>
             );
 
-            return hasDemo ? (
-              <a className="archive-card reveal-blur" href={project.demo} target="_blank" rel="noreferrer" key={project.id}>{content}</a>
-            ) : (
-              <article className="archive-card reveal-blur" key={project.id}>{content}</article>
-            );
+            return <Link className="archive-card reveal-blur" to={`/projects/${project.id}`} key={project.id}>{content}</Link>;
           })}
         </div>
       </div>
