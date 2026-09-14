@@ -2,6 +2,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Github, Linkedin, MapPin, Sparkles
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
+import { useTheme } from "@/hooks/useTheme";
 import projectsData from "@/data/projects.json";
 
 const featuredIds = [-1, 0, 1, 9];
@@ -52,6 +53,7 @@ const education = [
 const Home = () => {
   const revealRef = useReveal<HTMLDivElement>();
   const portraitRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
   const [loaded, setLoaded] = useState(false);
   const featured = featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
 
@@ -96,6 +98,10 @@ const Home = () => {
           </div>
         </div>
 
+        <div className="hero-center-mark hero-reveal" aria-hidden="true">
+          <img src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"} alt="" />
+        </div>
+
         <div className="hero-visual hero-reveal">
           <div className="portrait-halo" aria-hidden="true" />
           <div ref={portraitRef} className="portrait-stage" onPointerMove={handlePortraitMove} onPointerLeave={resetPortrait}>
@@ -103,7 +109,6 @@ const Home = () => {
             <img src="/avatar-rg.png" alt="Portrait illustré de Ramatoulaye Gueye" />
             <span className="portrait-label portrait-label--bottom"><Sparkles /> Based in Dakar</span>
           </div>
-          <span className="hero-signature" aria-hidden="true">RG</span>
         </div>
 
         <div className="hero-foot hero-reveal">
@@ -170,19 +175,24 @@ const Home = () => {
         </div>
       </section>
 
-      <section id="parcours" className="journey-section section-shell">
-        <header className="journey-heading reveal-blur"><p className="section-index">06 — Parcours</p><h2>Apprendre.<br />Pratiquer. <em>Évoluer.</em></h2><p>Un parcours construit entre formation continue et projets concrets.</p></header>
-        <div className="journey-columns">
-          <div className="journey-column"><h3>Expériences</h3>{experiences.map((item) => <article className="journey-item reveal-blur" key={`${item.period}-${item.title}`}><time>{item.period}</time><div><h4>{item.title}</h4><strong>{item.place}</strong><p>{item.text}</p></div></article>)}</div>
-          <div className="journey-column"><h3>Formations</h3>{education.map(([period, title, place]) => <article className="journey-item reveal-blur" key={`${period}-${title}`}><time>{period}</time><div><h4>{title}</h4><strong>{place}</strong></div></article>)}</div>
+      <section id="experiences" className="experience-section">
+        <div className="section-shell journey-layout">
+          <header className="journey-heading reveal-blur"><p className="section-index">06 — Expériences</p><h2>Le terrain comme<br /><em>meilleure école.</em></h2><p>Des missions où l’analyse, le produit et la technique se rencontrent.</p></header>
+          <div className="journey-column journey-column--experience">{experiences.map((item, index) => <article className="journey-item reveal-blur" key={`${item.period}-${item.title}`}><span className="journey-number">0{index + 1}</span><time>{item.period}</time><div><h4>{item.title}</h4><strong>{item.place}</strong><p>{item.text}</p></div></article>)}</div>
+          <div className="journey-links reveal-blur"><Link to="/experience">Voir toutes mes expériences <ArrowRight /></Link></div>
         </div>
-        <div className="journey-links reveal-blur"><Link to="/experience">Parcours détaillé <ArrowRight /></Link><Link to="/education">Toutes les formations <ArrowRight /></Link><Link to="/skills">Compétences détaillées <ArrowRight /></Link></div>
+      </section>
+
+      <section id="formations" className="education-section section-shell">
+        <header className="journey-heading reveal-blur"><p className="section-index">07 — Formations</p><h2>Apprendre pour<br /><em>mieux construire.</em></h2><p>Un apprentissage continu, entre ingénierie logicielle, produit et création.</p></header>
+        <div className="education-list">{education.map(([period, title, place], index) => <article className="education-item reveal-blur" key={`${period}-${title}`}><span>0{index + 1}</span><time>{period}</time><h3>{title}</h3><strong>{place}</strong></article>)}</div>
+        <div className="journey-links reveal-blur"><Link to="/education">Voir toutes mes formations <ArrowRight /></Link><Link to="/skills">Compétences détaillées <ArrowRight /></Link></div>
       </section>
 
       <section id="apropos" className="about-section section-shell">
-        <div className="about-portrait reveal-blur"><span className="about-portrait__word" aria-hidden="true">curieuse</span><img src="/photo_ramaa.png" alt="Ramatoulaye Gueye" loading="lazy" /></div>
+        <div className="about-portrait reveal-blur"><span className="about-portrait__word" aria-hidden="true">curieuse</span><img src="/portrait-rama-illustrated.png" alt="Portrait illustré de Ramatoulaye Gueye" loading="lazy" /></div>
         <div className="about-copy reveal-blur">
-          <p className="section-index">07 — Derrière l’écran</p><h2>Développeuse par métier.<br /><em>Créatrice par nature.</em></h2>
+          <p className="section-index">08 — Derrière l’écran</p><h2>Développeuse par métier.<br /><em>Créatrice par nature.</em></h2>
           <p>Je suis Ramatoulaye, développeuse Fullstack et Business Analyst basée à Dakar. Ma force est de pouvoir circuler entre les conversations métier, la conception et le code sans perdre le fil du produit.</p>
           <p>J’aime les problèmes complexes, les interfaces qui paraissent évidentes et les technologies utilisées avec intention.</p>
           <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>4</strong><span>disciplines réunies</span></div></div>
@@ -193,7 +203,7 @@ const Home = () => {
       <section id="contact" className="contact-section">
         <div className="contact-glow" aria-hidden="true" />
         <div className="section-shell contact-inner reveal-blur">
-          <p className="section-index">08 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
+          <p className="section-index">09 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
           <a className="contact-email" href="mailto:ramatoulaye.rtg@gmail.com">ramatoulaye.rtg@gmail.com <ArrowUpRight /></a>
           <footer><span>© 2026 Ramatoulaye Gueye</span><div><a href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><Github /> GitHub</a><a href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a></div><a href="#top">Retour en haut ↑</a></footer>
         </div>

@@ -8,7 +8,8 @@ const links = [
   { label: "Projets", href: "#projets" },
   { label: "Méthode", href: "#methode" },
   { label: "Compétences", href: "#competences" },
-  { label: "Parcours", href: "#parcours" },
+  { label: "Expériences", href: "#experiences" },
+  { label: "Formations", href: "#formations" },
   { label: "À propos", href: "#apropos" },
   { label: "Contact", href: "#contact" },
 ];
