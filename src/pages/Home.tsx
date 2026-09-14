@@ -167,6 +167,11 @@ const Home = () => {
       <section id="competences" className="skills-section">
         <div className="section-shell">
           <header className="skills-heading reveal-blur"><p className="section-index">05 — Boîte à outils</p><h2>Des compétences qui<br /><em>travaillent ensemble.</em></h2><p>Je choisis la technologie en fonction du produit — jamais l’inverse.</p></header>
+          <div className="skills-proof reveal-blur" aria-label="Aperçu des compétences">
+            <span><strong>6</strong> domaines complémentaires</span>
+            <span><strong>35+</strong> compétences maîtrisées</span>
+            <span><strong>360°</strong> du besoin à la production</span>
+          </div>
           <div className="skills-grid">
             {skillGroups.map((group, index) => (
               <article className="skill-group reveal-blur" key={group.title}><span>0{index + 1}</span><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>
@@ -204,8 +209,12 @@ const Home = () => {
         <div className="contact-glow" aria-hidden="true" />
         <div className="section-shell contact-inner reveal-blur">
           <p className="section-index">09 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
-          <a className="contact-email" href="mailto:ramatoulaye.rtg@gmail.com">ramatoulaye.rtg@gmail.com <ArrowUpRight /></a>
-          <footer><span>© 2026 Ramatoulaye Gueye</span><div><a href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><Github /> GitHub</a><a href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a></div><a href="#top">Retour en haut ↑</a></footer>
+          <div className="contact-channels">
+            <a className="contact-channel contact-channel--email" href="mailto:ramatoulaye.rtg@gmail.com"><span>E-mail</span><strong>ramatoulaye.rtg@gmail.com</strong><ArrowUpRight /></a>
+            <a className="contact-channel" href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><span><Github /> GitHub</span><strong>@rama-lpb</strong><ArrowUpRight /></a>
+            <a className="contact-channel" href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><span><Linkedin /> LinkedIn</span><strong>Ramatoulaye Gueye</strong><ArrowUpRight /></a>
+          </div>
+          <footer><span>© 2026 Ramatoulaye Gueye</span><a href="#top">Retour en haut ↑</a></footer>
         </div>
       </section>
     </div>
