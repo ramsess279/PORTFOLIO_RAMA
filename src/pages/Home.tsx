@@ -214,7 +214,7 @@ const Home = () => {
             <a className="contact-channel" href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><span><Github /> GitHub</span><strong>@rama-lpb</strong><ArrowUpRight /></a>
             <a className="contact-channel" href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><span><Linkedin /> LinkedIn</span><strong>Ramatoulaye Gueye</strong><ArrowUpRight /></a>
           </div>
-          <footer><span>© 2026 Ramatoulaye Gueye</span><a href="#top">Retour en haut ↑</a></footer>
+          <footer><a href="#top">Retour en haut ↑</a></footer>
         </div>
       </section>
     </div>
