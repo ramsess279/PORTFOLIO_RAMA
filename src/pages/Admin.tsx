@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
-import { ArrowLeft, Check, ChevronRight, Download, Eye, FileText, LayoutDashboard, LogOut, Palette, PanelsTopLeft, Save, Settings2, Upload } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Download, Eye, EyeOff, FileText, LayoutDashboard, LockKeyhole, LogOut, Palette, PanelsTopLeft, Save, Settings2, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { usePortfolioContent } from "@/hooks/usePortfolioContent";
@@ -33,6 +33,7 @@ const Admin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => { setDraft(content); }, [content]);
   useEffect(() => { void getAdminAuthState().then((state) => { setAuthenticated(state === "authenticated"); if (state !== "authenticated") setAuthMode(state); }).finally(() => setCheckingAuth(false)); }, []);
@@ -40,6 +41,10 @@ const Admin = () => {
   const visibleCount = useMemo(() => Object.values(draft.sections).filter(Boolean).length, [draft.sections]);
   const publicProjects = useMemo(() => draft.projects.filter((project) => !project.commented), [draft.projects]);
   const isDirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(content), [draft, content]);
+  const passwordStrength = useMemo(() => {
+    if (!password) return 0;
+    return [password.length >= 8, password.length >= 12, /[A-Z]/.test(password) && /[a-z]/.test(password), /\d/.test(password), /[^A-Za-z0-9]/.test(password)].filter(Boolean).length;
+  }, [password]);
 
   const update = <K extends keyof PortfolioContent>(key: K, value: PortfolioContent[K]) => setDraft((current) => ({ ...current, [key]: value }));
   const updateProject = (id: number, patch: Partial<PortfolioProject>) => setDraft((current) => ({ ...current, projects: current.projects.map((project) => project.id === id ? { ...project, ...patch } : project) }));
@@ -82,8 +87,8 @@ const Admin = () => {
       <form onSubmit={login} className="admin-login__form">
         <p className="admin-kicker">{authMode === "setup" ? "Première ouverture" : "Espace privé"}</p><h1>{authMode === "setup" ? <>Créez votre<br /><em>mot de passe.</em></> : <>Bienvenue dans<br /><em>votre studio.</em></>}</h1>
         {cmsMode === "cloud" && <label>E-mail<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>}
-        <label>Mot de passe<input type="password" minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
-        {authMode === "setup" && <label>Confirmer le mot de passe<input type="password" minLength={8} value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} required /></label>}
+        <label>Mot de passe<div className="admin-password-field"><LockKeyhole /><input type={showPassword ? "text" : "password"} minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={authMode === "setup" ? "new-password" : "current-password"} required /><button type="button" aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"} onClick={() => setShowPassword((value) => !value)}>{showPassword ? <EyeOff /> : <Eye />}</button></div></label>
+        {authMode === "setup" && <><label>Confirmer le mot de passe<div className={`admin-password-field ${passwordConfirmation && password === passwordConfirmation ? "is-valid" : ""}`}><LockKeyhole /><input type={showPassword ? "text" : "password"} minLength={8} value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} autoComplete="new-password" required />{passwordConfirmation && password === passwordConfirmation && <Check />}</div></label><div className="password-strength" aria-live="polite"><div>{[1, 2, 3, 4, 5].map((level) => <i className={passwordStrength >= level ? "is-active" : ""} key={level} />)}</div><span>{passwordStrength < 2 ? "Faible" : passwordStrength < 4 ? "Correct" : "Très sécurisé"}</span></div></>}
         <button type="submit">{authMode === "setup" ? "Protéger mon studio" : "Se connecter"} <ChevronRight /></button><Link to="/"><ArrowLeft /> Retour au portfolio</Link>
       </form>
     </div>
