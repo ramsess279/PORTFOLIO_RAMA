@@ -62,5 +62,16 @@ export type PortfolioContent = {
     fileName: string;
     updatedAt: string;
   };
+  cv: {
+    headline: string;
+    summary: string;
+    phone: string;
+    website: string;
+    skills: string[];
+    languages: string[];
+    interests: string[];
+    experiences: { period: string; title: string; place: string; bullets: string[] }[];
+    education: { period: string; title: string; place: string }[];
+  };
   projects: PortfolioProject[];
 };

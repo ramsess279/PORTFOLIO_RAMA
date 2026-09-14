@@ -61,7 +61,7 @@ const Home = () => {
           <div className="hero-actions hero-reveal">
             <a className="button-primary" href="#projets">Découvrir mes projets <ArrowDown /></a>
             <a className="text-link" href="#methode">Ma façon de travailler <ArrowRight /></a>
-            {content.resume.url && <a className="text-link resume-link" href={content.resume.url} download={content.resume.fileName || undefined} target="_blank" rel="noreferrer">Télécharger mon CV <Download /></a>}
+            <Link className="text-link resume-link" to="/cv">Voir mon CV <Download /></Link>
           </div>
         </div>
 
@@ -178,11 +178,7 @@ const Home = () => {
           <h2>Mon parcours.<br /><em>Un seul document.</em></h2>
           <p>Expériences, compétences, formation et réalisations clés réunies dans une version claire, concise et prête à partager.</p>
         </div>
-        {content.resume.url ? (
-          <a className="public-resume__action reveal-blur" href={content.resume.url} download={content.resume.fileName || undefined} target="_blank" rel="noreferrer"><span>Télécharger</span><strong>Mon CV</strong><Download /></a>
-        ) : (
-          <div className="public-resume__action public-resume__action--pending reveal-blur"><span>Prochainement</span><strong>CV en préparation</strong><Download /></div>
-        )}
+        <Link className="public-resume__action reveal-blur" to="/cv"><span>Voir et télécharger</span><strong>Mon CV</strong><Download /></Link>
       </section>
 
       <section id="contact" className="contact-section" hidden={!content.sections.contact}>

@@ -76,6 +76,10 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 
 L’espace `/admin` permet de modifier les textes principaux, les couleurs, la visibilité des sections, les projets et le CV.
 
+Au premier accès en mode local, l’application demande de créer un mot de passe d’au moins huit caractères. Son empreinte est conservée localement et la session est fermée lorsque l’onglet du navigateur est quitté. En mode cloud, la connexion est gérée par Supabase Auth.
+
+Le CV possède également un éditeur structuré complet dans `/admin` et une page publique `/cv`. Le bouton de cette page ouvre le dialogue d’impression du navigateur avec une mise en page A4 dédiée, permettant d’enregistrer le document en PDF. Un PDF externe peut aussi être importé en complément.
+
 Sans configuration externe, il fonctionne en mode local avec `localStorage`. Les changements restent sur le navigateur utilisé. Pour une administration privée et persistante en ligne :
 
 1. Créer un projet Supabase et un compte Auth pour `ramatoulaye.rtg@gmail.com`.

@@ -3,7 +3,7 @@ import { ArrowLeft, Check, ChevronRight, Download, Eye, FileText, LayoutDashboar
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { usePortfolioContent } from "@/hooks/usePortfolioContent";
-import { cmsMode, isAdminAuthenticated, savePortfolioContent, signInAdmin, signOutAdmin, uploadResume } from "@/lib/portfolioRepository";
+import { cmsMode, getAdminAuthState, savePortfolioContent, setupLocalAdminPassword, signInAdmin, signOutAdmin, uploadResume } from "@/lib/portfolioRepository";
 import type { PortfolioContent, PortfolioProject, PortfolioSection } from "@/types/portfolio";
 
 type AdminTab = "dashboard" | "content" | "appearance" | "sections" | "projects" | "resume";
@@ -27,23 +27,32 @@ const Admin = () => {
   const [draft, setDraft] = useState<PortfolioContent>(content);
   const [tab, setTab] = useState<AdminTab>("dashboard");
   const [authenticated, setAuthenticated] = useState(false);
+  const [authMode, setAuthMode] = useState<"setup" | "login">("login");
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [saving, setSaving] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   useEffect(() => { setDraft(content); }, [content]);
-  useEffect(() => { void isAdminAuthenticated().then(setAuthenticated).finally(() => setCheckingAuth(false)); }, []);
+  useEffect(() => { void getAdminAuthState().then((state) => { setAuthenticated(state === "authenticated"); if (state !== "authenticated") setAuthMode(state); }).finally(() => setCheckingAuth(false)); }, []);
 
   const visibleCount = useMemo(() => Object.values(draft.sections).filter(Boolean).length, [draft.sections]);
   const publicProjects = useMemo(() => draft.projects.filter((project) => !project.commented), [draft.projects]);
+  const isDirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(content), [draft, content]);
 
   const update = <K extends keyof PortfolioContent>(key: K, value: PortfolioContent[K]) => setDraft((current) => ({ ...current, [key]: value }));
   const updateProject = (id: number, patch: Partial<PortfolioProject>) => setDraft((current) => ({ ...current, projects: current.projects.map((project) => project.id === id ? { ...project, ...patch } : project) }));
 
   const login = async (event: React.FormEvent) => {
     event.preventDefault();
-    try { await signInAdmin(email, password); setAuthenticated(true); toast.success("Bienvenue dans votre studio."); }
+    try {
+      if (authMode === "setup") {
+        if (password !== passwordConfirmation) throw new Error("Les deux mots de passe ne correspondent pas.");
+        await setupLocalAdminPassword(password);
+      } else await signInAdmin(email, password);
+      setAuthenticated(true); toast.success(authMode === "setup" ? "Votre espace privé est protégé." : "Bienvenue dans votre studio.");
+    }
     catch (error) { toast.error(error instanceof Error ? error.message : "Connexion impossible."); }
   };
 
@@ -71,10 +80,11 @@ const Admin = () => {
     <div className="admin-login">
       <div className="admin-login__visual"><span>RG</span><p>Votre portfolio devient un produit vivant.</p></div>
       <form onSubmit={login} className="admin-login__form">
-        <p className="admin-kicker">Espace privé</p><h1>Bienvenue dans<br /><em>votre studio.</em></h1>
-        <label>E-mail<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>
-        <label>Mot de passe<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
-        <button type="submit">Se connecter <ChevronRight /></button><Link to="/"><ArrowLeft /> Retour au portfolio</Link>
+        <p className="admin-kicker">{authMode === "setup" ? "Première ouverture" : "Espace privé"}</p><h1>{authMode === "setup" ? <>Créez votre<br /><em>mot de passe.</em></> : <>Bienvenue dans<br /><em>votre studio.</em></>}</h1>
+        {cmsMode === "cloud" && <label>E-mail<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>}
+        <label>Mot de passe<input type="password" minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
+        {authMode === "setup" && <label>Confirmer le mot de passe<input type="password" minLength={8} value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} required /></label>}
+        <button type="submit">{authMode === "setup" ? "Protéger mon studio" : "Se connecter"} <ChevronRight /></button><Link to="/"><ArrowLeft /> Retour au portfolio</Link>
       </form>
     </div>
   );
@@ -84,11 +94,11 @@ const Admin = () => {
       <aside className="admin-sidebar">
         <div className="admin-brand"><span>RG</span><div><strong>Portfolio Studio</strong><small>{cmsMode === "cloud" ? "Connecté au cloud" : "Mode local"}</small></div></div>
         <nav>{navItems.map((item) => <button className={tab === item.id ? "is-active" : ""} key={item.id} onClick={() => setTab(item.id)}><item.icon />{item.label}</button>)}</nav>
-        <div className="admin-sidebar__bottom"><Link to="/" target="_blank"><Eye /> Voir le portfolio</Link>{cmsMode === "cloud" && <button onClick={() => void signOutAdmin().then(() => setAuthenticated(false))}><LogOut /> Déconnexion</button>}</div>
+        <div className="admin-sidebar__bottom"><Link to="/" target="_blank"><Eye /> Voir le portfolio</Link><button onClick={() => void signOutAdmin().then(() => { setAuthenticated(false); setAuthMode("login"); })}><LogOut /> Déconnexion</button></div>
       </aside>
 
       <section className="admin-workspace">
-        <header className="admin-topbar"><div><p>{cmsMode === "cloud" ? "Synchronisation en ligne" : "Prévisualisation locale"}</p><h1>{navItems.find((item) => item.id === tab)?.label}</h1></div><div><Link to="/" target="_blank"><Eye /> Aperçu</Link><button onClick={save} disabled={saving}><Save />{saving ? "Publication…" : "Publier"}</button></div></header>
+        <header className="admin-topbar"><div><p className={isDirty ? "has-unsaved" : ""}>{isDirty ? "Modifications non publiées" : cmsMode === "cloud" ? "Synchronisation en ligne" : "Portfolio à jour"}</p><h1>{navItems.find((item) => item.id === tab)?.label}</h1></div><div><Link to="/" target="_blank"><Eye /> Aperçu</Link><button className={isDirty ? "needs-save" : ""} onClick={save} disabled={saving}><Save />{saving ? "Publication…" : isDirty ? "Publier les changements" : "Publié"}</button></div></header>
 
         <div className="admin-canvas">
           {cmsMode === "local" && <div className="admin-notice"><Settings2 /><div><strong>Le studio fonctionne en mode local.</strong><p>Vos changements sont visibles immédiatement sur cet appareil. Ajoutez les variables Supabase pour publier depuis n’importe où avec une connexion sécurisée.</p></div></div>}
@@ -98,7 +108,7 @@ const Admin = () => {
           {tab === "appearance" && <AppearanceEditor draft={draft} setDraft={setDraft} />}
           {tab === "sections" && <div className="admin-panel"><PanelTitle title="Organisation des sections" text="Activez ou masquez une partie du portfolio sans supprimer son contenu." /> <div className="admin-section-list">{(Object.keys(draft.sections) as PortfolioSection[]).map((section) => <label key={section}><span><strong>{sectionLabels[section]}</strong><small>{draft.sections[section] ? "Visible sur le site" : "Masquée"}</small></span><input type="checkbox" checked={draft.sections[section]} onChange={(event) => update("sections", { ...draft.sections, [section]: event.target.checked })} /><i /></label>)}</div></div>}
           {tab === "projects" && <ProjectsEditor projects={draft.projects} updateProject={updateProject} />}
-          {tab === "resume" && <ResumeEditor draft={draft} onUpload={handleResume} />}
+          {tab === "resume" && <ResumeEditor draft={draft} setDraft={setDraft} onUpload={handleResume} />}
         </div>
       </section>
     </div>
@@ -109,7 +119,7 @@ const PanelTitle = ({ title, text }: { title: string; text: string }) => <header
 
 const Dashboard = ({ draft, visibleCount, projectCount, setTab }: { draft: PortfolioContent; visibleCount: number; projectCount: number; setTab: (tab: AdminTab) => void }) => <>
   <div className="admin-welcome"><div><p>Bonjour Ramatoulaye</p><h2>Votre univers,<br /><em>toujours à jour.</em></h2><span>Modifiez, prévisualisez et publiez sans toucher au code.</span></div><div className="admin-welcome__orb">RG</div></div>
-  <div className="admin-metrics"><button onClick={() => setTab("sections")}><span>Sections visibles</span><strong>{visibleCount}<small>/ 9</small></strong><ChevronRight /></button><button onClick={() => setTab("projects")}><span>Projets publiés</span><strong>{projectCount}</strong><ChevronRight /></button><button onClick={() => setTab("resume")}><span>CV en ligne</span><strong className={draft.resume.url ? "is-ready" : ""}>{draft.resume.url ? "Oui" : "Non"}</strong><ChevronRight /></button></div>
+  <div className="admin-metrics"><button onClick={() => setTab("sections")}><span>Sections visibles</span><strong>{visibleCount}<small>/ 9</small></strong><ChevronRight /></button><button onClick={() => setTab("projects")}><span>Projets publiés</span><strong>{projectCount}</strong><ChevronRight /></button><button onClick={() => setTab("resume")}><span>CV dynamique</span><strong className="is-ready">Prêt</strong><ChevronRight /></button></div>
   <div className="admin-quick"><PanelTitle title="Actions rapides" text="Les réglages les plus utilisés, accessibles en un geste." /><div><button onClick={() => setTab("content")}><PanelsTopLeft /><span><strong>Modifier l’accueil</strong><small>Hero, manifeste et contact</small></span><ChevronRight /></button><button onClick={() => setTab("appearance")}><Palette /><span><strong>Changer les couleurs</strong><small>Direction visuelle globale</small></span><ChevronRight /></button><button onClick={() => setTab("resume")}><Upload /><span><strong>Mettre à jour le CV</strong><small>Remplacer le PDF public</small></span><ChevronRight /></button></div></div>
 </>;
 
@@ -145,6 +155,25 @@ const AppearanceEditor = ({ draft, setDraft }: { draft: PortfolioContent; setDra
 
 const ProjectsEditor = ({ projects, updateProject }: { projects: PortfolioProject[]; updateProject: (id: number, patch: Partial<PortfolioProject>) => void }) => <div className="admin-panel"><PanelTitle title="Gestion des projets" text="Modifiez les informations, les médias et choisissez les projets à mettre en avant." /><div className="admin-project-list">{projects.map((project) => <details key={project.id}><summary><div><span className={project.commented ? "is-hidden" : "is-live"}>{project.commented ? "Masqué" : "Publié"}</span><strong>{project.title}</strong><small>{project.technologies.slice(0, 3).join(" · ")}</small></div><ChevronRight /></summary><div className="admin-project-fields"><label>Titre<input value={project.title} onChange={(event) => updateProject(project.id, { title: event.target.value })} /></label><label>Durée<input value={project.duration} onChange={(event) => updateProject(project.id, { duration: event.target.value })} /></label><label className="admin-project-fields__wide">Description<textarea rows={4} value={project.description} onChange={(event) => updateProject(project.id, { description: event.target.value })} /></label><label>URL de démonstration<input value={project.demo || ""} onChange={(event) => updateProject(project.id, { demo: event.target.value })} /></label><label>Technologies (séparées par des virgules)<input value={project.technologies.join(", ")} onChange={(event) => updateProject(project.id, { technologies: event.target.value.split(",").map((item) => item.trim()).filter(Boolean) })} /></label><label className="admin-project-fields__wide">Images / vidéos (une URL par ligne)<textarea rows={4} value={project.media.map((item) => item.src).join("\n")} onChange={(event) => updateProject(project.id, { media: event.target.value.split("\n").map((src) => src.trim()).filter(Boolean).map((src) => ({ type: src.match(/\.(webm|mp4)$/i) ? "video" : "image", src })) })} /></label><div className="admin-project-toggles"><label><input type="checkbox" checked={!project.commented} onChange={(event) => updateProject(project.id, { commented: !event.target.checked })} /> Visible</label><label><input type="checkbox" checked={Boolean(project.featured)} onChange={(event) => updateProject(project.id, { featured: event.target.checked })} /> À la une</label></div></div></details>)}</div></div>;
 
-const ResumeEditor = ({ draft, onUpload }: { draft: PortfolioContent; onUpload: (event: ChangeEvent<HTMLInputElement>) => void }) => <div className="admin-panel"><PanelTitle title="Curriculum vitæ" text="Le PDF publié alimente automatiquement le bouton Télécharger mon CV sur votre portfolio." /><div className="admin-resume"><div className="admin-resume__drop"><FileText /><h3>{draft.resume.fileName || "Ajoutez votre CV"}</h3><p>Un fichier PDF, clair et optimisé pour les recruteurs.</p><label><Upload /> Choisir un PDF<input type="file" accept="application/pdf" onChange={onUpload} /></label>{draft.resume.url && <a href={draft.resume.url} target="_blank" rel="noreferrer"><Download /> Vérifier le document</a>}</div><aside><p>Conseils pour votre nouveau CV</p><ul><li><Check /> Un titre métier précis</li><li><Check /> Des résultats mesurables</li><li><Check /> Une page, deux maximum</li><li><Check /> Une version compatible ATS</li></ul><span>Envoyez-moi votre CV actuel et je pourrai le réécrire et le redessiner avec vous.</span></aside></div></div>;
+const ResumeEditor = ({ draft, setDraft, onUpload }: { draft: PortfolioContent; setDraft: React.Dispatch<React.SetStateAction<PortfolioContent>>; onUpload: (event: ChangeEvent<HTMLInputElement>) => void }) => {
+  const setCv = (key: keyof PortfolioContent["cv"], value: PortfolioContent["cv"][typeof key]) => setDraft((current) => ({ ...current, cv: { ...current.cv, [key]: value } }));
+  const updateCvExperience = (index: number, patch: Partial<PortfolioContent["cv"]["experiences"][number]>) => setCv("experiences", draft.cv.experiences.map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item));
+  const updateCvEducation = (index: number, patch: Partial<PortfolioContent["cv"]["education"][number]>) => setCv("education", draft.cv.education.map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item));
+
+  return <div className="admin-panel"><PanelTitle title="CV Builder" text="Éditez tout le contenu, observez le résultat en direct puis imprimez-le en PDF depuis la page publique." />
+    <div className="cv-builder">
+      <div className="cv-builder__form">
+        <fieldset><legend>En-tête</legend><label>Titre professionnel<input value={draft.cv.headline} onChange={(event) => setCv("headline", event.target.value)} /></label><label>Résumé<textarea rows={4} value={draft.cv.summary} onChange={(event) => setCv("summary", event.target.value)} /></label><div className="admin-inline"><label>Téléphone<input value={draft.cv.phone} onChange={(event) => setCv("phone", event.target.value)} /></label><label>Site web<input value={draft.cv.website} onChange={(event) => setCv("website", event.target.value)} /></label></div></fieldset>
+        <fieldset><legend>Compétences & langues</legend><label>Compétences, séparées par des virgules<textarea rows={3} value={draft.cv.skills.join(", ")} onChange={(event) => setCv("skills", event.target.value.split(",").map((value) => value.trim()).filter(Boolean))} /></label><label>Langues, une par ligne<textarea rows={3} value={draft.cv.languages.join("\n")} onChange={(event) => setCv("languages", event.target.value.split("\n").map((value) => value.trim()).filter(Boolean))} /></label><label>Centres d’intérêt, une par ligne<textarea rows={3} value={draft.cv.interests.join("\n")} onChange={(event) => setCv("interests", event.target.value.split("\n").map((value) => value.trim()).filter(Boolean))} /></label></fieldset>
+        <fieldset><legend>Expériences</legend><div className="cv-editor-list">{draft.cv.experiences.map((item, index) => <div key={index}><div className="admin-inline"><label>Période<input value={item.period} onChange={(event) => updateCvExperience(index, { period: event.target.value })} /></label><label>Entreprise<input value={item.place} onChange={(event) => updateCvExperience(index, { place: event.target.value })} /></label></div><label>Poste<input value={item.title} onChange={(event) => updateCvExperience(index, { title: event.target.value })} /></label><label>Réalisations, une par ligne<textarea rows={4} value={item.bullets.join("\n")} onChange={(event) => updateCvExperience(index, { bullets: event.target.value.split("\n").map((value) => value.trim()).filter(Boolean) })} /></label><button type="button" className="cv-remove" onClick={() => setCv("experiences", draft.cv.experiences.filter((_, itemIndex) => itemIndex !== index))}>Supprimer</button></div>)}</div><button type="button" className="cv-add" onClick={() => setCv("experiences", [...draft.cv.experiences, { period: "", title: "Nouvelle expérience", place: "", bullets: [""] }])}>+ Ajouter une expérience</button></fieldset>
+        <fieldset><legend>Formations</legend><div className="cv-editor-list">{draft.cv.education.map((item, index) => <div key={index}><div className="admin-inline"><label>Période<input value={item.period} onChange={(event) => updateCvEducation(index, { period: event.target.value })} /></label><label>Établissement<input value={item.place} onChange={(event) => updateCvEducation(index, { place: event.target.value })} /></label></div><label>Diplôme / formation<input value={item.title} onChange={(event) => updateCvEducation(index, { title: event.target.value })} /></label><button type="button" className="cv-remove" onClick={() => setCv("education", draft.cv.education.filter((_, itemIndex) => itemIndex !== index))}>Supprimer</button></div>)}</div><button type="button" className="cv-add" onClick={() => setCv("education", [...draft.cv.education, { period: "", title: "Nouvelle formation", place: "" }])}>+ Ajouter une formation</button></fieldset>
+        <fieldset><legend>PDF existant — optionnel</legend><div className="admin-resume__compact"><FileText /><div><strong>{draft.resume.fileName || "Aucun PDF importé"}</strong><small>Vous pouvez conserver une version PDF externe en complément du CV dynamique.</small></div><label><Upload /> Importer<input type="file" accept="application/pdf" onChange={onUpload} /></label></div></fieldset>
+      </div>
+      <aside className="cv-builder__preview"><div className="cv-preview-bar"><span>Aperçu en direct</span><Link to="/cv" target="_blank">Ouvrir en grand <Eye /></Link></div><CvPreview content={draft} /></aside>
+    </div>
+  </div>;
+};
+
+const CvPreview = ({ content }: { content: PortfolioContent }) => <div className="cv-mini"><header><p>RG</p><div><h2>{content.identity.name}</h2><strong>{content.cv.headline}</strong><span>{content.identity.email} · {content.cv.phone}</span></div></header><section><h3>Profil</h3><p>{content.cv.summary}</p></section><section><h3>Expériences</h3>{content.cv.experiences.slice(0, 3).map((item, index) => <article key={index}><time>{item.period}</time><div><strong>{item.title}</strong><small>{item.place}</small><p>{item.bullets[0]}</p></div></article>)}</section><section><h3>Compétences</h3><div className="cv-mini__tags">{content.cv.skills.slice(0, 9).map((skill) => <span key={skill}>{skill}</span>)}</div></section></div>;
 
 export default Admin;

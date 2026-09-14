@@ -17,6 +17,7 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
+import Resume from "./pages/Resume";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const AnimatedRoutes = () => {
         <Route path="/education" element={<Education />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/cv" element={<Resume />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
@@ -56,11 +58,12 @@ const AnimatedRoutes = () => {
 const AppShell = () => {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith("/admin");
+  const isStandalone = isAdmin || pathname === "/cv";
 
   return (
     <>
       <ScrollManager />
-      {!isAdmin && <Navbar />}
+      {!isStandalone && <Navbar />}
       <main className={isAdmin ? "admin-main" : undefined}><AnimatedRoutes /></main>
     </>
   );

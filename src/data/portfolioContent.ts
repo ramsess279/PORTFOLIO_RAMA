@@ -82,6 +82,25 @@ export const defaultPortfolioContent: PortfolioContent = {
     contact: true,
   },
   resume: { url: "", fileName: "", updatedAt: "" },
+  cv: {
+    headline: "Développeuse Fullstack & Business Analyst",
+    summary: "Je transforme les besoins métier en produits numériques utiles, robustes et élégants, de l’analyse jusqu’à la mise en production.",
+    phone: "",
+    website: "",
+    skills: ["React", "TypeScript", "Node.js", "Java", "Spring Boot", "PHP", "PostgreSQL", "Docker", "Figma", "UML", "Agile / Scrum"],
+    languages: ["Français — courant", "Anglais — professionnel"],
+    interests: ["Design produit", "Intelligence artificielle", "Innovation numérique"],
+    experiences: [
+      { period: "2025 — Aujourd’hui", title: "Développeuse Fullstack & Business Analyst", place: "Digital Media Mobile · Dakar", bullets: ["Analyse des besoins et rédaction de cahiers des charges.", "Conception, développement et mise en production d’applications métier.", "Collaboration avec les équipes produit et parties prenantes."] },
+      { period: "2024", title: "Développement Fullstack — Gestion de flotte", place: "Multimédia, TGI · Dakar", bullets: ["Conception d’une application multi-rôles de gestion de flotte.", "Gestion des véhicules, missions, conducteurs et rapports de maintenance."] },
+      { period: "2024", title: "Formation intensive Fullstack", place: "Sonatel Academy · Dakar", bullets: ["Onze mois de pratique intensive et plus de dix projets réalisés.", "Développement d’API et d’applications web complexes."] },
+    ],
+    education: [
+      { period: "2026 — En cours", title: "Licence 3 Développement Web/Mobile & Génie Logiciel", place: "ESP 221" },
+      { period: "2025", title: "Développement FullStack Web/Mobile", place: "Orange Digital Center" },
+      { period: "2022 — 2024", title: "DST en Génie Informatique", place: "ESP" },
+    ],
+  },
   projects: (projectsData.projects as PortfolioProject[]).map((project) => ({
     ...project,
     featured: [-1, 0, 1, 9].includes(project.id),
