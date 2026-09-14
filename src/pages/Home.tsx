@@ -1,9 +1,10 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Github, Linkedin, MapPin, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Download, Github, Linkedin, MapPin, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
 import { useTheme } from "@/hooks/useTheme";
 import projectsData from "@/data/projects.json";
+import { usePortfolioContent } from "@/hooks/usePortfolioContent";
 
 const featuredIds = [-1, 0, 1, 9];
 const projectMeta: Record<number, { index: string; type: string; accent: string }> = {
@@ -13,49 +14,14 @@ const projectMeta: Record<number, { index: string; type: string; accent: string 
   9: { index: "04", type: "Travel · Expérience digitale", accent: "Le Sénégal raconté comme une destination vivante." },
 };
 
-const process = [
-  { num: "01", verb: "Comprendre", title: "Le besoin avant la solution", text: "J’écoute, je questionne et je transforme les enjeux métier en objectifs, parcours et priorités clairs." },
-  { num: "02", verb: "Concevoir", title: "Donner une forme à l’idée", text: "Architecture, user flows, maquettes et prototype : chaque décision prépare un produit cohérent et utile." },
-  { num: "03", verb: "Construire", title: "Développer avec méthode", text: "Du front au back, je crée des interfaces robustes, accessibles et maintenables avec une vision produit." },
-  { num: "04", verb: "Livrer", title: "Aller jusqu’au réel", text: "Déploiement, validation, documentation et amélioration continue : le projet ne s’arrête pas à la démo." },
-];
-
-const expertise = [
-  ["01", "Product thinking", "Cahier des charges, ateliers, user stories, UML, priorisation MoSCoW et méthodes Agile."],
-  ["02", "Engineering", "React, TypeScript, Node.js, PHP, Java, Spring Boot, API REST, PostgreSQL et Docker."],
-  ["03", "Design & expérience", "Figma, direction visuelle, prototypes, design responsive et micro-interactions utiles."],
-  ["04", "IA & automatisation", "Agents, outils d’assistance et workflows IA intégrés avec discernement au processus produit."],
-];
-
-const skillGroups = [
-  { title: "Langages", items: ["JavaScript", "TypeScript", "Java", "PHP", "C", "HTML", "CSS"] },
-  { title: "Front & Back", items: ["React", "Node.js", "Express", "Symfony", "Spring Boot", "Tailwind CSS"] },
-  { title: "Data & qualité", items: ["PostgreSQL", "MySQL", "Prisma", "Zod", "JUnit", "API REST"] },
-  { title: "Architecture", items: ["POO", "SOLID", "MVC", "Architecture hexagonale", "DDD", "UML", "BPMN"] },
-  { title: "Outils & DevOps", items: ["Git", "GitHub", "Docker", "Maven", "Gradle", "Jira", "Notion"] },
-  { title: "Design & produit", items: ["Figma", "Canva", "Illustrator", "User stories", "MoSCoW", "Agile / Scrum"] },
-];
-
-const experiences = [
-  { period: "2025 — Aujourd’hui", title: "Développeuse Fullstack & Business Analyst", place: "Digital Media Mobile · Dakar", text: "Recueil du besoin, cahier des charges, conception, développement, mise en production et maintenance applicative." },
-  { period: "2024", title: "Développement Fullstack — Gestion de flotte", place: "Multimédia, TGI · Dakar", text: "Application multi-rôles pour gérer les véhicules, conducteurs, missions, suivi GPS et rapports de maintenance." },
-  { period: "2024", title: "Formation intensive Fullstack", place: "Sonatel Academy · Dakar", text: "Onze mois de pratique, plus de dix projets réalisés et déployés, APIs et applications complexes." },
-];
-
-const education = [
-  ["2026 — En cours", "Licence 3 Développement Web/Mobile & Génie Logiciel", "ESP 221"],
-  ["2025", "Développement FullStack Web/Mobile", "Orange Digital Center"],
-  ["2022 — 2025", "Licence 2 IDA", "Université Cheikh Hamidou Kane"],
-  ["2022 — 2024", "DST en Génie Informatique", "ESP"],
-  ["2021 — 2022", "Baccalauréat S2", "Complexe Symbiose"],
-];
-
 const Home = () => {
   const revealRef = useReveal<HTMLDivElement>();
   const portraitRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
+  const { content } = usePortfolioContent();
   const [loaded, setLoaded] = useState(false);
-  const featured = featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
+  const configuredFeatured = content.projects.filter((project) => project.featured && !project.commented).slice(0, 4);
+  const featured = configuredFeatured.length ? configuredFeatured : featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoaded(true), 160);
@@ -84,17 +50,18 @@ const Home = () => {
         <div className="hero-orbit hero-orbit--two" aria-hidden="true" />
 
         <div className="hero-copy">
-          <div className="availability hero-reveal"><span className="availability__dot" /> Disponible pour de nouvelles opportunités</div>
-          <p className="eyebrow hero-reveal">Fullstack Developer · Business Analyst</p>
+          <div className="availability hero-reveal"><span className="availability__dot" /> {content.hero.availability}</div>
+          <p className="eyebrow hero-reveal">{content.hero.eyebrow}</p>
           <h1 id="hero-title" className="hero-title">
-            <span className="hero-line"><span>Du besoin</span></span>
-            <span className="hero-line"><span>au produit</span></span>
-            <span className="hero-line hero-line--accent"><span>livré.</span></span>
+            <span className="hero-line"><span>{content.hero.titleLine1}</span></span>
+            <span className="hero-line"><span>{content.hero.titleLine2}</span></span>
+            <span className="hero-line hero-line--accent"><span>{content.hero.titleAccent}</span></span>
           </h1>
-          <p className="hero-intro hero-reveal">Je transforme des problématiques métier en expériences numériques utiles, élégantes et prêtes à vivre dans le monde réel.</p>
+          <p className="hero-intro hero-reveal">{content.hero.introduction}</p>
           <div className="hero-actions hero-reveal">
             <a className="button-primary" href="#projets">Découvrir mes projets <ArrowDown /></a>
             <a className="text-link" href="#methode">Ma façon de travailler <ArrowRight /></a>
+            {content.resume.url && <a className="text-link resume-link" href={content.resume.url} download={content.resume.fileName || undefined} target="_blank" rel="noreferrer">Télécharger mon CV <Download /></a>}
           </div>
         </div>
 
@@ -112,16 +79,16 @@ const Home = () => {
         </div>
 
         <div className="hero-foot hero-reveal">
-          <span><MapPin /> Dakar, Sénégal</span><span className="hero-foot__line" /><span>2026 · Portfolio sélectionné</span>
+          <span><MapPin /> {content.identity.location}</span><span className="hero-foot__line" /><span>2026 · Portfolio sélectionné</span>
         </div>
       </section>
 
-      <section className="manifesto section-shell" aria-label="Manifeste">
+      <section className="manifesto section-shell" aria-label="Manifeste" hidden={!content.sections.manifesto}>
         <p className="manifesto-index reveal-blur">01 — Manifeste</p>
-        <p className="manifesto-copy reveal-blur">Je ne me contente pas d’écrire du code. Je relie <em>les personnes</em>, <em>les enjeux métier</em> et <em>la technologie</em> pour créer des produits qui ont du sens — du premier échange jusqu’à la mise en production.</p>
+        <p className="manifesto-copy reveal-blur">{content.manifesto}</p>
       </section>
 
-      <section id="projets" className="projects-showcase section-shell">
+      <section id="projets" className="projects-showcase section-shell" hidden={!content.sections.projects}>
         <header className="section-heading reveal-blur">
           <div><p className="section-index">02 — Sélection</p><h2>Projets<br /><em>choisis.</em></h2></div>
           <p>Quatre projets, quatre univers, une même exigence : comprendre avant de construire.</p>
@@ -146,25 +113,25 @@ const Home = () => {
         <div className="projects-more reveal-blur"><Link to="/projects">Voir toutes les réalisations <ArrowUpRight /></Link></div>
       </section>
 
-      <section id="methode" className="method-section">
+      <section id="methode" className="method-section" hidden={!content.sections.method}>
         <div className="section-shell">
           <header className="method-intro reveal-blur"><p className="section-index">03 — Ma méthode</p><h2>Une idée n’est forte<br />que lorsqu’elle devient <em>réelle.</em></h2></header>
           <div className="process-grid">
-            {process.map((step) => (
+            {content.process.map((step) => (
               <article className="process-card reveal-blur" key={step.num}><div className="process-top"><span>{step.num}</span><span className="process-dot" /></div><p className="process-verb">{step.verb}</p><h3>{step.title}</h3><p>{step.text}</p></article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="expertise-section section-shell">
+      <section className="expertise-section section-shell" hidden={!content.sections.expertise}>
         <div className="expertise-sticky reveal-blur"><p className="section-index">04 — Expertise</p><h2>Une vision<br /><em>à 360°.</em></h2><p>Le produit, la technique et l’expérience réunis dans une même démarche.</p></div>
         <div className="expertise-list">
-          {expertise.map(([num, title, text]) => <article className="expertise-item reveal-blur" key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div><ArrowUpRight /></article>)}
+          {content.expertise.map(({ num, title, text }) => <article className="expertise-item reveal-blur" key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div><ArrowUpRight /></article>)}
         </div>
       </section>
 
-      <section id="competences" className="skills-section">
+      <section id="competences" className="skills-section" hidden={!content.sections.skills}>
         <div className="section-shell">
           <header className="skills-heading reveal-blur"><p className="section-index">05 — Boîte à outils</p><h2>Des compétences qui<br /><em>travaillent ensemble.</em></h2><p>Je choisis la technologie en fonction du produit — jamais l’inverse.</p></header>
           <div className="skills-proof reveal-blur" aria-label="Aperçu des compétences">
@@ -173,46 +140,59 @@ const Home = () => {
             <span><strong>360°</strong> du besoin à la production</span>
           </div>
           <div className="skills-grid">
-            {skillGroups.map((group, index) => (
+            {content.skillGroups.map((group, index) => (
               <article className="skill-group reveal-blur" key={group.title}><span>0{index + 1}</span><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="experiences" className="experience-section">
+      <section id="experiences" className="experience-section" hidden={!content.sections.experience}>
         <div className="section-shell journey-layout">
           <header className="journey-heading reveal-blur"><p className="section-index">06 — Expériences</p><h2>Le terrain comme<br /><em>meilleure école.</em></h2><p>Des missions où l’analyse, le produit et la technique se rencontrent.</p></header>
-          <div className="journey-column journey-column--experience">{experiences.map((item, index) => <article className="journey-item reveal-blur" key={`${item.period}-${item.title}`}><span className="journey-number">0{index + 1}</span><time>{item.period}</time><div><h4>{item.title}</h4><strong>{item.place}</strong><p>{item.text}</p></div></article>)}</div>
+          <div className="journey-column journey-column--experience">{content.experiences.map((item, index) => <article className="journey-item reveal-blur" key={`${item.period}-${item.title}`}><span className="journey-number">0{index + 1}</span><time>{item.period}</time><div><h4>{item.title}</h4><strong>{item.place}</strong><p>{item.text}</p></div></article>)}</div>
           <div className="journey-links reveal-blur"><Link to="/experience">Voir toutes mes expériences <ArrowRight /></Link></div>
         </div>
       </section>
 
-      <section id="formations" className="education-section section-shell">
+      <section id="formations" className="education-section section-shell" hidden={!content.sections.education}>
         <header className="journey-heading reveal-blur"><p className="section-index">07 — Formations</p><h2>Apprendre pour<br /><em>mieux construire.</em></h2><p>Un apprentissage continu, entre ingénierie logicielle, produit et création.</p></header>
-        <div className="education-list">{education.map(([period, title, place], index) => <article className="education-item reveal-blur" key={`${period}-${title}`}><span>0{index + 1}</span><time>{period}</time><h3>{title}</h3><strong>{place}</strong></article>)}</div>
+        <div className="education-list">{content.education.map(({ period, title, place }, index) => <article className="education-item reveal-blur" key={`${period}-${title}`}><span>0{index + 1}</span><time>{period}</time><h3>{title}</h3><strong>{place}</strong></article>)}</div>
         <div className="journey-links reveal-blur"><Link to="/education">Voir toutes mes formations <ArrowRight /></Link><Link to="/skills">Compétences détaillées <ArrowRight /></Link></div>
       </section>
 
-      <section id="apropos" className="about-section section-shell">
+      <section id="apropos" className="about-section section-shell" hidden={!content.sections.about}>
         <div className="about-portrait reveal-blur"><span className="about-portrait__word" aria-hidden="true">curieuse</span><img src="/portrait-rama-illustrated.png" alt="Portrait illustré de Ramatoulaye Gueye" loading="lazy" /></div>
         <div className="about-copy reveal-blur">
-          <p className="section-index">08 — Derrière l’écran</p><h2>Développeuse par métier.<br /><em>Créatrice par nature.</em></h2>
-          <p>Je suis Ramatoulaye, développeuse Fullstack et Business Analyst basée à Dakar. Ma force est de pouvoir circuler entre les conversations métier, la conception et le code sans perdre le fil du produit.</p>
-          <p>J’aime les problèmes complexes, les interfaces qui paraissent évidentes et les technologies utilisées avec intention.</p>
+          <p className="section-index">08 — Derrière l’écran</p><h2>{content.about.title}<br /><em>{content.about.accent}</em></h2>
+          {content.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>4</strong><span>disciplines réunies</span></div></div>
           <div className="about-links"><Link to="/experience">Voir mon parcours <ArrowRight /></Link><Link to="/skills">Explorer mes compétences <ArrowRight /></Link></div>
         </div>
       </section>
 
-      <section id="contact" className="contact-section">
+      <section className="public-resume section-shell" aria-label="Curriculum vitæ">
+        <div className="public-resume__mark" aria-hidden="true">CV</div>
+        <div className="public-resume__copy reveal-blur">
+          <p className="section-index">Profil — En un coup d’œil</p>
+          <h2>Mon parcours.<br /><em>Un seul document.</em></h2>
+          <p>Expériences, compétences, formation et réalisations clés réunies dans une version claire, concise et prête à partager.</p>
+        </div>
+        {content.resume.url ? (
+          <a className="public-resume__action reveal-blur" href={content.resume.url} download={content.resume.fileName || undefined} target="_blank" rel="noreferrer"><span>Télécharger</span><strong>Mon CV</strong><Download /></a>
+        ) : (
+          <div className="public-resume__action public-resume__action--pending reveal-blur"><span>Prochainement</span><strong>CV en préparation</strong><Download /></div>
+        )}
+      </section>
+
+      <section id="contact" className="contact-section" hidden={!content.sections.contact}>
         <div className="contact-glow" aria-hidden="true" />
         <div className="section-shell contact-inner reveal-blur">
-          <p className="section-index">09 — Et maintenant ?</p><h2>Construisons quelque chose<br /><em>d’inoubliable.</em></h2><p>Une opportunité, un produit à imaginer ou un défi technique ? Parlons-en.</p>
+          <p className="section-index">{content.contact.eyebrow}</p><h2>{content.contact.title}<br /><em>{content.contact.accent}</em></h2><p>{content.contact.introduction}</p>
           <div className="contact-channels">
-            <a className="contact-channel contact-channel--email" href="mailto:ramatoulaye.rtg@gmail.com"><span>E-mail</span><strong>ramatoulaye.rtg@gmail.com</strong><ArrowUpRight /></a>
-            <a className="contact-channel" href="https://github.com/rama-lpb" target="_blank" rel="noreferrer"><span><Github /> GitHub</span><strong>@rama-lpb</strong><ArrowUpRight /></a>
-            <a className="contact-channel" href="https://www.linkedin.com/in/rama-gueye-" target="_blank" rel="noreferrer"><span><Linkedin /> LinkedIn</span><strong>Ramatoulaye Gueye</strong><ArrowUpRight /></a>
+            <a className="contact-channel contact-channel--email" href={`mailto:${content.identity.email}`}><span>E-mail</span><strong>{content.identity.email}</strong><ArrowUpRight /></a>
+            <a className="contact-channel" href={content.identity.githubUrl} target="_blank" rel="noreferrer"><span><Github /> GitHub</span><strong>@rama-lpb</strong><ArrowUpRight /></a>
+            <a className="contact-channel" href={content.identity.linkedinUrl} target="_blank" rel="noreferrer"><span><Linkedin /> LinkedIn</span><strong>{content.identity.name}</strong><ArrowUpRight /></a>
           </div>
           <footer><a href="#top">Retour en haut ↑</a></footer>
         </div>

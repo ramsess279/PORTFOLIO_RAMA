@@ -1,11 +1,12 @@
 import { ArrowLeft, ArrowUpRight, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
-import projectsData from "@/data/projects.json";
+import { usePortfolioContent } from "@/hooks/usePortfolioContent";
 
 const ProjetsSection = () => {
   const ref = useReveal<HTMLElement>();
-  const projects = projectsData.projects
+  const { content } = usePortfolioContent();
+  const projects = content.projects
     .filter((project) => !project.commented)
     .sort((a, b) => a.id === -1 ? -1 : b.id === -1 ? 1 : a.id - b.id);
 

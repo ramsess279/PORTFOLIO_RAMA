@@ -1,8 +1,8 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Clock, ExternalLink, Layers3, Pause, Play } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import projectsData from "@/data/projects.json";
 import { useReveal } from "@/hooks/useReveal";
+import { usePortfolioContent } from "@/hooks/usePortfolioContent";
 
 type Media = { type: string; src: string };
 
@@ -73,7 +73,8 @@ const ProjectCarousel = ({ media, title }: { media: Media[]; title: string }) =>
 const ProjectDetail = () => {
   const { projectId } = useParams();
   const ref = useReveal<HTMLElement>();
-  const project = projectsData.projects.find((item) => String(item.id) === projectId);
+  const { content } = usePortfolioContent();
+  const project = content.projects.find((item) => String(item.id) === projectId);
 
   useEffect(() => {
     document.body.classList.add("project-page-open");
@@ -140,7 +141,7 @@ const ProjectDetail = () => {
           <span>La suite</span><h2>Découvrir les autres<br />univers du portfolio.</h2><Link to="/projects">Voir tous les projets <ArrowRight /></Link>
         </section>
 
-        <footer className="case-footer reveal-blur"><p>Un projet similaire en tête ?</p><a href="mailto:ramatoulaye.rtg@gmail.com">Parlons-en <ArrowUpRight /></a></footer>
+        <footer className="case-footer reveal-blur"><p>Un projet similaire en tête ?</p><a href={`mailto:${content.identity.email}`}>Parlons-en <ArrowUpRight /></a></footer>
       </div>
     </article>
   );

@@ -1,9 +1,11 @@
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { ThemeProvider } from "@/hooks/useTheme";
+import { PortfolioProvider } from "@/hooks/usePortfolioContent";
 import { Navbar } from "@/components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -14,6 +16,7 @@ import Contact from "./pages/Contact";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -43,25 +46,36 @@ const AnimatedRoutes = () => {
         <Route path="/projects/:projectId" element={<ProjectDetail />} />
         <Route path="/education" element={<Education />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
 };
 
+const AppShell = () => {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith("/admin");
+
+  return (
+    <>
+      <ScrollManager />
+      {!isAdmin && <Navbar />}
+      <main className={isAdmin ? "admin-main" : undefined}><AnimatedRoutes /></main>
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
-      <TooltipProvider>
-        <BrowserRouter>
-          <ScrollManager />
-          <Navbar />
-          <main>
-            <AnimatedRoutes />
-          </main>
-        </BrowserRouter>
-        <Toaster />
-      </TooltipProvider>
+      <PortfolioProvider>
+        <TooltipProvider>
+          <BrowserRouter><AppShell /></BrowserRouter>
+          <Toaster />
+          <Sonner />
+        </TooltipProvider>
+      </PortfolioProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );

@@ -71,3 +71,17 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Portfolio Studio — administration
+
+L’espace `/admin` permet de modifier les textes principaux, les couleurs, la visibilité des sections, les projets et le CV.
+
+Sans configuration externe, il fonctionne en mode local avec `localStorage`. Les changements restent sur le navigateur utilisé. Pour une administration privée et persistante en ligne :
+
+1. Créer un projet Supabase et un compte Auth pour `ramatoulaye.rtg@gmail.com`.
+2. Exécuter `supabase/migrations/202609140001_portfolio_cms.sql` dans l’éditeur SQL Supabase.
+3. Copier `.env.example` vers `.env.local` et renseigner `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`.
+4. Ajouter les deux mêmes variables d’environnement dans Lovable ou la plateforme d’hébergement.
+5. Redéployer l’application.
+
+Le contenu public est lisible sans connexion. Seule l’adresse administratrice déclarée dans la migration peut modifier le portfolio et envoyer un PDF dans le bucket `portfolio-assets`.
