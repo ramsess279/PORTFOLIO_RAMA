@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Download, Github, Linkedin, MapPin, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Braces, CheckCircle2, Database, Download, GitBranch, Github, Linkedin, MapPin, Server, Sparkles, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
@@ -7,12 +7,19 @@ import projectsData from "@/data/projects.json";
 import { usePortfolioContent } from "@/hooks/usePortfolioContent";
 
 const featuredIds = [-1, 0, 1, 9];
-const projectMeta: Record<number, { index: string; type: string; accent: string }> = {
-  [-1]: { index: "01", type: "Civic tech · Architecture", accent: "Un système de vote pensé autour du métier et de la confiance." },
-  0: { index: "02", type: "E-commerce · Fullstack", accent: "Une boutique pensée et livrée en 72 heures." },
-  1: { index: "03", type: "SaaS RH · Produit métier", accent: "Des processus RH complexes rendus simples." },
-  9: { index: "04", type: "Travel · Expérience digitale", accent: "Le Sénégal raconté comme une destination vivante." },
+const projectMeta: Record<number, { index: string; type: string; accent: string; role: string; architecture: string; result: string }> = {
+  [-1]: { index: "01", type: "Civic tech · Back-end", accent: "Un système de vote pensé autour du métier et de la confiance.", role: "Architecture & API", architecture: "DDD · Hexagonal", result: "Métier isolé et testable" },
+  0: { index: "02", type: "E-commerce · Full-stack", accent: "Une boutique fonctionnelle conçue et livrée en 72 heures.", role: "Front + Back", architecture: "React · REST API", result: "MVP livré en 72 h" },
+  1: { index: "03", type: "SaaS RH · Full-stack", accent: "Des processus RH complexes transformés en modules métier clairs.", role: "Full-stack", architecture: "Node · Prisma", result: "Workflow multi-rôles" },
+  9: { index: "04", type: "Travel · Front-end", accent: "Une expérience responsive structurée autour de contenus et parcours riches.", role: "Front-end", architecture: "Next.js · React", result: "UX responsive" },
 };
+
+const engineeringPillars = [
+  { icon: Braces, label: "Front-end", value: "React · TypeScript" },
+  { icon: Server, label: "Back-end", value: "Node · Java · PHP" },
+  { icon: Database, label: "Data", value: "PostgreSQL · Prisma" },
+  { icon: Terminal, label: "Delivery", value: "Git · Docker · CI" },
+];
 
 const Home = () => {
   const revealRef = useReveal<HTMLDivElement>();
@@ -58,9 +65,12 @@ const Home = () => {
             <span className="hero-line hero-line--accent"><span>{content.hero.titleAccent}</span></span>
           </h1>
           <p className="hero-intro hero-reveal">{content.hero.introduction}</p>
+          <div className="hero-stack hero-reveal" aria-label="Stack technique principale">
+            {['React', 'TypeScript', 'Node.js', 'Java', 'PostgreSQL'].map((technology) => <span key={technology}>{technology}</span>)}
+          </div>
           <div className="hero-actions hero-reveal">
-            <a className="button-primary" href="#projets">Découvrir mes projets <ArrowDown /></a>
-            <a className="text-link" href="#methode">Ma façon de travailler <ArrowRight /></a>
+            <a className="button-primary" href="#projets">Voir mes projets techniques <ArrowDown /></a>
+            <a className="text-link" href="#competences">Explorer ma stack <ArrowRight /></a>
             <Link className="text-link resume-link" to="/cv">Voir mon CV <Download /></Link>
           </div>
         </div>
@@ -72,9 +82,14 @@ const Home = () => {
         <div className="hero-visual hero-reveal">
           <div className="portrait-halo" aria-hidden="true" />
           <div ref={portraitRef} className="portrait-stage" onPointerMove={handlePortraitMove} onPointerLeave={resetPortrait}>
-            <span className="portrait-label portrait-label--top">Designing with intent</span>
+            <span className="portrait-label portrait-label--top"><CheckCircle2 /> Build mindset</span>
             <img src="/avatar-rg.png" alt="Portrait illustré de Ramatoulaye Gueye" />
-            <span className="portrait-label portrait-label--bottom"><Sparkles /> Based in Dakar</span>
+            <span className="portrait-label portrait-label--bottom"><Sparkles /> Full-stack · Dakar</span>
+            <div className="hero-code-card" aria-label="Profil technique">
+              <div className="hero-code-card__bar"><span /><span /><span /><code>profile.ts</code></div>
+              <pre><span className="code-keyword">const</span> developer = {'{'}{`\n`}  role: <span className="code-string">"full-stack"</span>,{`\n`}  focus: <span className="code-string">"clean architecture"</span>,{`\n`}  ships: <span className="code-boolean">true</span>{`\n`}{'}'}</pre>
+              <div className="hero-code-card__status"><GitBranch /> preprod <span>build passing</span></div>
+            </div>
           </div>
         </div>
 
@@ -83,15 +98,32 @@ const Home = () => {
         </div>
       </section>
 
+      <section className="engineering-strip section-shell" aria-label="Expertise technique">
+        <header className="engineering-strip__intro reveal-blur"><span>01 — Engineering</span><strong>De l’interface à la production.</strong></header>
+        <div className="engineering-strip__grid">
+          {engineeringPillars.map(({ icon: Icon, label, value }, index) => (
+            <article className="engineering-pillar reveal-blur" key={label}>
+              <span>0{index + 1}</span><Icon /><div><small>{label}</small><strong>{value}</strong></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="manifesto section-shell" aria-label="Manifeste" hidden={!content.sections.manifesto}>
-        <p className="manifesto-index reveal-blur">01 — Manifeste</p>
+        <p className="manifesto-index reveal-blur">02 — Code & produit</p>
         <p className="manifesto-copy reveal-blur">{content.manifesto}</p>
+        <div className="manifesto-principles reveal-blur" aria-label="Principes de développement">
+          <span><code>01</code> Code maintenable</span>
+          <span><code>02</code> Architecture claire</span>
+          <span><code>03</code> Interfaces accessibles</span>
+          <span><code>04</code> Livraison continue</span>
+        </div>
       </section>
 
       <section id="projets" className="projects-showcase section-shell" hidden={!content.sections.projects}>
         <header className="section-heading reveal-blur">
-          <div><p className="section-index">02 — Sélection</p><h2>Projets<br /><em>choisis.</em></h2></div>
-          <p>Quatre projets, quatre univers, une même exigence : comprendre avant de construire.</p>
+          <div><p className="section-index">03 — Études de cas</p><h2>Projets<br /><em>techniques.</em></h2></div>
+          <p>Des applications documentées par leurs choix de stack, leur architecture et les problèmes résolus.</p>
         </header>
         <div className="project-list">
           {featured.map((project, index) => {
@@ -105,6 +137,11 @@ const Home = () => {
                 <div className="project-content">
                   <p className="project-type">{meta.type}</p><h3>{project.title.split(" - ")[0].split(" – ")[0]}</h3><p className="project-accent">{meta.accent}</p>
                   <div className="project-tags">{project.technologies.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</div>
+                  <dl className="project-engineering">
+                    <div><dt>Rôle</dt><dd>{meta.role}</dd></div>
+                    <div><dt>Architecture</dt><dd>{meta.architecture}</dd></div>
+                    <div><dt>Résultat</dt><dd>{meta.result}</dd></div>
+                  </dl>
                 </div>
               </article>
             );
@@ -115,7 +152,7 @@ const Home = () => {
 
       <section id="methode" className="method-section" hidden={!content.sections.method}>
         <div className="section-shell">
-          <header className="method-intro reveal-blur"><p className="section-index">03 — Ma méthode</p><h2>Une idée n’est forte<br />que lorsqu’elle devient <em>réelle.</em></h2></header>
+          <header className="method-intro reveal-blur"><p className="section-index">04 — Ma méthode</p><h2>Une idée n’est forte<br />que lorsqu’elle devient <em>réelle.</em></h2></header>
           <div className="process-grid">
             {content.process.map((step) => (
               <article className="process-card reveal-blur" key={step.num}><div className="process-top"><span>{step.num}</span><span className="process-dot" /></div><p className="process-verb">{step.verb}</p><h3>{step.title}</h3><p>{step.text}</p></article>
@@ -125,7 +162,7 @@ const Home = () => {
       </section>
 
       <section className="expertise-section section-shell" hidden={!content.sections.expertise}>
-        <div className="expertise-sticky reveal-blur"><p className="section-index">04 — Expertise</p><h2>Une vision<br /><em>à 360°.</em></h2><p>Le produit, la technique et l’expérience réunis dans une même démarche.</p></div>
+        <div className="expertise-sticky reveal-blur"><p className="section-index">05 — Expertise</p><h2>Une ingénierie<br /><em>complète.</em></h2><p>Front-end, back-end, data et architecture réunis dans une même démarche de développement.</p></div>
         <div className="expertise-list">
           {content.expertise.map(({ num, title, text }) => <article className="expertise-item reveal-blur" key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div><ArrowUpRight /></article>)}
         </div>
@@ -133,7 +170,7 @@ const Home = () => {
 
       <section id="competences" className="skills-section" hidden={!content.sections.skills}>
         <div className="section-shell">
-          <header className="skills-heading reveal-blur"><p className="section-index">05 — Boîte à outils</p><h2>Des compétences qui<br /><em>travaillent ensemble.</em></h2><p>Je choisis la technologie en fonction du produit — jamais l’inverse.</p></header>
+          <header className="skills-heading reveal-blur"><p className="section-index">06 — Stack technique</p><h2>Des technologies qui<br /><em>travaillent ensemble.</em></h2><p>Je choisis une stack cohérente avec les contraintes du produit — jamais l’inverse.</p></header>
           <div className="skills-proof reveal-blur" aria-label="Aperçu des compétences">
             <span><strong>6</strong> domaines complémentaires</span>
             <span><strong>35+</strong> compétences maîtrisées</span>
@@ -149,14 +186,14 @@ const Home = () => {
 
       <section id="experiences" className="experience-section" hidden={!content.sections.experience}>
         <div className="section-shell journey-layout">
-          <header className="journey-heading reveal-blur"><p className="section-index">06 — Expériences</p><h2>Le terrain comme<br /><em>meilleure école.</em></h2><p>Des missions où l’analyse, le produit et la technique se rencontrent.</p></header>
+          <header className="journey-heading reveal-blur"><p className="section-index">07 — Expériences</p><h2>Le terrain comme<br /><em>meilleure école.</em></h2><p>Des missions centrées sur la conception, le développement et la mise en production d’applications.</p></header>
           <div className="journey-column journey-column--experience">{content.experiences.map((item, index) => <article className="journey-item reveal-blur" key={`${item.period}-${item.title}`}><span className="journey-number">0{index + 1}</span><time>{item.period}</time><div><h4>{item.title}</h4><strong>{item.place}</strong><p>{item.text}</p></div></article>)}</div>
           <div className="journey-links reveal-blur"><Link to="/experience">Voir toutes mes expériences <ArrowRight /></Link></div>
         </div>
       </section>
 
       <section id="formations" className="education-section section-shell" hidden={!content.sections.education}>
-        <header className="journey-heading reveal-blur"><p className="section-index">07 — Formations</p><h2>Apprendre pour<br /><em>mieux construire.</em></h2><p>Un apprentissage continu, entre ingénierie logicielle, produit et création.</p></header>
+        <header className="journey-heading reveal-blur"><p className="section-index">08 — Formations</p><h2>Apprendre pour<br /><em>mieux construire.</em></h2><p>Un apprentissage continu en développement web, mobile et génie logiciel.</p></header>
         <div className="education-list">{content.education.map(({ period, title, place }, index) => <article className="education-item reveal-blur" key={`${period}-${title}`}><span>0{index + 1}</span><time>{period}</time><h3>{title}</h3><strong>{place}</strong></article>)}</div>
         <div className="journey-links reveal-blur"><Link to="/education">Voir toutes mes formations <ArrowRight /></Link><Link to="/skills">Compétences détaillées <ArrowRight /></Link></div>
       </section>
@@ -164,7 +201,7 @@ const Home = () => {
       <section id="apropos" className="about-section section-shell" hidden={!content.sections.about}>
         <div className="about-portrait reveal-blur"><span className="about-portrait__word" aria-hidden="true">curieuse</span><img src="/portrait-rama-illustrated.png" alt="Portrait illustré de Ramatoulaye Gueye" loading="lazy" /></div>
         <div className="about-copy reveal-blur">
-          <p className="section-index">08 — Derrière l’écran</p><h2>{content.about.title}<br /><em>{content.about.accent}</em></h2>
+          <p className="section-index">09 — Derrière le code</p><h2>{content.about.title}<br /><em>{content.about.accent}</em></h2>
           {content.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>4</strong><span>disciplines réunies</span></div></div>
           <div className="about-links"><Link to="/experience">Voir mon parcours <ArrowRight /></Link><Link to="/skills">Explorer mes compétences <ArrowRight /></Link></div>

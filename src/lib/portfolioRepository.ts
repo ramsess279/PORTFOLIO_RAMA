@@ -49,6 +49,22 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
     if (about.paragraphs?.[0]?.startsWith("Je suis Ramatoulaye, développeuse Fullstack et Business Analyst")) about = defaultPortfolioContent.about;
   }
 
+  // Preserve genuine admin customizations while upgrading the previous built-in
+  // copy to the more explicitly developer-focused direction.
+  if (hero.titleLine1 === "Du besoin" && hero.titleLine2 === "au produit" && hero.titleAccent === "livré.") {
+    Object.assign(hero, defaultPortfolioContent.hero);
+  }
+  if (manifesto === "J’écris du code pour construire des produits qui fonctionnent vraiment. Du front-end au back-end, je transforme les besoins métier en applications robustes, maintenables et prêtes pour la production.") {
+    manifesto = defaultPortfolioContent.manifesto;
+  }
+  if (expertise[0]?.title === "Full-stack engineering") expertise = defaultPortfolioContent.expertise;
+  if (saved?.process?.[0]?.verb === "Comprendre" && saved.process[1]?.verb === "Concevoir") saved.process = defaultPortfolioContent.process;
+  if (saved?.skillGroups?.[5]?.title === "Design & produit") saved.skillGroups = defaultPortfolioContent.skillGroups;
+  if (about.title === "Développeuse par métier." && about.accent === "Créatrice par nature.") about = defaultPortfolioContent.about;
+
+  const contact = { ...defaultPortfolioContent.contact, ...saved?.contact };
+  if (contact.eyebrow === "09 — Et maintenant ?" && contact.title === "Construisons quelque chose") Object.assign(contact, defaultPortfolioContent.contact);
+
   return ({
   ...defaultPortfolioContent,
   ...saved,
@@ -56,7 +72,7 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   identity,
   hero,
   manifesto,
-  contact: { ...defaultPortfolioContent.contact, ...saved?.contact },
+  contact,
   appearance: { ...defaultPortfolioContent.appearance, ...saved?.appearance },
   sections: { ...defaultPortfolioContent.sections, ...saved?.sections },
   resume: { ...defaultPortfolioContent.resume, ...saved?.resume },
