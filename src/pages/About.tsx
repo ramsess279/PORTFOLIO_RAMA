@@ -39,7 +39,7 @@ const interests = [
 const goals = [
   "Évoluer vers un rôle d'architecte logiciel / tech lead",
   "Approfondir le Domain-Driven Design et l'architecture hexagonale sur des projets réels",
-  "Renforcer la double compétence Développement / Business Analyst",
+  "Approfondir l’ingénierie logicielle, les tests et la conception d’API robustes",
   "Explorer le développement assisté par l'IA (agents, outils de vibecoding)",
   "Contribuer à des projets à impact social, comme Naatalvote",
   "Partager mes connaissances et mentorer d'autres développeurs",
@@ -58,15 +58,15 @@ const About = () => {
               Qui suis-je
             </span>
             <h1 className="text-4xl md:text-5xl font-normal leading-tight mb-8">
-              Une seule personne,
+              Une développeuse,
               <br />
-              <em className="accent-italic">plusieurs métiers</em>.
+              <em className="accent-italic">une vision produit</em>.
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed mb-5">
-              Développeuse Full Stack et Business Analyst, je prends en charge un projet de bout en
-              bout : à partir d'un cahier des charges, je conçois, je développe, je mets en production
-              et j'assure la maintenance. Je combine expertise technique, analyse du besoin métier et
-              sens du détail.
+              Développeuse full-stack, je conçois et construis des applications web de bout en bout :
+              interface, API, logique métier, base de données, mise en production et maintenance.
+              L’analyse du besoin complète mon expertise technique et m’aide à écrire le bon produit,
+              sans diluer mon rôle principal de développeuse.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Portée par une forte capacité d'apprentissage et une réelle curiosité technologique,

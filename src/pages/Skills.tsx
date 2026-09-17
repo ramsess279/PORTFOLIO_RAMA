@@ -67,7 +67,7 @@ const competences = [
     ],
   },
   {
-    categorie: "Business Analyst",
+    categorie: "Analyse fonctionnelle — complément",
     items: [
       { label: "Recueil de besoins & cahier des charges" },
       { label: "Rédaction de user stories" },
@@ -96,10 +96,10 @@ const Skills = () => {
     <div ref={ref} className="pt-28 pb-24 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         <PageHeader
-          eyebrow="Ce que je maîtrise"
+          eyebrow="Ma boîte à outils de développeuse"
           title={
             <>
-              Compétences <em className="accent-italic">techniques</em> & humaines
+              Ma stack <em className="accent-italic">technique</em>
             </>
           }
         />

@@ -17,29 +17,59 @@ const getSupabase = async () => {
 
 export const cmsMode = hasSupabaseConfig ? "cloud" : "local";
 
-const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioContent => ({
-  ...defaultPortfolioContent,
-  ...saved,
-  identity: { ...defaultPortfolioContent.identity, ...saved?.identity },
-  hero: { ...defaultPortfolioContent.hero, ...saved?.hero },
-  contact: { ...defaultPortfolioContent.contact, ...saved?.contact },
-  appearance: { ...defaultPortfolioContent.appearance, ...saved?.appearance },
-  sections: { ...defaultPortfolioContent.sections, ...saved?.sections },
-  resume: { ...defaultPortfolioContent.resume, ...saved?.resume },
-  cv: {
+const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioContent => {
+  const legacy = saved?.version !== 2;
+  const identity = { ...defaultPortfolioContent.identity, ...saved?.identity };
+  const hero = { ...defaultPortfolioContent.hero, ...saved?.hero };
+  const cv = {
     ...defaultPortfolioContent.cv,
     ...saved?.cv,
     experiences: saved?.cv?.experiences || defaultPortfolioContent.cv.experiences,
     education: saved?.cv?.education || defaultPortfolioContent.cv.education,
-  },
+    selectedProjectIds: saved?.cv?.selectedProjectIds || defaultPortfolioContent.cv.selectedProjectIds,
+  };
+  let manifesto = saved?.manifesto || defaultPortfolioContent.manifesto;
+  let expertise = saved?.expertise || defaultPortfolioContent.expertise;
+  let experiences = saved?.experiences || defaultPortfolioContent.experiences;
+  let about = { ...defaultPortfolioContent.about, ...saved?.about };
+  const projects = (saved?.projects || defaultPortfolioContent.projects).map((project) => {
+    const projectDefaults = defaultPortfolioContent.projects.find((item) => item.id === project.id);
+    return { ...projectDefaults, ...project, cvSummary: project.cvSummary || projectDefaults?.cvSummary };
+  });
+
+  if (legacy) {
+    if (identity.role === "Fullstack Developer · Business Analyst") identity.role = defaultPortfolioContent.identity.role;
+    if (hero.eyebrow === "Fullstack Developer · Business Analyst") hero.eyebrow = defaultPortfolioContent.hero.eyebrow;
+    if (hero.introduction === "Je transforme des problématiques métier en expériences numériques utiles, élégantes et prêtes à vivre dans le monde réel.") hero.introduction = defaultPortfolioContent.hero.introduction;
+    if (cv.headline === "Développeuse Fullstack & Business Analyst") cv.headline = defaultPortfolioContent.cv.headline;
+    if (cv.summary === "Je transforme les besoins métier en produits numériques utiles, robustes et élégants, de l’analyse jusqu’à la mise en production.") cv.summary = defaultPortfolioContent.cv.summary;
+    if (manifesto === "Je ne me contente pas d’écrire du code. Je relie les personnes, les enjeux métier et la technologie pour créer des produits qui ont du sens — du premier échange jusqu’à la mise en production.") manifesto = defaultPortfolioContent.manifesto;
+    if (expertise[0]?.title === "Product thinking") expertise = defaultPortfolioContent.expertise;
+    if (experiences[0]?.title === "Développeuse Fullstack & Business Analyst") experiences = defaultPortfolioContent.experiences;
+    if (about.paragraphs?.[0]?.startsWith("Je suis Ramatoulaye, développeuse Fullstack et Business Analyst")) about = defaultPortfolioContent.about;
+  }
+
+  return ({
+  ...defaultPortfolioContent,
+  ...saved,
+  version: 2,
+  identity,
+  hero,
+  manifesto,
+  contact: { ...defaultPortfolioContent.contact, ...saved?.contact },
+  appearance: { ...defaultPortfolioContent.appearance, ...saved?.appearance },
+  sections: { ...defaultPortfolioContent.sections, ...saved?.sections },
+  resume: { ...defaultPortfolioContent.resume, ...saved?.resume },
+  cv,
   process: saved?.process || defaultPortfolioContent.process,
-  expertise: saved?.expertise || defaultPortfolioContent.expertise,
+  expertise,
   skillGroups: saved?.skillGroups || defaultPortfolioContent.skillGroups,
-  experiences: saved?.experiences || defaultPortfolioContent.experiences,
+  experiences,
   education: saved?.education || defaultPortfolioContent.education,
-  about: { ...defaultPortfolioContent.about, ...saved?.about },
-  projects: saved?.projects || defaultPortfolioContent.projects,
-});
+  about,
+  projects,
+  });
+};
 
 export const loadPortfolioContent = async (): Promise<PortfolioContent> => {
   const supabase = await getSupabase();

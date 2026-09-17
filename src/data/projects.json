@@ -6,6 +6,7 @@
       "technologies": ["React", "Node.js", "Express", "MongoDB", "TailwindCSS"],
       "description": "Je vous présente MiniBloom Store. C'est une mini application e-commerce, développée le temps d'un week-end, entre deux tasses de café, avec une envie simple : transformer une idée en quelque chose de concret, utilisable et réel. MiniBloom Store est une application dédiée à l'univers bébé et enfants. Elle permet : de parcourir un catalogue de produits, de filtrer par catégories, d'ajouter des articles au panier, de gérer les commandes côté utilisateur, et côté administration : gérer les produits, suivre les commandes, surveiller les stocks, visualiser quelques indicateurs clés. L'application est déployée et fonctionnelle.",
       "fullDescription": "Je vous présente MiniBloom Store. C'est une mini application e-commerce, développée le temps d'un week-end, entre deux tasses de café, avec une envie simple : transformer une idée en quelque chose de concret, utilisable et réel. MiniBloom Store est une application dédiée à l'univers bébé et enfants. Elle permet : de parcourir un catalogue de produits, de filtrer par catégories, d'ajouter des articles au panier, de gérer les commandes côté utilisateur, et côté administration : gérer les produits, suivre les commandes, surveiller les stocks, visualiser quelques indicateurs clés. L'application est déployée et fonctionnelle.",
+      "cvSummary": "Application e-commerce complète avec catalogue, panier, commandes, gestion des stocks et tableau de bord administrateur.",
       "duration": "3 jours",
       "referent": "",
       "media": [
@@ -31,6 +32,7 @@
       "title": "Gestion d'Entreprise – SaaS RH",
       "technologies": ["React", "Node.js", "Express", "Prisma", "TypeScript", "TailwindCSS"],
       "description": "Développement d'une plateforme SaaS pour la gestion des employés, de la paie et des rôles d'accès. Mise en place de l'authentification sécurisée, de la gestion des autorisations et d'un tableau de bord RH. Conception d'une architecture monolithique distribuée et automatisation des processus internes.",
+      "cvSummary": "Plateforme SaaS RH avec authentification, autorisations par rôle, gestion des employés et tableau de bord administratif.",
       "duration": "2025",
       "referent": "Aly Tall Niang - +221 77 182 54 14 | WhatsApp",
       "media": [
@@ -209,6 +211,7 @@
       "technologies": ["Java", "Spring Boot", "Architecture Hexagonale (DDD)", "PostgreSQL"],
       "description": "Projet personnel de soutenance visant à digitaliser le processus de vote au Sénégal. Backend conçu en Java avec Spring Boot, en appliquant une architecture hexagonale (Domain-Driven Design) pour séparer clairement le métier de l'infrastructure technique.",
       "fullDescription": "Naatalvote est un projet personnel de soutenance visant à digitaliser le processus de vote au Sénégal. Le backend est développé en Java avec Spring Boot, en appliquant les principes du Domain-Driven Design et une architecture hexagonale, afin de garantir une séparation claire entre la logique métier et les détails techniques (base de données, frameworks). Le projet est encore en cours de finalisation avant déploiement.",
+      "cvSummary": "Backend de vote numérique conçu avec Spring Boot, DDD et architecture hexagonale pour isoler le domaine de l’infrastructure.",
       "duration": "Projet de soutenance",
       "referent": "",
       "media": [

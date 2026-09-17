@@ -15,10 +15,11 @@ export type PortfolioProject = {
   difficulty?: number;
   commented?: boolean;
   featured?: boolean;
+  cvSummary?: string;
 };
 
 export type PortfolioContent = {
-  version: 1;
+  version: 2;
   identity: {
     name: string;
     role: string;
@@ -70,6 +71,7 @@ export type PortfolioContent = {
     skills: string[];
     languages: string[];
     interests: string[];
+    selectedProjectIds: number[];
     experiences: { period: string; title: string; place: string; bullets: string[] }[];
     education: { period: string; title: string; place: string }[];
   };

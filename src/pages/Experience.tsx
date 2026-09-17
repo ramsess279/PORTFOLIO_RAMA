@@ -5,13 +5,13 @@ import { useReveal } from "@/hooks/useReveal";
 const experiences = [
   {
     type: "stage",
-    title: "Développeuse Fullstack & Business Analyst",
+    title: "Développeuse Full-stack",
     company: "Digital Media Mobile",
     location: "Dakar, Sénégal",
     period: "Décembre 2025 - Aujourd'hui",
     duration: "En cours",
     description:
-      "Prise en charge de projets de bout en bout : recueil du besoin et rédaction du cahier des charges, conception, développement, jusqu'à la mise en production et la maintenance applicative.",
+      "Conception et développement d’applications métier de bout en bout : interfaces, services back-end, modélisation des données, intégration d’API, mise en production et maintenance.",
     achievements: [] as string[],
     technologies: [] as string[],
     icon: Briefcase,
@@ -71,7 +71,7 @@ const Experience = () => {
     <div ref={ref} className="pt-28 pb-24 px-6 md:px-8">
       <div className="max-w-4xl mx-auto">
         <PageHeader
-          eyebrow="Mon parcours"
+          eyebrow="Mon parcours de développeuse"
           title={
             <>
               De la <em className="accent-italic">formation</em> au terrain
