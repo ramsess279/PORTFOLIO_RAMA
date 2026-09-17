@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Braces, Database, Download, Github, Linkedin, Server, Terminal } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Braces, Database, Download, GitBranch, Github, Linkedin, Server, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
@@ -112,6 +112,11 @@ const Home = () => {
               <span>Ramatoulaye Gueye</span>
               <p className={evaporating ? "is-evaporating" : ""}>{dialoguePhrases[phraseIndex].slice(0, charIndex)}<i /></p>
               <small>continuer ▸</small>
+            </div>
+            <div className="hero-code-card" aria-label="Profil technique">
+              <div className="hero-code-card__bar"><span /><span /><span /><code>profile.ts</code></div>
+              <pre><span className="code-keyword">const</span> developer = {'{'}{`\n`}  mindset: <span className="code-string">"adaptable"</span>,{`\n`}  focus: <span className="code-string">"clean solutions"</span>,{`\n`}  ships: <span className="code-boolean">true</span>{`\n`}{'}'}</pre>
+              <div className="hero-code-card__status"><GitBranch /> preprod <span>build passing</span></div>
             </div>
           </div>
         </div>
