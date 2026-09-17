@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Braces, CheckCircle2, Database, Download, GitBranch, Github, Linkedin, MapPin, Server, Sparkles, Terminal } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Braces, Database, Download, Github, Linkedin, Server, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
@@ -21,12 +21,22 @@ const engineeringPillars = [
   { icon: Terminal, label: "Delivery", value: "Git · Docker · CI" },
 ];
 
+const dialoguePhrases = [
+  "Bonjour, je suis Ramatoulaye.",
+  "Je conçois, je développe, je livre.",
+  "Du besoin métier à la production.",
+  "Je m’adapte à chaque projet.",
+];
+
 const Home = () => {
   const revealRef = useReveal<HTMLDivElement>();
   const portraitRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const { content } = usePortfolioContent();
   const [loaded, setLoaded] = useState(false);
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [evaporating, setEvaporating] = useState(false);
   const configuredFeatured = content.projects.filter((project) => project.featured && !project.commented).slice(0, 4);
   const featured = configuredFeatured.length ? configuredFeatured : featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
 
@@ -34,6 +44,27 @@ const Home = () => {
     const timer = window.setTimeout(() => setLoaded(true), 160);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!loaded || evaporating) return;
+    const phrase = dialoguePhrases[phraseIndex];
+    if (charIndex < phrase.length) {
+      const timer = window.setTimeout(() => setCharIndex((current) => current + 1), 42);
+      return () => window.clearTimeout(timer);
+    }
+    const timer = window.setTimeout(() => setEvaporating(true), 1900);
+    return () => window.clearTimeout(timer);
+  }, [loaded, phraseIndex, charIndex, evaporating]);
+
+  useEffect(() => {
+    if (!evaporating) return;
+    const timer = window.setTimeout(() => {
+      setEvaporating(false);
+      setCharIndex(0);
+      setPhraseIndex((current) => (current + 1) % dialoguePhrases.length);
+    }, 520);
+    return () => window.clearTimeout(timer);
+  }, [evaporating]);
 
   const handlePortraitMove = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!portraitRef.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -55,6 +86,7 @@ const Home = () => {
         <div className="hero-grid" aria-hidden="true" />
         <div className="hero-orbit hero-orbit--one" aria-hidden="true" />
         <div className="hero-orbit hero-orbit--two" aria-hidden="true" />
+        <img className="hero-watermark" src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"} alt="" aria-hidden="true" />
 
         <div className="hero-copy">
           <div className="availability hero-reveal"><span className="availability__dot" /> {content.hero.availability}</div>
@@ -65,9 +97,6 @@ const Home = () => {
             <span className="hero-line hero-line--accent"><span>{content.hero.titleAccent}</span></span>
           </h1>
           <p className="hero-intro hero-reveal">{content.hero.introduction}</p>
-          <div className="hero-stack hero-reveal" aria-label="Stack technique principale">
-            {['React', 'TypeScript', 'Node.js', 'Java', 'PostgreSQL'].map((technology) => <span key={technology}>{technology}</span>)}
-          </div>
           <div className="hero-actions hero-reveal">
             <a className="button-primary" href="#projets">Voir mes projets techniques <ArrowDown /></a>
             <a className="text-link" href="#competences">Explorer ma stack <ArrowRight /></a>
@@ -75,26 +104,16 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="hero-center-mark hero-reveal" aria-hidden="true">
-          <img src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"} alt="" />
-        </div>
-
         <div className="hero-visual hero-reveal">
           <div className="portrait-halo" aria-hidden="true" />
           <div ref={portraitRef} className="portrait-stage" onPointerMove={handlePortraitMove} onPointerLeave={resetPortrait}>
-            <span className="portrait-label portrait-label--top"><CheckCircle2 /> Build mindset</span>
             <img src="/avatar-rg.png" alt="Portrait illustré de Ramatoulaye Gueye" />
-            <span className="portrait-label portrait-label--bottom"><Sparkles /> Full-stack · Dakar</span>
-            <div className="hero-code-card" aria-label="Profil technique">
-              <div className="hero-code-card__bar"><span /><span /><span /><code>profile.ts</code></div>
-              <pre><span className="code-keyword">const</span> developer = {'{'}{`\n`}  role: <span className="code-string">"full-stack"</span>,{`\n`}  focus: <span className="code-string">"clean architecture"</span>,{`\n`}  ships: <span className="code-boolean">true</span>{`\n`}{'}'}</pre>
-              <div className="hero-code-card__status"><GitBranch /> preprod <span>build passing</span></div>
+            <div className="hero-dialogue" aria-live="polite">
+              <span>Ramatoulaye Gueye</span>
+              <p className={evaporating ? "is-evaporating" : ""}>{dialoguePhrases[phraseIndex].slice(0, charIndex)}<i /></p>
+              <small>continuer ▸</small>
             </div>
           </div>
-        </div>
-
-        <div className="hero-foot hero-reveal">
-          <span><MapPin /> {content.identity.location}</span><span className="hero-foot__line" /><span>2026 · Portfolio sélectionné</span>
         </div>
       </section>
 

@@ -54,6 +54,9 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   if (hero.titleLine1 === "Du besoin" && hero.titleLine2 === "au produit" && hero.titleAccent === "livré.") {
     Object.assign(hero, defaultPortfolioContent.hero);
   }
+  if (["DÉVELOPPEUSE FULL-STACK · REACT · NODE · JAVA", "FULL-STACK DEVELOPER · REACT · TYPESCRIPT · JAVA"].includes(hero.eyebrow)) {
+    hero.eyebrow = defaultPortfolioContent.hero.eyebrow;
+  }
   if (manifesto === "J’écris du code pour construire des produits qui fonctionnent vraiment. Du front-end au back-end, je transforme les besoins métier en applications robustes, maintenables et prêtes pour la production.") {
     manifesto = defaultPortfolioContent.manifesto;
   }

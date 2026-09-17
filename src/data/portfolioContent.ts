@@ -13,7 +13,7 @@ export const defaultPortfolioContent: PortfolioContent = {
   },
   hero: {
     availability: "Disponible pour de nouvelles opportunités",
-    eyebrow: "DÉVELOPPEUSE FULL-STACK · REACT · NODE · JAVA",
+    eyebrow: "DÉVELOPPEUSE FULL-STACK · DE L’IDÉE À LA PRODUCTION",
     titleLine1: "Je développe",
     titleLine2: "des applications",
     titleAccent: "full-stack.",
