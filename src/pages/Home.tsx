@@ -38,7 +38,13 @@ const Home = () => {
   const [charIndex, setCharIndex] = useState(0);
   const [evaporating, setEvaporating] = useState(false);
   const configuredFeatured = content.projects.filter((project) => project.featured && !project.commented).slice(0, 4);
-  const featured = configuredFeatured.length ? configuredFeatured : featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
+  const featuredRank = (id: number) => {
+    const rank = featuredIds.indexOf(id);
+    return rank === -1 ? featuredIds.length : rank;
+  };
+  const featured = configuredFeatured.length
+    ? [...configuredFeatured].sort((a, b) => featuredRank(a.id) - featuredRank(b.id))
+    : featuredIds.map((id) => projectsData.projects.find((project) => project.id === id)).filter((project): project is (typeof projectsData.projects)[number] => Boolean(project));
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoaded(true), 160);
@@ -197,7 +203,7 @@ const Home = () => {
           <header className="skills-heading reveal-blur"><p className="section-index">06 — Stack technique</p><h2>Des technologies qui<br /><em>travaillent ensemble.</em></h2><p>Je choisis une stack cohérente avec les contraintes du produit — jamais l’inverse.</p></header>
           <div className="skills-proof reveal-blur" aria-label="Aperçu des compétences">
             <span><strong>6</strong> domaines complémentaires</span>
-            <span><strong>35+</strong> compétences maîtrisées</span>
+            <span><strong>35+</strong> technologies & pratiques</span>
             <span><strong>360°</strong> du besoin à la production</span>
           </div>
           <div className="skills-grid">
@@ -227,7 +233,7 @@ const Home = () => {
         <div className="about-copy reveal-blur">
           <p className="section-index">09 — Derrière le code</p><h2>{content.about.title}<br /><em>{content.about.accent}</em></h2>
           {content.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>4</strong><span>disciplines réunies</span></div></div>
+          <div className="about-stats"><div><strong>15+</strong><span>projets réalisés</span></div><div><strong>2+</strong><span>années d’expérience</span></div><div><strong>3</strong><span>couches applicatives</span></div></div>
           <div className="about-links"><Link to="/experience">Voir mon parcours <ArrowRight /></Link><Link to="/skills">Explorer mes compétences <ArrowRight /></Link></div>
         </div>
       </section>

@@ -41,7 +41,7 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
     if (identity.role === "Fullstack Developer · Business Analyst") identity.role = defaultPortfolioContent.identity.role;
     if (hero.eyebrow === "Fullstack Developer · Business Analyst") hero.eyebrow = defaultPortfolioContent.hero.eyebrow;
     if (hero.introduction === "Je transforme des problématiques métier en expériences numériques utiles, élégantes et prêtes à vivre dans le monde réel.") hero.introduction = defaultPortfolioContent.hero.introduction;
-    if (cv.headline === "Développeuse Fullstack & Business Analyst") cv.headline = defaultPortfolioContent.cv.headline;
+    if (["Développeuse Fullstack & Business Analyst", "Développeuse Full-stack · React, TypeScript & Java"].includes(cv.headline)) cv.headline = defaultPortfolioContent.cv.headline;
     if (cv.summary === "Je transforme les besoins métier en produits numériques utiles, robustes et élégants, de l’analyse jusqu’à la mise en production.") cv.summary = defaultPortfolioContent.cv.summary;
     if (manifesto === "Je ne me contente pas d’écrire du code. Je relie les personnes, les enjeux métier et la technologie pour créer des produits qui ont du sens — du premier échange jusqu’à la mise en production.") manifesto = defaultPortfolioContent.manifesto;
     if (expertise[0]?.title === "Product thinking") expertise = defaultPortfolioContent.expertise;

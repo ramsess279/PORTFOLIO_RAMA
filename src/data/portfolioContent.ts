@@ -83,7 +83,7 @@ export const defaultPortfolioContent: PortfolioContent = {
   },
   resume: { url: "", fileName: "", updatedAt: "" },
   cv: {
-    headline: "Développeuse Full-stack · React, TypeScript & Java",
+    headline: "Développeuse full-stack · Applications web & logiciels métier",
     summary: "Développeuse full-stack basée à Dakar, je conçois des applications web de bout en bout : interfaces React, API, logique métier et bases de données. J’accorde une attention particulière à l’architecture, à la qualité du code et à la mise en production. Ma maîtrise de l’analyse métier me permet de transformer un besoin complexe en solution technique claire et maintenable.",
     phone: "",
     website: "",

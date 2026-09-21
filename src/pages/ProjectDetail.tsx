@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Clock, ExternalLink, Layers3, Pause, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Braces, ChevronLeft, ChevronRight, Clock, ExternalLink, Pause, Play } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
 import { usePortfolioContent } from "@/hooks/usePortfolioContent";
@@ -16,6 +16,65 @@ const identities: Record<number, { name: string; suffix?: string; discipline: st
 };
 
 const fallbackIdentity = { name: "RG Studio", discipline: "Produit numérique", bg: "#18070d", surface: "#2a0e18", ink: "#fff7f9", accent: "#ed3b70", soft: "#cfabb7" };
+
+type TechnicalProfile = {
+  role: string;
+  problem: string;
+  architecture: string;
+  decisions: string[];
+  contributions: string[];
+  outcome: string;
+  nextStep: string;
+};
+
+const technicalProfiles: Record<number, TechnicalProfile> = {
+  [-1]: {
+    role: "Architecture back-end",
+    problem: "Transformer un processus de vote sensible en règles métier explicites, sans laisser le framework dicter le fonctionnement du domaine.",
+    architecture: "Le domaine reste au centre. Les cas d’usage orchestrent les règles, tandis que Spring Boot et PostgreSQL restent accessibles par des ports et des adaptateurs.",
+    decisions: ["DDD pour nommer et isoler le métier", "Architecture hexagonale pour limiter le couplage", "PostgreSQL pour une persistance relationnelle robuste"],
+    contributions: ["Modélisation du domaine électoral", "Définition des cas d’usage et des contrats", "Implémentation de l’API avec Spring Boot", "Conception de la couche de persistance"],
+    outcome: "Un socle back-end structuré, lisible et prêt à évoluer sans mélanger les règles métier avec l’infrastructure.",
+    nextStep: "Finaliser les scénarios métier, renforcer la sécurité et préparer le déploiement.",
+  },
+  0: {
+    role: "Développement full-stack",
+    problem: "Livrer en trois jours une boutique réellement utilisable, du catalogue jusqu’au suivi des commandes, avec un espace d’administration cohérent.",
+    architecture: "Une interface React consomme une API REST Node.js / Express. MongoDB porte les données du catalogue, du panier et des commandes.",
+    decisions: ["Découpage par parcours utilisateur", "API REST pour séparer interface et logique", "Composants réutilisables pour livrer vite sans dupliquer"],
+    contributions: ["Catalogue, catégories et recherche", "Panier et création de commande", "Gestion des produits et des stocks", "Tableau de bord et indicateurs"],
+    outcome: "Un MVP e-commerce complet, navigable et mis en ligne en 72 heures.",
+    nextStep: "Industrialiser les tests et consolider le paiement, la sécurité et l’observabilité.",
+  },
+  1: {
+    role: "Développement full-stack",
+    problem: "Rendre lisibles des processus RH multi-rôles : authentification, gestion des employés, paie et pilotage depuis un même produit.",
+    architecture: "Le front React dialogue avec une API Node.js / Express. Prisma structure l’accès aux données et TypeScript sécurise les contrats entre les couches.",
+    decisions: ["Contrôle d’accès fondé sur les rôles", "Schéma de données centralisé avec Prisma", "Modules métier séparés pour faire évoluer le produit"],
+    contributions: ["Authentification et autorisations", "Gestion des employés", "Modules de paie", "Dashboard et indicateurs RH"],
+    outcome: "Un workflow RH multi-rôles regroupé dans une application déployée et démontrable.",
+    nextStep: "Approfondir les tests d’intégration et automatiser davantage les opérations sensibles.",
+  },
+  9: {
+    role: "Développement front-end",
+    problem: "Organiser une grande richesse de contenus touristiques sans perdre l’utilisateur, sur mobile comme sur desktop.",
+    architecture: "Next.js structure les pages et les parcours, React compose l’interface et Tailwind CSS garantit un système responsive cohérent.",
+    decisions: ["Hiérarchie de contenu orientée découverte", "Composants réutilisables par destination", "Responsive pensé dès la structure des pages"],
+    contributions: ["Pages de destinations", "Navigation et parcours de découverte", "Informations pratiques et guide", "Intégration responsive puis déploiement"],
+    outcome: "Une expérience éditoriale responsive, claire et disponible en ligne.",
+    nextStep: "Enrichir la recherche, les filtres et les données de contenu.",
+  },
+};
+
+const buildFallbackProfile = (description: string): TechnicalProfile => ({
+  role: "Conception & développement",
+  problem: description,
+  architecture: "Une architecture choisie selon les contraintes du produit, avec une séparation claire entre interface, logique métier et données.",
+  decisions: ["Découpage fonctionnel clair", "Composants et services réutilisables", "Stack adaptée au périmètre du projet"],
+  contributions: ["Analyse du besoin", "Conception de la solution", "Développement des fonctionnalités", "Validation et livraison"],
+  outcome: "Une solution fonctionnelle qui transforme un besoin concret en expérience numérique utilisable.",
+  nextStep: "Poursuivre l’industrialisation, les tests et la mesure des usages.",
+});
 
 const ProjectCarousel = ({ media, title }: { media: Media[]; title: string }) => {
   const [active, setActive] = useState(0);
@@ -86,6 +145,7 @@ const ProjectDetail = () => {
   const identity = identities[project.id] || { ...fallbackIdentity, name: project.title.split(/\s[-–]\s/)[0] };
   const hasDemo = Boolean(project.demo && project.demo !== "#");
   const media = project.media.filter((item) => item.src !== "/placeholder.svg");
+  const technicalProfile = technicalProfiles[project.id] || buildFallbackProfile(project.description);
   const themeStyle = {
     "--case-bg": identity.bg,
     "--case-surface": identity.surface,
@@ -123,22 +183,42 @@ const ProjectDetail = () => {
       <div className="case-body section-shell">
         <div className="case-facts">
           <div><Clock /><span>Durée</span><strong>{project.duration}</strong></div>
-          <div><Layers3 /><span>Technologies</span><strong>{project.technologies.length} utilisées</strong></div>
+          <div><Braces /><span>Rôle</span><strong>{technicalProfile.role}</strong></div>
           <div><ArrowUpRight /><span>Statut</span><strong>{hasDemo ? "Disponible en ligne" : "Prototype / projet privé"}</strong></div>
         </div>
 
-        <section className="case-story reveal-blur">
-          <p className="section-index">01 — Vision</p>
-          <div><h2>Une identité pensée<br />pour une expérience <em>cohérente.</em></h2><p>{project.description}</p></div>
+        <section id="probleme" className="case-story reveal-blur">
+          <p className="section-index">01 — Problème & périmètre</p>
+          <div><h2>Le besoin derrière<br /><em>le code.</em></h2><p>{technicalProfile.problem}</p></div>
         </section>
 
-        <section className="case-stack reveal-blur">
-          <p className="section-index">02 — Stack & savoir-faire</p>
+        <section id="architecture" className="case-engineering reveal-blur">
+          <div className="case-engineering__intro">
+            <p className="section-index">02 — Architecture & décisions</p>
+            <h2>Des choix techniques<br />qui servent <em>le produit.</em></h2>
+            <p>{technicalProfile.architecture}</p>
+          </div>
+          <ol>{technicalProfile.decisions.map((decision, index) => <li key={decision}><small>{String(index + 1).padStart(2, "0")}</small><span>{decision}</span></li>)}</ol>
+        </section>
+
+        <section id="contribution" className="case-contributions reveal-blur">
+          <div><p className="section-index">03 — Ma contribution</p><h2>Ce que j’ai<br /><em>développé.</em></h2></div>
+          <ul>{technicalProfile.contributions.map((contribution) => <li key={contribution}><ArrowRight /><span>{contribution}</span></li>)}</ul>
+        </section>
+
+        <section id="stack" className="case-stack reveal-blur">
+          <p className="section-index">04 — Stack technique</p>
           <div>{project.technologies.map((technology, index) => <span key={technology}><small>{String(index + 1).padStart(2, "0")}</small>{technology}</span>)}</div>
         </section>
 
+        <section id="resultat" className="case-outcome reveal-blur">
+          <p className="section-index">05 — Livraison & suite</p>
+          <div><span>Résultat</span><p>{technicalProfile.outcome}</p></div>
+          <div><span>Prochaine étape</span><p>{technicalProfile.nextStep}</p></div>
+        </section>
+
         <section className="case-next reveal-blur">
-          <span>La suite</span><h2>Découvrir les autres<br />univers du portfolio.</h2><Link to="/projects">Voir tous les projets <ArrowRight /></Link>
+          <span>La suite</span><h2>Découvrir les autres<br />études de cas.</h2><Link to="/projects">Voir tous les projets <ArrowRight /></Link>
         </section>
 
         <footer className="case-footer reveal-blur"><p>Un projet similaire en tête ?</p><a href={`mailto:${content.identity.email}`}>Parlons-en <ArrowUpRight /></a></footer>
