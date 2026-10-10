@@ -416,7 +416,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .portfolio-home .about-stats strong,
 .portfolio-home .public-resume__action strong,
 .portfolio-home .contact-channel strong {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Manrope, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 .portfolio-home h1,
 .portfolio-home h2,
@@ -429,6 +429,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .portfolio-home .project-content h3,
 .portfolio-home .skill-group h3,
 .portfolio-home .education-item h3 { letter-spacing: -.035em; }
+.portfolio-home .hero-title { font-size: clamp(3.35rem, 5.6vw, 5.7rem); }
+.portfolio-home .manifesto-copy { font-size: clamp(1.7rem, 2.65vw, 2.8rem); }
+.portfolio-home .section-heading h2,
+.portfolio-home .method-intro h2,
+.portfolio-home .expertise-sticky h2,
+.portfolio-home .contact-inner h2 { font-size: clamp(2.9rem, 5.4vw, 5.5rem); }
+.portfolio-home .project-content h3 { font-size: clamp(2.15rem, 3.55vw, 3.75rem); }
+.portfolio-home .process-verb { font-size: clamp(1.65rem, 2.35vw, 2.45rem); }
+.portfolio-home .expertise-item h3 { font-size: clamp(1.4rem, 2.25vw, 2.1rem); }
+.portfolio-home .skills-heading h2,
+.portfolio-home .journey-heading h2,
+.portfolio-home .public-resume__copy h2 { font-size: clamp(3rem, 5.25vw, 5.4rem); }
+.portfolio-home .skill-group h3 { font-size: 1.65rem; }
+.portfolio-home .journey-item h4 { font-size: 1.15rem; }
+.portfolio-home .education-item h3 { font-size: clamp(1.1rem, 1.75vw, 1.65rem); }
+.portfolio-home .about-copy h2 { font-size: clamp(2.75rem, 4.6vw, 4.7rem); }
+.portfolio-home .contact-inner h2 { font-size: clamp(3.2rem, 6.2vw, 6.3rem); }
+.portfolio-home .contact-channel strong { font-size: 1.05rem; }
+.portfolio-home .contact-channel--email strong { font-size: clamp(1rem, 1.5vw, 1.35rem); }
 
 /* Home clair — des plans visuels distincts sans toucher aux espacements */
 html:not(.dark) .portfolio-home { background: #fbf8f7; }
