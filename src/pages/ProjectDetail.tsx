@@ -25,6 +25,8 @@ type TechnicalProfile = {
   contributions: string[];
   outcome: string;
   nextStep: string;
+  layers: string[];
+  tradeoff: string;
 };
 
 const technicalProfiles: Record<number, TechnicalProfile> = {
@@ -36,6 +38,8 @@ const technicalProfiles: Record<number, TechnicalProfile> = {
     contributions: ["Modélisation du domaine électoral", "Définition des cas d’usage et des contrats", "Implémentation de l’API avec Spring Boot", "Conception de la couche de persistance"],
     outcome: "Un socle back-end structuré, lisible et prêt à évoluer sans mélanger les règles métier avec l’infrastructure.",
     nextStep: "Finaliser les scénarios métier, renforcer la sécurité et préparer le déploiement.",
+    layers: ["Entrées API", "Cas d’usage", "Domaine", "Adaptateurs SQL"],
+    tradeoff: "Privilégier une structure métier plus exigeante au départ pour gagner en testabilité et en évolutivité.",
   },
   0: {
     role: "Développement full-stack",
@@ -45,6 +49,8 @@ const technicalProfiles: Record<number, TechnicalProfile> = {
     contributions: ["Catalogue, catégories et recherche", "Panier et création de commande", "Gestion des produits et des stocks", "Tableau de bord et indicateurs"],
     outcome: "Un MVP e-commerce complet, navigable et mis en ligne en 72 heures.",
     nextStep: "Industrialiser les tests et consolider le paiement, la sécurité et l’observabilité.",
+    layers: ["React UI", "API REST", "Node / Express", "MongoDB"],
+    tradeoff: "Limiter le périmètre aux parcours essentiels pour garantir une livraison complète en 72 heures.",
   },
   1: {
     role: "Développement full-stack",
@@ -54,6 +60,8 @@ const technicalProfiles: Record<number, TechnicalProfile> = {
     contributions: ["Authentification et autorisations", "Gestion des employés", "Modules de paie", "Dashboard et indicateurs RH"],
     outcome: "Un workflow RH multi-rôles regroupé dans une application déployée et démontrable.",
     nextStep: "Approfondir les tests d’intégration et automatiser davantage les opérations sensibles.",
+    layers: ["React", "API Express", "Modules RH", "Prisma / Data"],
+    tradeoff: "Centraliser le schéma de données tout en maintenant des modules métier clairement séparés.",
   },
   9: {
     role: "Développement front-end",
@@ -63,6 +71,8 @@ const technicalProfiles: Record<number, TechnicalProfile> = {
     contributions: ["Pages de destinations", "Navigation et parcours de découverte", "Informations pratiques et guide", "Intégration responsive puis déploiement"],
     outcome: "Une expérience éditoriale responsive, claire et disponible en ligne.",
     nextStep: "Enrichir la recherche, les filtres et les données de contenu.",
+    layers: ["Next.js", "Composants", "Contenus", "Vercel"],
+    tradeoff: "Favoriser une navigation éditoriale lisible avant d’ajouter des fonctions de recherche avancée.",
   },
 };
 
@@ -74,6 +84,8 @@ const buildFallbackProfile = (description: string): TechnicalProfile => ({
   contributions: ["Analyse du besoin", "Conception de la solution", "Développement des fonctionnalités", "Validation et livraison"],
   outcome: "Une solution fonctionnelle qui transforme un besoin concret en expérience numérique utilisable.",
   nextStep: "Poursuivre l’industrialisation, les tests et la mesure des usages.",
+  layers: ["Interface", "Services", "Métier", "Données"],
+  tradeoff: "Concentrer l’effort sur la valeur centrale du produit avant les optimisations secondaires.",
 });
 
 const ProjectCarousel = ({ media, title }: { media: Media[]; title: string }) => {
@@ -104,9 +116,9 @@ const ProjectCarousel = ({ media, title }: { media: Media[]; title: string }) =>
           {media.map((item, index) => (
             <figure className="carousel-slide" key={`${item.src}-${index}`} aria-hidden={index !== active}>
               {item.type === "video" ? (
-                <video src={item.src} controls playsInline preload="metadata" poster={poster} onPlay={() => setPaused(true)} />
+                <video src={item.src} controls playsInline preload={index === active ? "metadata" : "none"} poster={poster} onPlay={() => setPaused(true)} />
               ) : (
-                <img src={item.src} alt={`${title} — aperçu ${index + 1}`} loading={index > 1 ? "lazy" : "eager"} />
+                <img src={item.src} alt={`${title} — aperçu ${index + 1}`} loading={index > 1 ? "lazy" : "eager"} decoding="async" />
               )}
             </figure>
           ))}
@@ -199,6 +211,8 @@ const ProjectDetail = () => {
             <p>{technicalProfile.architecture}</p>
           </div>
           <ol>{technicalProfile.decisions.map((decision, index) => <li key={decision}><small>{String(index + 1).padStart(2, "0")}</small><span>{decision}</span></li>)}</ol>
+          <div className="case-flow" aria-label="Flux d’architecture">{technicalProfile.layers.map((layer, index) => <span key={layer}>{layer}{index < technicalProfile.layers.length - 1 && <ArrowRight />}</span>)}</div>
+          <p className="case-tradeoff"><strong>Compromis assumé</strong>{technicalProfile.tradeoff}</p>
         </section>
 
         <section id="contribution" className="case-contributions reveal-blur">

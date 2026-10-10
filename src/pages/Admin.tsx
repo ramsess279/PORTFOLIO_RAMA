@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { usePortfolioContent } from "@/hooks/usePortfolioContent";
 import { cmsMode, getAdminAuthState, savePortfolioContent, setupLocalAdminPassword, signInAdmin, signOutAdmin, uploadResume } from "@/lib/portfolioRepository";
+import { importResumePdf, type ResumeImport } from "@/lib/resumeImport";
 import type { PortfolioContent, PortfolioProject, PortfolioSection } from "@/types/portfolio";
 
 type AdminTab = "dashboard" | "content" | "appearance" | "sections" | "projects" | "resume";
@@ -34,6 +35,8 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [resumeImport, setResumeImport] = useState<ResumeImport | null>(null);
+  const [importingResume, setImportingResume] = useState(false);
 
   useEffect(() => { setDraft(content); }, [content]);
   useEffect(() => { void getAdminAuthState().then((state) => { setAuthenticated(state === "authenticated"); if (state !== "authenticated") setAuthMode(state); }).finally(() => setCheckingAuth(false)); }, []);
@@ -72,11 +75,21 @@ const Admin = () => {
     const file = event.target.files?.[0];
     if (!file) return;
     if (file.type !== "application/pdf") return toast.error("Choisissez un fichier PDF.");
+    setImportingResume(true);
+    try { setResumeImport(await importResumePdf(file, draft)); toast.success("CV analysé. Vérifiez les données détectées avant de les appliquer."); }
+    catch (error) { toast.error(error instanceof Error ? error.message : "Import impossible."); }
+    finally { setImportingResume(false); event.target.value = ""; }
+  };
+
+  const applyResumeImport = async () => {
+    if (!resumeImport) return;
+    setImportingResume(true);
     try {
-      const url = await uploadResume(file);
-      setDraft((current) => ({ ...current, resume: { url, fileName: file.name, updatedAt: new Date().toISOString() } }));
-      toast.success("CV chargé. Cliquez sur Publier pour le rendre disponible.");
+      const url = await uploadResume(resumeImport.file);
+      setDraft((current) => ({ ...current, identity: { ...current.identity, ...resumeImport.identity }, cv: { ...current.cv, ...resumeImport.cv }, resume: { url, fileName: resumeImport.file.name, updatedAt: new Date().toISOString() } }));
+      setResumeImport(null); toast.success("Données importées. Vérifiez maintenant chaque étape puis publiez.");
     } catch (error) { toast.error(error instanceof Error ? error.message : "Import impossible."); }
+    finally { setImportingResume(false); }
   };
 
   if (checkingAuth || loading) return <div className="admin-loading"><span />Chargement du studio…</div>;
@@ -113,7 +126,7 @@ const Admin = () => {
           {tab === "appearance" && <AppearanceEditor draft={draft} setDraft={setDraft} />}
           {tab === "sections" && <div className="admin-panel"><PanelTitle title="Organisation des sections" text="Activez ou masquez une partie du portfolio sans supprimer son contenu." /> <div className="admin-section-list">{(Object.keys(draft.sections) as PortfolioSection[]).map((section) => <label key={section}><span><strong>{sectionLabels[section]}</strong><small>{draft.sections[section] ? "Visible sur le site" : "Masquée"}</small></span><input type="checkbox" checked={draft.sections[section]} onChange={(event) => update("sections", { ...draft.sections, [section]: event.target.checked })} /><i /></label>)}</div></div>}
           {tab === "projects" && <ProjectsEditor projects={draft.projects} updateProject={updateProject} />}
-          {tab === "resume" && <ResumeEditor draft={draft} setDraft={setDraft} onUpload={handleResume} />}
+          {tab === "resume" && <ResumeEditor draft={draft} setDraft={setDraft} onUpload={handleResume} resumeImport={resumeImport} importing={importingResume} onApplyImport={applyResumeImport} onCancelImport={() => setResumeImport(null)} />}
         </div>
       </section>
     </div>
@@ -160,7 +173,7 @@ const AppearanceEditor = ({ draft, setDraft }: { draft: PortfolioContent; setDra
 
 const ProjectsEditor = ({ projects, updateProject }: { projects: PortfolioProject[]; updateProject: (id: number, patch: Partial<PortfolioProject>) => void }) => <div className="admin-panel"><PanelTitle title="Gestion des projets" text="Modifiez les informations, les médias et choisissez les projets à mettre en avant." /><div className="admin-project-list">{projects.map((project) => <details key={project.id}><summary><div><span className={project.commented ? "is-hidden" : "is-live"}>{project.commented ? "Masqué" : "Publié"}</span><strong>{project.title}</strong><small>{project.technologies.slice(0, 3).join(" · ")}</small></div><ChevronRight /></summary><div className="admin-project-fields"><label>Titre<input value={project.title} onChange={(event) => updateProject(project.id, { title: event.target.value })} /></label><label>Durée<input value={project.duration} onChange={(event) => updateProject(project.id, { duration: event.target.value })} /></label><label className="admin-project-fields__wide">Description<textarea rows={4} value={project.description} onChange={(event) => updateProject(project.id, { description: event.target.value })} /></label><label>URL de démonstration<input value={project.demo || ""} onChange={(event) => updateProject(project.id, { demo: event.target.value })} /></label><label>Technologies (séparées par des virgules)<input value={project.technologies.join(", ")} onChange={(event) => updateProject(project.id, { technologies: event.target.value.split(",").map((item) => item.trim()).filter(Boolean) })} /></label><label className="admin-project-fields__wide">Images / vidéos (une URL par ligne)<textarea rows={4} value={project.media.map((item) => item.src).join("\n")} onChange={(event) => updateProject(project.id, { media: event.target.value.split("\n").map((src) => src.trim()).filter(Boolean).map((src) => ({ type: src.match(/\.(webm|mp4)$/i) ? "video" : "image", src })) })} /></label><div className="admin-project-toggles"><label><input type="checkbox" checked={!project.commented} onChange={(event) => updateProject(project.id, { commented: !event.target.checked })} /> Visible</label><label><input type="checkbox" checked={Boolean(project.featured)} onChange={(event) => updateProject(project.id, { featured: event.target.checked })} /> À la une</label></div></div></details>)}</div></div>;
 
-const ResumeEditor = ({ draft, setDraft, onUpload }: { draft: PortfolioContent; setDraft: React.Dispatch<React.SetStateAction<PortfolioContent>>; onUpload: (event: ChangeEvent<HTMLInputElement>) => void }) => {
+const ResumeEditor = ({ draft, setDraft, onUpload, resumeImport, importing, onApplyImport, onCancelImport }: { draft: PortfolioContent; setDraft: React.Dispatch<React.SetStateAction<PortfolioContent>>; onUpload: (event: ChangeEvent<HTMLInputElement>) => void; resumeImport: ResumeImport | null; importing: boolean; onApplyImport: () => void; onCancelImport: () => void }) => {
   const [step, setStep] = useState(0);
   const steps = ["Identité", "Profil", "Expériences", "Formations", "Projets", "Stack", "Aperçu"];
   const setCv = (key: keyof PortfolioContent["cv"], value: PortfolioContent["cv"][typeof key]) => setDraft((current) => ({ ...current, cv: { ...current.cv, [key]: value } }));
@@ -172,7 +185,9 @@ const ResumeEditor = ({ draft, setDraft, onUpload }: { draft: PortfolioContent; 
   const toggleCvProject = (id: number) => setCv("selectedProjectIds", draft.cv.selectedProjectIds.includes(id) ? draft.cv.selectedProjectIds.filter((projectId) => projectId !== id) : [...draft.cv.selectedProjectIds, id]);
   const updateProjectSummary = (id: number, cvSummary: string) => setDraft((current) => ({ ...current, projects: current.projects.map((project) => project.id === id ? { ...project, cvSummary } : project) }));
 
-  return <div className="admin-panel"><PanelTitle title="CV Builder" text="Votre CV est maintenant un document vivant : complétez chaque étape, publiez, puis téléchargez votre PDF." />
+  return <div className="admin-panel"><PanelTitle title="CV Builder" text="Importez votre CV existant, contrôlez les données reconnues, puis corrigez chaque étape avant publication." />
+    <section className="cv-import-card"><div><Upload /><span><strong>Partir de mon CV actuel</strong><small>Le PDF est lu localement. Rien n’écrase votre contenu avant votre validation.</small></span></div><label>{importing ? "Analyse en cours…" : "Choisir un PDF"}<input type="file" accept="application/pdf" disabled={importing} onChange={onUpload} /></label></section>
+    {resumeImport && <section className="cv-import-review"><header><div><strong>{resumeImport.file.name}</strong><span>{resumeImport.detected.length ? `Détecté : ${resumeImport.detected.join(" · ")}` : "Aucune donnée structurée reconnue automatiquement"}</span></div></header><p>{resumeImport.text.slice(0, 420)}{resumeImport.text.length > 420 ? "…" : ""}</p><small>Après application, parcourez les 7 étapes : l’extraction aide à préremplir le CV mais vous gardez toujours le contrôle.</small><div><button type="button" onClick={onCancelImport}>Annuler</button><button type="button" onClick={onApplyImport} disabled={importing}><Check /> Appliquer et vérifier étape par étape</button></div></section>}
     <nav className="cv-steps" aria-label="Étapes de création du CV">{steps.map((label, index) => <button type="button" className={index === step ? "is-active" : index < step ? "is-done" : ""} onClick={() => setStep(index)} key={label}><span>{index < step ? <Check /> : index + 1}</span><strong>{label}</strong></button>)}</nav>
     <div className="cv-builder">
       <div className="cv-builder__form">

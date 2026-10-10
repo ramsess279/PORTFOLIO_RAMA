@@ -34,7 +34,12 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   let about = { ...defaultPortfolioContent.about, ...saved?.about };
   const projects = (saved?.projects || defaultPortfolioContent.projects).map((project) => {
     const projectDefaults = defaultPortfolioContent.projects.find((item) => item.id === project.id);
-    return { ...projectDefaults, ...project, cvSummary: project.cvSummary || projectDefaults?.cvSummary };
+    const obsoleteBuiltInCopy = (project.id === 0 && project.description.startsWith("Je vous présente MiniBloom"))
+      || (project.id === 1 && project.description.includes("architecture monolithique distribuée"))
+      || (project.id === 9 && project.description.startsWith("Application de voyage interactive"))
+      || (project.id === 10 && project.description.startsWith("Site vitrine pour une agence"))
+      || (project.id === 11 && project.description.startsWith("Plateforme de services de jets"));
+    return { ...projectDefaults, ...project, description: obsoleteBuiltInCopy ? projectDefaults?.description || project.description : project.description, fullDescription: obsoleteBuiltInCopy ? projectDefaults?.fullDescription : project.fullDescription, cvSummary: project.cvSummary || projectDefaults?.cvSummary };
   });
 
   if (legacy) {

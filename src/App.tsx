@@ -3,21 +3,22 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { PortfolioProvider } from "@/hooks/usePortfolioContent";
 import { Navbar } from "@/components/Navbar";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Experience from "./pages/Experience";
-import Skills from "./pages/Skills";
-import Education from "./pages/Education";
-import Contact from "./pages/Contact";
-import Projects from "./pages/Projects";
-import ProjectDetail from "./pages/ProjectDetail";
-import NotFound from "./pages/NotFound";
-import Admin from "./pages/Admin";
-import Resume from "./pages/Resume";
+import SeoManager from "@/components/SeoManager";
+const About = lazy(() => import("./pages/About"));
+const Experience = lazy(() => import("./pages/Experience"));
+const Skills = lazy(() => import("./pages/Skills"));
+const Education = lazy(() => import("./pages/Education"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Projects = lazy(() => import("./pages/Projects"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Resume = lazy(() => import("./pages/Resume"));
 
 const queryClient = new QueryClient();
 
@@ -38,7 +39,7 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   return (
     <div key={location.pathname} className="page-enter">
-      <Routes location={location}>
+      <Suspense fallback={<div className="admin-loading"><span />Chargement…</div>}><Routes location={location}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/experience" element={<Experience />} />
@@ -50,7 +51,7 @@ const AnimatedRoutes = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="/cv" element={<Resume />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
+      </Routes></Suspense>
     </div>
   );
 };
@@ -63,6 +64,7 @@ const AppShell = () => {
   return (
     <>
       <ScrollManager />
+      <SeoManager />
       {!isStandalone && <Navbar />}
       <main className={isAdmin ? "admin-main" : undefined}><AnimatedRoutes /></main>
     </>
@@ -74,7 +76,7 @@ const App = () => (
     <ThemeProvider>
       <PortfolioProvider>
         <TooltipProvider>
-          <BrowserRouter><AppShell /></BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><AppShell /></BrowserRouter>
           <Toaster />
           <Sonner />
         </TooltipProvider>

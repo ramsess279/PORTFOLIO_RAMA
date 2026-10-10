@@ -89,7 +89,7 @@ export const defaultPortfolioContent: PortfolioContent = {
     website: "",
     skills: ["React", "TypeScript", "JavaScript", "Node.js", "Express", "Java", "Spring Boot", "PHP", "Symfony", "API REST", "PostgreSQL", "Docker", "Git"],
     languages: ["Français — courant", "Anglais — professionnel"],
-    interests: ["Design produit", "Intelligence artificielle", "Innovation numérique"],
+    interests: ["Architecture logicielle", "Intelligence artificielle", "Innovation numérique"],
     experiences: [
       { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", bullets: ["Conception et développement d’applications métier, de l’interface jusqu’aux services back-end.", "Modélisation des données, intégration d’API et préparation des mises en production.", "Traduction des besoins fonctionnels en fonctionnalités techniques maintenables."] },
       { period: "2024", title: "Développeuse Full-stack — Gestion de flotte", place: "Multimédia, TGI · Dakar", bullets: ["Développement d’une application web multi-rôles pour la gestion d’une flotte.", "Implémentation des modules véhicules, conducteurs, missions et maintenance."] },
