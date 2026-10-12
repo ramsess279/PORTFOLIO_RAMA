@@ -267,7 +267,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .projects-more svg { width: 3rem; height: 3rem; padding: .9rem; flex: 0 0 auto; border-radius: 50%; background: hsl(var(--primary)); color: white; transition: transform .4s var(--ease-out-expo); }
 .projects-more a:hover svg { transform: rotate(45deg); }
 
-.method-section { background: linear-gradient(180deg, hsl(var(--background)) 0, hsl(var(--foreground)) 5rem, hsl(var(--foreground)) calc(100% - 5rem), hsl(var(--background)) 100%); color: hsl(var(--background)); padding: clamp(9rem, 13vw, 14rem) 0; position: relative; overflow: hidden; }
+.method-section { background: hsl(var(--foreground)); color: hsl(var(--background)); padding: clamp(9rem, 13vw, 14rem) 0; position: relative; overflow: hidden; }
 .method-section::before { content: "RG"; position: absolute; right: -3%; top: -13%; font: 28rem/.8 "Lavishly Yours", cursive; color: hsl(var(--background) / .035); }
 .method-section .section-index, .method-section .process-verb { color: hsl(var(--primary-light)); }
 .method-intro { position: relative; z-index: 2; margin-bottom: 6rem; }
@@ -333,7 +333,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .journey-links a { display: flex; align-items: center; gap: .5rem; padding-bottom: .35rem; border-bottom: 1px solid hsl(var(--border)); font-size: .68rem; }
 .journey-links svg { width: .85rem; }
 
-.experience-section { padding: clamp(10rem, 14vw, 15rem) 0; background: linear-gradient(180deg, hsl(var(--background)) 0, hsl(var(--ink)) 5rem, hsl(var(--ink)) calc(100% - 5rem), hsl(var(--background)) 100%); color: hsl(var(--ivory)); overflow: hidden; position: relative; }
+.experience-section { padding: clamp(10rem, 14vw, 15rem) 0; background: hsl(var(--ink)); color: hsl(var(--ivory)); overflow: hidden; position: relative; }
 .experience-section::before { content: "experience"; position: absolute; left: -3%; top: 14%; font: italic clamp(7rem, 18vw, 19rem)/1 var(--font-display); color: hsl(var(--ivory) / .025); pointer-events: none; }
 .journey-layout { position: relative; }
 .experience-section .section-index, .experience-section .journey-item strong { color: hsl(var(--rose)); }
@@ -391,7 +391,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .public-resume__action:hover { transform: translateY(-.55rem); }
 .public-resume__action:hover i { transform: translateY(.25rem) rotate(-8deg); }
 
-.contact-section { position: relative; overflow: hidden; background: linear-gradient(180deg, hsl(var(--background)) 0, hsl(var(--ink)) 5rem, hsl(var(--ink)) 100%); color: hsl(var(--ivory)); }
+.contact-section { position: relative; overflow: hidden; background: hsl(var(--ink)); color: hsl(var(--ivory)); }
 .contact-glow { position: absolute; width: 48rem; aspect-ratio: 1; left: 50%; bottom: -33rem; transform: translateX(-50%); background: radial-gradient(circle, hsl(var(--rose) / .38), transparent 68%); filter: blur(35px); }
 .contact-inner { position: relative; padding: clamp(8rem, 14vw, 14rem) 0 2rem; text-align: center; }
 .contact-inner .section-index { color: hsl(var(--rose)); }
