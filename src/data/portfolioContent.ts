@@ -41,9 +41,9 @@ export const defaultPortfolioContent: PortfolioContent = {
     { title: "Produit & collaboration", items: ["User stories", "MoSCoW", "Agile / Scrum", "Jira", "Figma", "Documentation"] },
   ],
   experiences: [
-    { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", text: "Conception et développement d’applications métier, intégration d’API, modélisation des données, mise en production et maintenance applicative." },
-    { period: "2024", title: "Développeuse Full-stack — Gestion de flotte", place: "Multimédia, TGI · Dakar", text: "Développement d’une application multi-rôles pour gérer les véhicules, conducteurs, missions, suivi GPS et rapports de maintenance." },
-    { period: "2024", title: "Développement web full-stack intensif", place: "Sonatel Academy · Dakar", text: "Onze mois de pratique, plus de dix applications et API réalisées, testées et déployées." },
+    { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", text: "Analyse des besoins, conception des parcours, développement d’interfaces et de services back-end, intégration d’API, modélisation des données, correction d’anomalies et préparation des mises en production." },
+    { period: "2024", title: "Développeuse Full-stack — Gestion de flotte", place: "Multimédia, TGI · Dakar", text: "Conception d’une application multi-rôles ; développement des modules véhicules, conducteurs, missions et maintenance ; intégration du suivi GPS et génération de rapports automatisés." },
+    { period: "2024", title: "Développement web full-stack intensif", place: "Sonatel Academy · Dakar", text: "Conception et livraison de plus de dix applications et API : CRUD, authentification, validation, architectures MVC, travail en équipe, documentation et déploiement." },
   ],
   education: [
     { period: "2026 — En cours", title: "Licence 3 Développement Web/Mobile & Génie Logiciel", place: "ESP 221" },

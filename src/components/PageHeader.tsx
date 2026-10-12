@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface PageHeaderProps {
   eyebrow: string;
@@ -7,7 +9,8 @@ interface PageHeaderProps {
 }
 
 export const PageHeader = ({ eyebrow, title, subtitle }: PageHeaderProps) => (
-  <div className="reveal-blur text-center mb-16">
+  <div className="page-header reveal-blur text-center mb-16">
+    <Link className="page-header__back" to="/"><ArrowLeft /> Retour à l’accueil</Link>
     <span className="inline-block text-xs tracking-[0.22em] uppercase text-primary mb-4">
       {eyebrow}
     </span>

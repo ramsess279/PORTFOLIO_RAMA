@@ -12,8 +12,13 @@ const experiences = [
     duration: "En cours",
     description:
       "Conception et développement d’applications métier de bout en bout : interfaces, services back-end, modélisation des données, intégration d’API, mise en production et maintenance.",
-    achievements: [] as string[],
-    technologies: [] as string[],
+    achievements: [
+      "Analyse des besoins et traduction en parcours fonctionnels puis en modules techniques",
+      "Développement d’interfaces et de services back-end connectés aux API métier",
+      "Modélisation des données, correction des anomalies et maintenance évolutive",
+      "Préparation des livraisons, documentation et accompagnement de la mise en production",
+    ],
+    technologies: ["React", "TypeScript", "Node.js", "API REST", "PostgreSQL", "Git"],
     icon: Briefcase,
   },
   {
@@ -26,9 +31,10 @@ const experiences = [
     description:
       "Développement d'une application complète de gestion de flotte automobile avec interface multi-rôles. Conception et implémentation de fonctionnalités avancées pour la gestion des véhicules, conducteurs et missions.",
     achievements: [
-      "Interface multi-utilisateurs avec rôles différenciés",
-      "Système de suivi GPS intégré",
-      "Rapports automatisés de maintenance",
+      "Conception d’une interface multi-utilisateurs avec rôles et autorisations différenciés",
+      "Développement des modules véhicules, conducteurs, missions et historique de maintenance",
+      "Intégration du suivi GPS et création de rapports automatisés pour le pilotage de la flotte",
+      "Structuration de la base MySQL et validation des principaux parcours métier",
     ],
     technologies: ["PHP", "MySQL", "HTML5", "CSS3", "JavaScript", "Bootstrap"],
     icon: Briefcase,
@@ -43,9 +49,10 @@ const experiences = [
     description:
       "Formation intensive en développement web fullstack avec réalisation de 7 projets professionnels. Apprentissage des meilleures pratiques de développement, participation à des compétitions et déploiement de projets en production.",
     achievements: [
-      "10+ projets professionnels réalisés et déployés",
-      "Participation à des compétitions de développement",
-      "Développement d'applications complexes avec APIs",
+      "Conception et livraison de plus de dix applications web et API en équipe",
+      "Implémentation de CRUD, authentification, validation et architectures MVC",
+      "Participation à des compétitions de développement avec contraintes de temps et de qualité",
+      "Déploiement, présentation et documentation des solutions réalisées",
     ],
     technologies: ["React", "Node.js", "TypeScript", "Prisma", "PostgreSQL", "Tailwind CSS", "PHP", "MySQL", "Zod", "Express"],
     icon: ScrollText,

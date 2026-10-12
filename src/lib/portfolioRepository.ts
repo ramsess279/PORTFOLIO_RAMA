@@ -69,6 +69,9 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   if (saved?.process?.[0]?.verb === "Comprendre" && saved.process[1]?.verb === "Concevoir") saved.process = defaultPortfolioContent.process;
   if (saved?.skillGroups?.[5]?.title === "Design & produit") saved.skillGroups = defaultPortfolioContent.skillGroups;
   if (about.title === "Développeuse par métier." && about.accent === "Créatrice par nature.") about = defaultPortfolioContent.about;
+  if (experiences[0]?.text === "Conception et développement d’applications métier, intégration d’API, modélisation des données, mise en production et maintenance applicative.") {
+    experiences = defaultPortfolioContent.experiences;
+  }
 
   const contact = { ...defaultPortfolioContent.contact, ...saved?.contact };
   if (contact.eyebrow === "09 — Et maintenant ?" && contact.title === "Construisons quelque chose") Object.assign(contact, defaultPortfolioContent.contact);

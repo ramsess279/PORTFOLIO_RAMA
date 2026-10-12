@@ -211,7 +211,7 @@ const Home = () => {
           </div>
           <div className="skills-grid">
             {content.skillGroups.map((group, index) => (
-              <article className="skill-group reveal-blur" key={group.title}><span>0{index + 1}</span><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>
+              <article className="skill-group reveal-blur" key={group.title}><span>0{index + 1}</span><strong className="skill-group__count">{group.items.length} compétences</strong><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>
             ))}
           </div>
         </div>
@@ -248,7 +248,7 @@ const Home = () => {
           <h2>Mon parcours.<br /><em>Un seul document.</em></h2>
           <p>Expériences, compétences, formation et réalisations clés réunies dans une version claire, concise et prête à partager.</p>
         </div>
-        <Link className="public-resume__action reveal-blur" to="/cv"><span>Voir et télécharger</span><strong>Mon CV</strong><Download /></Link>
+        <Link className="public-resume__action reveal-blur" to="/cv"><span>Profil complet</span><strong>Consulter mon CV</strong><small>Version dynamique · PDF</small><i><Download /></i></Link>
       </section>
 
       <section id="contact" className="contact-section" hidden={!content.sections.contact}>

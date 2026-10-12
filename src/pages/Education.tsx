@@ -7,26 +7,31 @@ const formations = [
     titre: "Licence 3 Développement Web/Mobile & Génie Logiciel",
     etablissement: "ESP 221 (École Supérieure Professionnelle 221)",
     periode: "2026 - En cours",
+    description: "Approfondissement du développement web, mobile, de l’architecture logicielle et de la conduite de projets numériques.",
   },
   {
     titre: "Développement FullStack Web/Mobile",
     etablissement: "Orange Digital Center",
     periode: "2025",
+    description: "Programme pratique centré sur la conception et la livraison d’applications full-stack web et mobile.",
   },
   {
     titre: "Licence 2 IDA",
     etablissement: "Université Cheikh Hamidou Kane",
     periode: "2022 - 2025",
+    description: "Formation universitaire en informatique, algorithmique, développement applicatif et systèmes d’information.",
   },
   {
     titre: "DST en Génie Informatique",
     etablissement: "ESP",
     periode: "2022 - 2024",
+    description: "Diplôme supérieur technique orienté génie informatique et développement de solutions logicielles.",
   },
   {
     titre: "Bac S2",
     etablissement: "Complexe Symbiose",
     periode: "2021 - 2022",
+    description: "Baccalauréat scientifique, socle de mon parcours en ingénierie et développement.",
   },
 ];
 
@@ -45,24 +50,16 @@ const Education = () => {
           }
         />
 
-        <div className="border-t border-border">
+        <div className="education-school-list">
           {formations.map((formation, index) => (
             <div
               key={index}
-              className="reveal-blur flex items-center gap-5 py-6 px-4 -mx-4 rounded-xl border-b border-border group transition-all duration-300 hover:bg-muted/50 hover:px-6"
+              className="education-school-card reveal-blur group"
               style={{ transitionDelay: `${index * 0.06}s` }}
             >
-              <GraduationCap
-                className="h-6 w-6 text-primary flex-shrink-0 transition-transform group-hover:scale-110"
-                strokeWidth={1.5}
-              />
-              <div className="flex-1">
-                <h3 className="text-lg leading-snug">{formation.titre}</h3>
-                <p className="text-primary text-sm font-medium mt-0.5">{formation.etablissement}</p>
-              </div>
-              <span className="text-sm text-muted-foreground flex-shrink-0 text-right">
-                {formation.periode}
-              </span>
+              <div className="education-school-card__mark"><GraduationCap strokeWidth={1.5} /><span>{String(index + 1).padStart(2, "0")}</span></div>
+              <div className="education-school-card__body"><p>{formation.etablissement}</p><h3>{formation.titre}</h3><span>{formation.description}</span></div>
+              <time>{formation.periode}</time>
             </div>
           ))}
         </div>
