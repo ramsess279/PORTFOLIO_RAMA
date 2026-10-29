@@ -1,3 +1,4 @@
+import publishedResumeUrl from "@/assets/cv-published.pdf?url";
 import { dmmMissions } from "@/lib/resumeExperienceContent";
 import projectsData from "@/data/projects.json";
 import type { PortfolioContent, PortfolioProject } from "@/types/portfolio";
@@ -82,7 +83,7 @@ export const defaultPortfolioContent: PortfolioContent = {
     about: true,
     contact: true,
   },
-  resume: { url: "", fileName: "", updatedAt: "" },
+  resume: { mode: "imported", url: publishedResumeUrl, fileName: "CV_Ramatoulaye_Gueye.pdf", updatedAt: "2026-10-29" },
   cv: {
     headline: "Développeuse full-stack · Applications web & logiciels métier",
     summary: "Développeuse full-stack basée à Dakar, je conçois des applications web de bout en bout : interfaces React, API, logique métier et bases de données. J’accorde une attention particulière à l’architecture, à la qualité du code et à la mise en production. Je privilégie un code clair, testable et maintenable, de la conception au déploiement.",

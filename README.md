@@ -91,3 +91,12 @@ Sans configuration externe, il fonctionne en mode local avec `localStorage`. Les
 5. Redéployer l’application.
 
 Le contenu public est lisible sans connexion. Seule l’adresse administratrice déclarée dans la migration peut modifier le portfolio et envoyer un PDF dans le bucket `portfolio-assets`.
+
+
+### Déploiement Vercel et CV livré avec le site
+
+`vercel.json` redirige les routes de l’application (`/admin`, `/cv`, `/projects/...`) vers `index.html` ; les fichiers statiques restent servis normalement. Inclure ce fichier dans le commit puis redéployer pour corriger les 404 lors d’un accès direct.
+
+Le CV public livré avec le code est `src/assets/cv-published.pdf`. Il est intégré au build et référencé par les données initiales : les nouveaux visiteurs consultent ainsi le PDF personnalisé, même sans stockage local ni CMS cloud. Un import ou une publication en mode local reste propre au navigateur ; pour une prochaine mise à jour globale sans CMS, télécharger le PDF final, remplacer cet asset puis committer et redéployer. Les fichiers de `output/pdf/` seuls ne changent pas le CV public.
+
+Le thème initial est clair. Les nouveaux choix explicites clair/sombre sont conservés dans `rg-theme-preference-v2`, sans reprendre l’ancien thème sombre enregistré automatiquement.

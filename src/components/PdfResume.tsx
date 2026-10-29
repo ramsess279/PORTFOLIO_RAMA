@@ -4,7 +4,7 @@ import "@/lib/resumeImport";
 
 // Render the published pages directly, without the browser PDF viewer or its
 // annotation controls. The downloadable document remains the original PDF.
-const ReadOnlyPage = ({ pdf, number }: { pdf: PDFDocumentProxy; number: number }) => {
+const ReadOnlyPage = ({ pdf, number, visibleText }: { pdf: PDFDocumentProxy; number: number; visibleText?: string }) => {
   const paper = useRef<HTMLDivElement>(null);
   const [text, setText] = useState("");
   const [error, setError] = useState(false);
@@ -18,7 +18,8 @@ const ReadOnlyPage = ({ pdf, number }: { pdf: PDFDocumentProxy; number: number }
     setError(false);
     void pdf.getPage(number).then((page) => {
       if (disposed) return;
-      void page.getTextContent().then((content) => {
+      if (visibleText !== undefined) setText(visibleText);
+      else void page.getTextContent().then((content) => {
         if (!disposed) setText(content.items.flatMap((item) => "str" in item ? [item.str] : []).join(" "));
       }).catch(() => undefined);
       const draw = async () => {
@@ -46,7 +47,7 @@ const ReadOnlyPage = ({ pdf, number }: { pdf: PDFDocumentProxy; number: number }
     }).catch(() => { if (!disposed) setError(true); });
     let observer: ResizeObserver | undefined;
     return () => { disposed = true; generation++; observer?.disconnect(); render?.cancel(); };
-  }, [pdf, number]);
+  }, [pdf, number, visibleText]);
   return <figure className="pdf-reader-page" aria-label={`Page ${number} sur ${pdf.numPages}`}>
     <div ref={paper} className="pdf-reader-page__paper" />
     <figcaption className="sr-only">Page {number} sur {pdf.numPages}. {text}</figcaption>
@@ -56,16 +57,36 @@ const ReadOnlyPage = ({ pdf, number }: { pdf: PDFDocumentProxy; number: number }
 
 export const PdfResume = ({ url, fileName, showDownload = true }: { url: string; fileName: string; showDownload?: boolean }) => {
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
+  const [visibleTexts, setVisibleTexts] = useState<Record<number, string>>({});
   const [error, setError] = useState(false);
   useEffect(() => {
     let active = true;
     setPdf(null); setError(false);
-    const task = getDocument({ url });
-    void task.promise.then((document) => { if (active) setPdf(document); }).catch(() => { if (active) setError(true); });
-    return () => { active = false; void task.destroy(); };
+    let task: ReturnType<typeof getDocument> | undefined;
+    void (async () => {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("PDF inaccessible");
+      const data = await response.arrayBuffer();
+      const { PDFDocument, PDFName, PDFString, PDFHexString } = await import("pdf-lib");
+      const source = await PDFDocument.load(data);
+      const metadata = source.catalog.get(PDFName.of("RGResumeText"));
+      const texts: Record<number, string> = {};
+      if (metadata instanceof PDFString || metadata instanceof PDFHexString) {
+        try {
+          const pages = JSON.parse(metadata.decodeText()) as Record<string, { text: string }[]>;
+          for (const [number, rows] of Object.entries(pages)) if (Array.isArray(rows)) texts[Number(number)] = rows.map((row) => row.text).join(" ");
+        } catch { /* Ordinary PDFs use their extracted text instead. */ }
+      }
+      if (!active) return;
+      setVisibleTexts(texts);
+      task = getDocument({ data: new Uint8Array(data) });
+      const document = await task.promise;
+      if (active) setPdf(document);
+    })().catch(() => { if (active) setError(true); });
+    return () => { active = false; void task?.destroy(); };
   }, [url]);
   return <div className="pdf-resume pdf-resume--readonly">
     {showDownload && <a className="button-primary" href={url} download={fileName || "cv.pdf"}>Télécharger mon CV (PDF)</a>}
-    {error ? <p role="alert">Impossible de charger le CV. Vous pouvez télécharger le PDF pour le consulter.</p> : pdf ? Array.from({ length: pdf.numPages }, (_, index) => <ReadOnlyPage key={index + 1} pdf={pdf} number={index + 1} />) : <p role="status">Chargement du CV…</p>}
+    {error ? <p role="alert">Impossible de charger le CV. Vous pouvez télécharger le PDF pour le consulter.</p> : pdf ? Array.from({ length: pdf.numPages }, (_, index) => <ReadOnlyPage key={index + 1} pdf={pdf} number={index + 1} visibleText={visibleTexts[index + 1]} />) : <p role="status">Chargement du CV…</p>}
   </div>;
 };

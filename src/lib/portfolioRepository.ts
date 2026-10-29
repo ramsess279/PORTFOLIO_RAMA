@@ -99,7 +99,7 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   contact,
   appearance: { ...defaultPortfolioContent.appearance, ...saved?.appearance },
   sections: { ...defaultPortfolioContent.sections, ...saved?.sections },
-  resume: { ...defaultPortfolioContent.resume, ...saved?.resume },
+  resume: saved?.resume?.url ? { ...defaultPortfolioContent.resume, ...saved.resume } : { ...defaultPortfolioContent.resume },
   cv,
   process: saved?.process || defaultPortfolioContent.process,
   expertise,

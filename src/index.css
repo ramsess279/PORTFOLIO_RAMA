@@ -1768,3 +1768,30 @@ html:not(.dark) .public-resume-band::before { inset: 0; width: auto; transform: 
 .pdf-reader-page canvas { display: block; width: 100%; height: auto; }
 @media (max-width: 600px) { .pdf-reader-page { margin-bottom: .8rem; } .resume-page:has(.pdf-resume--readonly) .resume-toolbar a { font-size: .75rem; } }
 @media print { .resume-page:has(.pdf-resume--readonly) .resume-toolbar { display: none; } .pdf-reader-page { width: 100%; margin: 0; box-shadow: none; break-after: page; } .pdf-reader-page:last-child { break-after: auto; } }
+
+/* Keep the portrait in the first mobile screen, directly after the headline. */
+.brand-mark img { width: 3.6rem; height: 3.1rem; }
+@media (max-width: 760px) {
+  .brand-mark img { width: 4.2rem; height: 3.4rem; }
+  .portfolio-home .hero { gap: .9rem; padding-top: 6.5rem; }
+  .portfolio-home .eyebrow { margin: .25rem 0 0; }
+  .portfolio-home .hero-title { font-size: clamp(2.8rem, 11.8vw, 4.25rem); }
+  .portfolio-home .hero-visual { order: 3; min-height: 310px; margin-top: 0; padding-top: 1rem; transform: none; }
+  .portfolio-home .portrait-stage { width: min(72%, 245px); }
+  .portfolio-home .hero-dialogue { top: .25rem; right: -1rem; width: min(11rem, 75%); padding: .8rem; }
+  .portfolio-home .hero-dialogue p { font-size: .8rem; }
+  .portfolio-home .hero-code-card { width: min(13rem, 76%); bottom: 0; right: -1rem; }
+  .portfolio-home .hero-intro { order: 4; margin-top: 1rem; }
+  .portfolio-home .hero-actions { order: 5; }
+}
+@media (max-width: 760px) {
+  .portfolio-home .hero-title { font-size: clamp(2.45rem, 11.4vw, 3.5rem); }
+  .portfolio-home .hero-code-card { display: none; }
+  .portfolio-home .hero-dialogue { top: auto; bottom: -.5rem; }
+}
+
+@media (max-width: 760px) {
+  .portfolio-home .hero-visual { order: 2; min-height: 365px; }
+  .portfolio-home .hero-title { order: 3; }
+  .portfolio-home .portrait-stage { width: min(86%, 290px); }
+}
