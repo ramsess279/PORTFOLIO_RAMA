@@ -59,6 +59,7 @@ export type PortfolioContent = {
   };
   sections: Record<PortfolioSection, boolean>;
   resume: {
+    mode?: "generated" | "imported";
     url: string;
     fileName: string;
     updatedAt: string;

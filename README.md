@@ -78,7 +78,9 @@ L’espace `/admin` permet de modifier les textes principaux, les couleurs, la v
 
 Au premier accès en mode local, l’application demande de créer un mot de passe d’au moins huit caractères. Son empreinte est conservée localement et la session est fermée lorsque l’onglet du navigateur est quitté. En mode cloud, la connexion est gérée par Supabase Auth.
 
-Le CV possède également un éditeur structuré complet dans `/admin` et une page publique `/cv`. Le bouton de cette page ouvre le dialogue d’impression du navigateur avec une mise en page A4 dédiée, permettant d’enregistrer le document en PDF. Un PDF externe peut aussi être importé en complément.
+Le CV possède un éditeur dans `/admin` et une page publique `/cv`. Le PDF importé conserve son propre design et ses pages. Les boutons « Télécharger le CV (PDF) », en haut et en bas de l’éditeur, téléchargent le dernier PDF enregistré. Les retouches en attente doivent d’abord être appliquées puis enregistrées. Le brouillon PDF et cinq versions précédentes sont conservés dans IndexedDB, indépendamment de la publication. Une copie téléchargée reste recommandée : supprimer les données du navigateur supprime aussi cette sauvegarde.
+
+Pour publier : ouvrir « Curriculum vitæ », vérifier le PDF, puis cliquer sur « Publier les changements » en haut à droite. Le lien « Voir mon CV » utilise alors le document publié ; un téléchargement direct apparaît aussi dans l’accueil. En mode local, cette publication reste propre au navigateur et ne modifie pas le site hébergé. Pour publier aux visiteurs du site en ligne, suivre la configuration Supabase ci-dessous puis publier depuis l’admin du site déployé. Le modèle structuré indépendant reste disponible avec une impression A4.
 
 Sans configuration externe, il fonctionne en mode local avec `localStorage`. Les changements restent sur le navigateur utilisé. Pour une administration privée et persistante en ligne :
 

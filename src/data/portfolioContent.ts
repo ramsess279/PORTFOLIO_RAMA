@@ -1,3 +1,4 @@
+import { dmmMissions } from "@/lib/resumeExperienceContent";
 import projectsData from "@/data/projects.json";
 import type { PortfolioContent, PortfolioProject } from "@/types/portfolio";
 
@@ -36,14 +37,14 @@ export const defaultPortfolioContent: PortfolioContent = {
     { title: "Langages", items: ["JavaScript", "TypeScript", "Java", "PHP", "C", "HTML", "CSS"] },
     { title: "Front & Back", items: ["React", "Node.js", "Express", "Symfony", "Spring Boot", "Tailwind CSS"] },
     { title: "Data & qualité", items: ["PostgreSQL", "MySQL", "Prisma", "Zod", "JUnit", "API REST"] },
-    { title: "Architecture", items: ["POO", "SOLID", "MVC", "Architecture hexagonale", "DDD", "UML", "BPMN"] },
-    { title: "Outils & DevOps", items: ["Git", "GitHub", "Docker", "Maven", "Gradle", "Jira", "Notion"] },
-    { title: "Produit & collaboration", items: ["User stories", "MoSCoW", "Agile / Scrum", "Jira", "Figma", "Documentation"] },
+    { title: "Architecture", items: ["POO", "SOLID", "MVC", "Architecture hexagonale", "DDD", "UML"] },
+    { title: "Outils & DevOps", items: ["Git", "GitHub", "Docker", "Maven", "Gradle"] },
+    { title: "Conception & documentation", items: ["Figma", "Documentation technique"] },
   ],
   experiences: [
-    { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", text: "Analyse des besoins, conception des parcours, développement d’interfaces et de services back-end, intégration d’API, modélisation des données, correction d’anomalies et préparation des mises en production." },
+    { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", text: dmmMissions.join("; ") },
     { period: "2024", title: "Développeuse Full-stack — Gestion de flotte", place: "Multimédia, TGI · Dakar", text: "Conception d’une application multi-rôles ; développement des modules véhicules, conducteurs, missions et maintenance ; intégration du suivi GPS et génération de rapports automatisés." },
-    { period: "2024", title: "Développement web full-stack intensif", place: "Sonatel Academy · Dakar", text: "Conception et livraison de plus de dix applications et API : CRUD, authentification, validation, architectures MVC, travail en équipe, documentation et déploiement." },
+    { period: "2025", title: "Développement web full-stack intensif", place: "Sonatel Academy · Dakar", text: "Conception et livraison de plus de dix applications et API : CRUD, authentification, validation, architectures MVC, travail en équipe, documentation et déploiement." },
   ],
   education: [
     { period: "2026 — En cours", title: "Licence 3 Développement Web/Mobile & Génie Logiciel", place: "ESP 221" },
@@ -84,16 +85,16 @@ export const defaultPortfolioContent: PortfolioContent = {
   resume: { url: "", fileName: "", updatedAt: "" },
   cv: {
     headline: "Développeuse full-stack · Applications web & logiciels métier",
-    summary: "Développeuse full-stack basée à Dakar, je conçois des applications web de bout en bout : interfaces React, API, logique métier et bases de données. J’accorde une attention particulière à l’architecture, à la qualité du code et à la mise en production. Ma maîtrise de l’analyse métier me permet de transformer un besoin complexe en solution technique claire et maintenable.",
+    summary: "Développeuse full-stack basée à Dakar, je conçois des applications web de bout en bout : interfaces React, API, logique métier et bases de données. J’accorde une attention particulière à l’architecture, à la qualité du code et à la mise en production. Je privilégie un code clair, testable et maintenable, de la conception au déploiement.",
     phone: "",
     website: "",
     skills: ["React", "TypeScript", "JavaScript", "Node.js", "Express", "Java", "Spring Boot", "PHP", "Symfony", "API REST", "PostgreSQL", "Docker", "Git"],
-    languages: ["Français — courant", "Anglais — professionnel"],
+    languages: ["Français — bilingue", "Espagnol — intermédiaire", "Anglais — notions"],
     interests: ["Architecture logicielle", "Intelligence artificielle", "Innovation numérique"],
     experiences: [
-      { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", bullets: ["Conception et développement d’applications métier, de l’interface jusqu’aux services back-end.", "Modélisation des données, intégration d’API et préparation des mises en production.", "Traduction des besoins fonctionnels en fonctionnalités techniques maintenables."] },
+      { period: "2025 — Aujourd’hui", title: "Développeuse Full-stack", place: "Digital Media Mobile · Dakar", bullets: dmmMissions },
       { period: "2024", title: "Développeuse Full-stack — Gestion de flotte", place: "Multimédia, TGI · Dakar", bullets: ["Développement d’une application web multi-rôles pour la gestion d’une flotte.", "Implémentation des modules véhicules, conducteurs, missions et maintenance."] },
-      { period: "2024", title: "Développeuse Full-stack en formation intensive", place: "Sonatel Academy · Dakar", bullets: ["Réalisation de plus de dix applications web et API en onze mois de pratique intensive.", "Mise en œuvre de CRUD, authentification, architectures MVC et déploiements applicatifs."] },
+      { period: "2025", title: "Développeuse Full-stack en formation intensive", place: "Sonatel Academy · Dakar", bullets: ["Réalisation de plus de dix applications web et API en onze mois de pratique intensive.", "Mise en œuvre de CRUD, authentification, architectures MVC et déploiements applicatifs."] },
     ],
     education: [
       { period: "2026 — En cours", title: "Licence 3 Développement Web/Mobile & Génie Logiciel", place: "ESP 221" },

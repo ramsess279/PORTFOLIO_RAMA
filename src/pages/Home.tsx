@@ -107,6 +107,7 @@ const Home = () => {
             <a className="button-primary" href="#projets">Voir mes projets techniques <ArrowDown /></a>
             <a className="text-link" href="#competences">Explorer ma stack <ArrowRight /></a>
             <Link className="text-link resume-link" to="/cv">Voir mon CV <Download /></Link>
+            {content.resume.mode === "imported" && content.resume.url && <a className="text-link resume-link" href={content.resume.url} download={content.resume.fileName || "CV_Ramatoulaye_Gueye.pdf"}>Télécharger mon CV <Download /></a>}
           </div>
         </div>
 
@@ -241,7 +242,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="public-resume section-shell" aria-label="Curriculum vitæ">
+      <section className="public-resume-band" aria-label="Curriculum vitæ"><div className="public-resume section-shell">
         <div className="public-resume__mark" aria-hidden="true">CV</div>
         <div className="public-resume__copy reveal-blur">
           <p className="section-index">Profil — En un coup d’œil</p>
@@ -249,7 +250,7 @@ const Home = () => {
           <p>Expériences, compétences, formation et réalisations clés réunies dans une version claire, concise et prête à partager.</p>
         </div>
         <Link className="public-resume__action reveal-blur" to="/cv"><span>Profil complet</span><strong>Consulter mon CV</strong><small>Version dynamique · PDF</small><i><Download /></i></Link>
-      </section>
+      </div></section>
 
       <section id="contact" className="contact-section" hidden={!content.sections.contact}>
         <div className="contact-glow" aria-hidden="true" />

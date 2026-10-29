@@ -1,3 +1,4 @@
+import { dmmMissions, previousDmmDescription } from "@/lib/resumeExperienceContent";
 import { defaultPortfolioContent } from "@/data/portfolioContent";
 import type { PortfolioContent } from "@/types/portfolio";
 
@@ -30,7 +31,7 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   };
   let manifesto = saved?.manifesto || defaultPortfolioContent.manifesto;
   let expertise = saved?.expertise || defaultPortfolioContent.expertise;
-  let experiences = saved?.experiences || defaultPortfolioContent.experiences;
+  let experiences = (saved?.experiences || defaultPortfolioContent.experiences).map((experience) => /digital media mobile/i.test(experience.place) && experience.text === previousDmmDescription ? { ...experience, text: dmmMissions.join("; ") } : experience);
   let about = { ...defaultPortfolioContent.about, ...saved?.about };
   const projects = (saved?.projects || defaultPortfolioContent.projects).map((project) => {
     const projectDefaults = defaultPortfolioContent.projects.find((item) => item.id === project.id);
@@ -73,6 +74,18 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
     experiences = defaultPortfolioContent.experiences;
   }
 
+  // Corrections confirmed by the owner against the imported CV.
+  experiences = experiences.map((item) => /sonatel academy/i.test(item.place) && item.period === "2024" ? { ...item, period: "2025" } : item);
+  cv.experiences = cv.experiences.map((item) => /sonatel academy/i.test(item.place) && item.period === "2024" ? { ...item, period: "2025" } : item);
+  if (cv.languages.length === 2 && cv.languages[0] === "Français — courant" && /^Anglais — (professionnel|notions)$/.test(cv.languages[1])) cv.languages = [...defaultPortfolioContent.cv.languages];
+  cv.languages = cv.languages.map((language) => /^anglais\s*[—–-]\s*professionnel$/i.test(language.trim()) ? "Anglais — notions" : language);
+
+  const developerSkillGroups = (saved?.skillGroups || defaultPortfolioContent.skillGroups).map((group) => ({
+    title: /produit.*collaboration|design.*produit/i.test(group.title) ? "Conception & documentation" : group.title,
+    items: group.items.filter((item) => !/^(jira|notion|moscow|user stories|agile\s*\/\s*scrum|bpmn|business analyst|business analysis)$/i.test(item.trim())),
+  })).filter((group) => group.items.length);
+  cv.summary = cv.summary.replace("Ma maîtrise de l’analyse métier me permet de transformer un besoin complexe en solution technique claire et maintenable.", "Je privilégie un code clair, testable et maintenable, de la conception au déploiement.");
+
   const contact = { ...defaultPortfolioContent.contact, ...saved?.contact };
   if (contact.eyebrow === "09 — Et maintenant ?" && contact.title === "Construisons quelque chose") Object.assign(contact, defaultPortfolioContent.contact);
 
@@ -90,7 +103,7 @@ const normalizeContent = (saved?: Partial<PortfolioContent> | null): PortfolioCo
   cv,
   process: saved?.process || defaultPortfolioContent.process,
   expertise,
-  skillGroups: saved?.skillGroups || defaultPortfolioContent.skillGroups,
+  skillGroups: developerSkillGroups,
   experiences,
   education: saved?.education || defaultPortfolioContent.education,
   about,

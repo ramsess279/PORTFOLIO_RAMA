@@ -1,3 +1,10 @@
+import recoverySource from "@/assets/cv-original-recovery.pdf?url";
+import { insertResumeExperience } from "@/lib/insertResumeExperience";
+import { formatPortfolioExperience } from "@/lib/resumeExperienceContent";
+import { loadResumeDraft, saveResumeDraft } from "@/lib/resumeDraftStorage";
+import { ResumePdfEditor } from "@/components/ResumePdfEditor";
+import { ResumePreview } from "@/components/ResumePreview";
+import { PdfResume } from "@/components/PdfResume";
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import { ArrowDown, ArrowLeft, ArrowUp, Check, ChevronLeft, ChevronRight, Download, Eye, EyeOff, FileText, LayoutDashboard, LockKeyhole, LogOut, Palette, PanelsTopLeft, Plus, Save, Settings2, Trash2, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -38,7 +45,36 @@ const Admin = () => {
   const [resumeImport, setResumeImport] = useState<ResumeImport | null>(null);
   const [importingResume, setImportingResume] = useState(false);
 
-  useEffect(() => { setDraft(content); }, [content]);
+  const [draftReady, setDraftReady] = useState(false);
+  const [resumeStorageStatus, setResumeStorageStatus] = useState("");
+  useEffect(() => {
+    if (loading) return;
+    let cancelled = false;
+    setDraftReady(false);
+    void loadResumeDraft().then((resume) => {
+      if (!cancelled) setDraft({ ...content, resume: resume ?? content.resume });
+    }).catch(() => {
+      if (!cancelled) {
+        setDraft(content);
+        setResumeStorageStatus("La sauvegarde locale est inaccessible. Téléchargez une copie de votre CV.");
+      }
+    }).finally(() => { if (!cancelled) setDraftReady(true); });
+    return () => { cancelled = true; };
+  }, [content, loading]);
+  useEffect(() => {
+    if (!draftReady || loading || !draft.resume.url) return;
+    let cancelled = false;
+    setResumeStorageStatus("Enregistrement du CV sur cet appareil…");
+    void saveResumeDraft(draft.resume).then(() => {
+      if (!cancelled) setResumeStorageStatus("CV sauvegardé sur cet appareil, même après fermeture du navigateur. Pensez à télécharger une copie.");
+    }).catch(() => {
+      if (!cancelled) {
+        setResumeStorageStatus("Échec de la sauvegarde du CV. Téléchargez une copie avant de fermer.");
+        toast.error("La sauvegarde du CV a échoué. Téléchargez votre PDF pour le conserver.");
+      }
+    });
+    return () => { cancelled = true; };
+  }, [draft.resume, draftReady, loading]);
   useEffect(() => { void getAdminAuthState().then((state) => { setAuthenticated(state === "authenticated"); if (state !== "authenticated") setAuthMode(state); }).finally(() => setCheckingAuth(false)); }, []);
 
   const visibleCount = useMemo(() => Object.values(draft.sections).filter(Boolean).length, [draft.sections]);
@@ -76,9 +112,26 @@ const Admin = () => {
     if (!file) return;
     if (file.type !== "application/pdf") return toast.error("Choisissez un fichier PDF.");
     setImportingResume(true);
-    try { setResumeImport(await importResumePdf(file, draft)); toast.success("CV analysé. Vérifiez les données détectées avant de les appliquer."); }
+    try { const url = await uploadResume(file); const resume: PortfolioContent["resume"] = { url, fileName: file.name, updatedAt: new Date().toISOString(), mode: "imported" }; await saveResumeDraft(resume); setDraft((current) => ({ ...current, resume })); toast.success("CV importé avec sa mise en page et toutes ses pages. Publiez pour le rendre public."); }
     catch (error) { toast.error(error instanceof Error ? error.message : "Import impossible."); }
     finally { setImportingResume(false); event.target.value = ""; }
+  };
+
+  const recoverResume = async () => {
+    setImportingResume(true);
+    try {
+      const experience = draft.experiences.find((item) => /digital media mobile/i.test(item.place));
+      if (!experience) throw new Error("L’expérience DMM est introuvable dans le portfolio.");
+      const response = await fetch(recoverySource);
+      if (!response.ok) throw new Error("La copie originale du CV est inaccessible.");
+      const bytes = await insertResumeExperience(await response.arrayBuffer(), formatPortfolioExperience(experience), draft);
+      const url = await uploadResume(new File([new Uint8Array(bytes.bytes)], "CV_RAMA-restaure.pdf", { type: "application/pdf" }));
+      const resume = { url, fileName: "CV_RAMA-restaure.pdf", updatedAt: new Date().toISOString(), mode: "imported" as const };
+      await saveResumeDraft(resume);
+      setDraft((current) => ({ ...current, resume }));
+      toast.success("CV reconstruit et sauvegardé sur cet appareil.");
+    } catch (error) { toast.error(error instanceof Error ? error.message : "Restauration impossible."); }
+    finally { setImportingResume(false); }
   };
 
   const applyResumeImport = async () => {
@@ -92,7 +145,7 @@ const Admin = () => {
     finally { setImportingResume(false); }
   };
 
-  if (checkingAuth || loading) return <div className="admin-loading"><span />Chargement du studio…</div>;
+  if (checkingAuth || loading || !draftReady) return <div className="admin-loading"><span />Chargement du studio…</div>;
 
   if (!authenticated) return (
     <div className="admin-login">
@@ -119,13 +172,15 @@ const Admin = () => {
         <header className="admin-topbar"><div><p className={isDirty ? "has-unsaved" : ""}>{isDirty ? "Modifications non publiées" : cmsMode === "cloud" ? "Synchronisation en ligne" : "Portfolio à jour"}</p><h1>{navItems.find((item) => item.id === tab)?.label}</h1></div><div><Link to="/" target="_blank"><Eye /> Aperçu</Link><button className={isDirty ? "needs-save" : ""} onClick={save} disabled={saving}><Save />{saving ? "Publication…" : isDirty ? "Publier les changements" : "Publié"}</button></div></header>
 
         <div className="admin-canvas">
-          {cmsMode === "local" && <div className="admin-notice"><Settings2 /><div><strong>Le studio fonctionne en mode local.</strong><p>Vos changements sont visibles immédiatement sur cet appareil. Ajoutez les variables Supabase pour publier depuis n’importe où avec une connexion sécurisée.</p></div></div>}
+          {cmsMode === "local" && <div className="admin-notice"><Settings2 /><div><strong>Le studio fonctionne en mode local.</strong><p>Le PDF du CV est sauvegardé automatiquement dans ce navigateur après application des retouches. Publiez les changements pour mettre à jour le portfolio visible. Téléchargez aussi une copie de votre CV.</p></div></div>}
 
           {tab === "dashboard" && <Dashboard draft={draft} visibleCount={visibleCount} projectCount={publicProjects.length} setTab={setTab} />}
           {tab === "content" && <ContentEditor draft={draft} setDraft={setDraft} />}
           {tab === "appearance" && <AppearanceEditor draft={draft} setDraft={setDraft} />}
           {tab === "sections" && <div className="admin-panel"><PanelTitle title="Organisation des sections" text="Activez ou masquez une partie du portfolio sans supprimer son contenu." /> <div className="admin-section-list">{(Object.keys(draft.sections) as PortfolioSection[]).map((section) => <label key={section}><span><strong>{sectionLabels[section]}</strong><small>{draft.sections[section] ? "Visible sur le site" : "Masquée"}</small></span><input type="checkbox" checked={draft.sections[section]} onChange={(event) => update("sections", { ...draft.sections, [section]: event.target.checked })} /><i /></label>)}</div></div>}
           {tab === "projects" && <ProjectsEditor projects={draft.projects} updateProject={updateProject} />}
+          {tab === "resume" && !draft.resume.url && <div className="admin-notice"><FileText /><div><strong>Une copie originale de votre CV a été retrouvée.</strong><p>Reconstruisez le PDF avec DMM, les compétences et les formations du portfolio. Les anciennes retouches manuelles absentes de cette copie ne peuvent pas être récupérées automatiquement.</p><button type="button" className="admin-primary" disabled={importingResume} onClick={() => void recoverResume()}>{importingResume ? "Reconstruction en cours…" : "Restaurer mon CV et ses mises à jour"}</button></div></div>}
+          {tab === "resume" && resumeStorageStatus && <p role="status">{resumeStorageStatus}</p>}
           {tab === "resume" && <ResumeEditor draft={draft} setDraft={setDraft} onUpload={handleResume} resumeImport={resumeImport} importing={importingResume} onApplyImport={applyResumeImport} onCancelImport={() => setResumeImport(null)} />}
         </div>
       </section>
@@ -185,9 +240,19 @@ const ResumeEditor = ({ draft, setDraft, onUpload, resumeImport, importing, onAp
   const toggleCvProject = (id: number) => setCv("selectedProjectIds", draft.cv.selectedProjectIds.includes(id) ? draft.cv.selectedProjectIds.filter((projectId) => projectId !== id) : [...draft.cv.selectedProjectIds, id]);
   const updateProjectSummary = (id: number, cvSummary: string) => setDraft((current) => ({ ...current, projects: current.projects.map((project) => project.id === id ? { ...project, cvSummary } : project) }));
 
-  return <div className="admin-panel"><PanelTitle title="CV Builder" text="Importez votre CV existant, contrôlez les données reconnues, puis corrigez chaque étape avant publication." />
-    <section className="cv-import-card"><div><Upload /><span><strong>Partir de mon CV actuel</strong><small>Le PDF est lu localement. Rien n’écrase votre contenu avant votre validation.</small></span></div><label>{importing ? "Analyse en cours…" : "Choisir un PDF"}<input type="file" accept="application/pdf" disabled={importing} onChange={onUpload} /></label></section>
+  if (draft.resume.mode === "imported" && draft.resume.url) return <div className="admin-panel cv-imported-workspace">
+    <PanelTitle title="Mon CV importé" text="Retouchez votre document, vérifiez le résultat puis publiez-le." />
+    <div className="cv-document-bar"><div><FileText /><span><strong>{draft.resume.fileName}</strong><small>Document actif · Votre design et toutes vos pages</small></span></div><a className="cv-download-button" href={draft.resume.url} download={draft.resume.fileName || "CV_Ramatoulaye_Gueye.pdf"}><Download /> Télécharger le CV (PDF)</a><label className="cv-replace"><Upload /> {importing ? "Importation…" : "Remplacer le PDF"}<input type="file" accept="application/pdf" disabled={importing} onChange={onUpload} /></label></div>
+    <ol className="cv-workflow"><li><b>1</b><span><strong>Retoucher</strong>Choisissez une page et placez votre texte.</span></li><li><b>2</b><span><strong>Appliquer</strong>Enregistrez les retouches dans le PDF.</span></li><li><b>3</b><span><strong>Publier</strong>Utilisez « Publier les changements » en haut.</span></li></ol>
+    <div className="cv-publish-help"><strong>Comment publier ce CV ?</strong><p>1. Enregistrez les retouches en attente dans l’éditeur. 2. Téléchargez ou ouvrez le PDF pour le vérifier. 3. Cliquez sur « Publier les changements » en haut à droite. Le lien « Voir mon CV » du portfolio utilisera alors ce document.</p><p>{cmsMode === "local" ? "Vous êtes en mode local : la publication concerne ce navigateur uniquement. Pour vos visiteurs en ligne, il faut connecter le CMS cloud (Supabase) et déployer le site avec cette configuration." : "Vous êtes connecté au CMS cloud : après publication, le PDF sera disponible aux visiteurs du site connecté au même CMS."}</p></div>
+    <ResumePdfEditor key={draft.resume.url} content={draft} resume={draft.resume} onSave={(resume) => setDraft((current) => ({ ...current, resume }))} />
+    <div className="cv-document-footer"><a className="cv-download-button" href={draft.resume.url} download={draft.resume.fileName || "CV_Ramatoulaye_Gueye.pdf"}><Download /> Télécharger le CV (PDF)</a><Link to="/cv?preview=1" onClick={() => sessionStorage.setItem("rg-cv-preview", JSON.stringify(draft))} target="_blank"><Eye /> Vérifier / télécharger le PDF enregistré</Link><details><summary>Utiliser le modèle du portfolio</summary><p>Ce modèle possède ses propres champs. Votre PDF importé reste conservé.</p><button type="button" onClick={() => setDraft((current) => ({ ...current, resume: { ...current.resume, mode: "generated" } }))}>Passer au modèle du portfolio</button></details></div>
+  </div>;
+
+  return <div className="admin-panel"><PanelTitle title="CV Builder" text="Conservez le design de votre PDF ou créez un CV avec le modèle du portfolio." />
+    <section className="cv-import-card"><div><Upload /><span><strong>Partir de mon CV actuel</strong><small>Votre mise en page, vos polices et toutes vos pages sont conservées. Les champs du modèle restent indépendants.</small></span></div><label>{importing ? "Analyse en cours…" : "Choisir un PDF"}<input type="file" accept="application/pdf" disabled={importing} onChange={onUpload} /></label></section>
     {resumeImport && <section className="cv-import-review"><header><div><strong>{resumeImport.file.name}</strong><span>{resumeImport.detected.length ? `Détecté : ${resumeImport.detected.join(" · ")}` : "Aucune donnée structurée reconnue automatiquement"}</span></div></header><p>{resumeImport.text.slice(0, 420)}{resumeImport.text.length > 420 ? "…" : ""}</p><small>Après application, parcourez les 7 étapes : l’extraction aide à préremplir le CV mais vous gardez toujours le contrôle.</small><div><button type="button" onClick={onCancelImport}>Annuler</button><button type="button" onClick={onApplyImport} disabled={importing}><Check /> Appliquer et vérifier étape par étape</button></div></section>}
+    <div className="cv-mode-switch"><button type="button" onClick={() => setDraft((current) => ({ ...current, resume: { ...current.resume, mode: "generated" } }))}>Modèle du portfolio</button><button type="button" disabled={!draft.resume.url} onClick={() => setDraft((current) => ({ ...current, resume: { ...current.resume, mode: "imported" } }))}>Mon design importé</button><p>{draft.resume.mode === "imported" ? "Votre PDF est utilisé tel quel. Les champs ci-dessous concernent uniquement le modèle du portfolio." : "Le modèle utilise les informations des étapes ci-dessous."}</p></div>
     <nav className="cv-steps" aria-label="Étapes de création du CV">{steps.map((label, index) => <button type="button" className={index === step ? "is-active" : index < step ? "is-done" : ""} onClick={() => setStep(index)} key={label}><span>{index < step ? <Check /> : index + 1}</span><strong>{label}</strong></button>)}</nav>
     <div className="cv-builder">
       <div className="cv-builder__form">
@@ -197,14 +262,14 @@ const ResumeEditor = ({ draft, setDraft, onUpload, resumeImport, importing, onAp
         {step === 3 && <fieldset><legend>04 — Formations</legend><p className="cv-step-intro">Ajoutez vos diplômes, certifications et programmes importants dans l’ordre souhaité.</p><div className="cv-editor-list">{draft.cv.education.map((item, index) => <div key={index}><header><strong>Formation {String(index + 1).padStart(2, "0")}</strong><div><button type="button" aria-label="Remonter cette formation" disabled={index === 0} onClick={() => moveEducation(index, -1)}><ArrowUp /></button><button type="button" aria-label="Descendre cette formation" disabled={index === draft.cv.education.length - 1} onClick={() => moveEducation(index, 1)}><ArrowDown /></button><button type="button" aria-label="Supprimer cette formation" onClick={() => setCv("education", draft.cv.education.filter((_, itemIndex) => itemIndex !== index))}><Trash2 /></button></div></header><div className="admin-inline"><label>Période<input value={item.period} onChange={(event) => updateCvEducation(index, { period: event.target.value })} /></label><label>Établissement<input value={item.place} onChange={(event) => updateCvEducation(index, { place: event.target.value })} /></label></div><label>Diplôme / formation<input value={item.title} onChange={(event) => updateCvEducation(index, { title: event.target.value })} /></label></div>)}</div><button type="button" className="cv-add" onClick={() => setCv("education", [...draft.cv.education, { period: "", title: "Nouvelle formation", place: "" }])}><Plus /> Ajouter une formation</button></fieldset>}
         {step === 4 && <fieldset><legend>05 — Projets techniques</legend><p className="cv-step-intro">Sélectionnez jusqu’à trois projets qui prouvent le mieux votre niveau de développement. Leur résumé doit expliquer ce que vous avez techniquement construit.</p><div className="cv-project-picker">{draft.projects.filter((project) => !project.commented).map((project) => { const selected = draft.cv.selectedProjectIds.includes(project.id); return <div className={selected ? "is-selected" : ""} key={project.id}><label className="cv-project-picker__toggle"><input type="checkbox" checked={selected} disabled={!selected && draft.cv.selectedProjectIds.length >= 3} onChange={() => toggleCvProject(project.id)} /><span><strong>{project.title}</strong><small>{project.technologies.slice(0, 5).join(" · ")}</small></span></label>{selected && <label>Résumé pour le CV<textarea rows={3} value={project.cvSummary || ""} placeholder="Expliquez en une phrase ce que vous avez techniquement construit." onChange={(event) => updateProjectSummary(project.id, event.target.value)} /></label>}</div>; })}</div></fieldset>}
         {step === 5 && <fieldset><legend>06 — Stack technique et langues</legend><p className="cv-step-intro">Placez en premier les technologies que vous maîtrisez réellement. Elles seront regroupées en Front-end, Back-end et Data & outils dans le CV.</p><label>Stack technique, séparée par des virgules<textarea rows={6} value={draft.cv.skills.join(", ")} onChange={(event) => setCv("skills", event.target.value.split(",").map((value) => value.trim()).filter(Boolean))} /></label><label>Langues<textarea rows={4} value={draft.cv.languages.join("\n")} onChange={(event) => setCv("languages", event.target.value.split("\n"))} /></label><label>Centres d’intérêt<textarea rows={4} value={draft.cv.interests.join("\n")} onChange={(event) => setCv("interests", event.target.value.split("\n"))} /></label></fieldset>}
-        {step === 6 && <fieldset><legend>07 — Vérification et export</legend><div className="cv-ready-card"><Check /><div><strong>Votre CV de développeuse est prêt.</strong><p>Cliquez d’abord sur “Publier les changements” en haut de la page. Ouvrez ensuite le CV en grand pour l’imprimer ou l’enregistrer en PDF.</p><Link to="/cv" target="_blank">Ouvrir et télécharger <Download /></Link></div></div><div className="admin-resume__compact"><FileText /><div><strong>{draft.resume.fileName || "Aucun ancien PDF conservé"}</strong><small>Optionnel : gardez ici votre ancien PDF comme référence. Il ne remplace pas le CV dynamique modifiable.</small></div><label><Upload /> Conserver un PDF<input type="file" accept="application/pdf" onChange={onUpload} /></label></div></fieldset>}
+        {step === 6 && <fieldset><legend>07 — Vérification et export</legend><div className="cv-ready-card"><Check /><div><strong>Votre CV de développeuse est prêt.</strong><p>Ouvrez votre brouillon pour vérifier et télécharger le CV. Publiez ensuite les changements pour mettre à jour le CV public.</p><Link to="/cv?preview=1" onClick={() => sessionStorage.setItem("rg-cv-preview", JSON.stringify(draft))} target="_blank">Ouvrir et télécharger <Download /></Link></div></div><div className="admin-resume__compact"><FileText /><div><strong>{draft.resume.fileName || "Aucun ancien PDF conservé"}</strong><small>Importez un PDF pour utiliser directement votre propre design.</small></div><label><Upload /> Importer mon design<input type="file" accept="application/pdf" onChange={onUpload} /></label></div></fieldset>}
         <footer className="cv-step-actions"><button type="button" disabled={step === 0} onClick={() => setStep((current) => Math.max(0, current - 1))}><ChevronLeft /> Précédent</button><span>Étape {step + 1} sur {steps.length}</span><button type="button" disabled={step === steps.length - 1} onClick={() => setStep((current) => Math.min(steps.length - 1, current + 1))}>Suivant <ChevronRight /></button></footer>
       </div>
-      <aside className="cv-builder__preview"><div className="cv-preview-bar"><span>Aperçu en direct</span><Link to="/cv" target="_blank">Ouvrir en grand <Eye /></Link></div><CvPreview content={draft} /></aside>
+      <aside className="cv-builder__preview"><div className="cv-preview-bar"><span>Aperçu en direct</span><Link to="/cv?preview=1" onClick={() => sessionStorage.setItem("rg-cv-preview", JSON.stringify(draft))} target="_blank">Ouvrir en grand <Eye /></Link></div>{draft.resume.mode === "imported" && draft.resume.url ? <PdfResume url={draft.resume.url} fileName={draft.resume.fileName} /> : <ResumePreview content={draft} />}</aside>
     </div>
   </div>;
 };
 
-const CvPreview = ({ content }: { content: PortfolioContent }) => <div className="cv-mini"><header><p>RG</p><div><h2>{content.identity.name}</h2><strong>{content.cv.headline}</strong><span>{content.identity.email} · {content.cv.phone}</span></div></header><section><h3>Profil développeuse</h3><p>{content.cv.summary}</p></section><section><h3>Expériences</h3>{content.cv.experiences.slice(0, 3).map((item, index) => <article key={index}><time>{item.period}</time><div><strong>{item.title}</strong><small>{item.place}</small><p>{item.bullets[0]}</p></div></article>)}</section><section><h3>Projets techniques</h3>{content.cv.selectedProjectIds.slice(0, 2).map((id) => { const project = content.projects.find((item) => item.id === id); return project ? <article key={id}><time>{project.duration}</time><div><strong>{project.title}</strong><small>{project.technologies.slice(0, 4).join(" · ")}</small></div></article> : null; })}</section><section><h3>Stack technique</h3><div className="cv-mini__tags">{content.cv.skills.slice(0, 11).map((skill) => <span key={skill}>{skill}</span>)}</div></section></div>;
+
 
 export default Admin;
