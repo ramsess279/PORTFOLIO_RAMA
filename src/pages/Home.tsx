@@ -95,7 +95,6 @@ const Home = () => {
         <img className="hero-watermark" src={theme === "dark" ? "/branding/logo-a-lavishly-yours-dark.png" : "/branding/logo-a-lavishly-yours-light.png"} alt="" aria-hidden="true" />
 
         <div className="hero-copy">
-          <div className="availability hero-reveal"><span className="availability__dot" /> {content.hero.availability}</div>
           <p className="eyebrow hero-reveal">{content.hero.eyebrow}</p>
           <h1 id="hero-title" className="hero-title">
             <span className="hero-line"><span>{content.hero.titleLine1}</span></span>
@@ -103,11 +102,10 @@ const Home = () => {
             <span className="hero-line hero-line--accent"><span>{content.hero.titleAccent}</span></span>
           </h1>
           <p className="hero-intro hero-reveal">{content.hero.introduction}</p>
-          <div className="hero-actions hero-reveal">
+          <div className="hero-actions hero-reveal" role="group" aria-label="Découvrir mon travail et mon CV">
             <a className="button-primary" href="#projets">Voir mes projets techniques <ArrowDown /></a>
             <a className="text-link" href="#competences">Explorer ma stack <ArrowRight /></a>
-            <Link className="text-link resume-link" to="/cv">Voir mon CV <Download /></Link>
-            {content.resume.mode === "imported" && content.resume.url && <a className="text-link resume-link" href={content.resume.url} download={content.resume.fileName || "CV_Ramatoulaye_Gueye.pdf"}>Télécharger mon CV <Download /></a>}
+            <a className="text-link hero-cv-link" href="#consulter-cv">Voir le CV <ArrowDown /></a>
           </div>
         </div>
 
@@ -249,7 +247,7 @@ const Home = () => {
           <h2>Mon parcours.<br /><em>Un seul document.</em></h2>
           <p>Expériences, compétences, formation et réalisations clés réunies dans une version claire, concise et prête à partager.</p>
         </div>
-        <Link className="public-resume__action reveal-blur" to="/cv"><span>Profil complet</span><strong>Consulter mon CV</strong><small>Version dynamique · PDF</small><i><Download /></i></Link>
+        <Link id="consulter-cv" className="public-resume__action reveal-blur" to="/cv"><span>Profil complet</span><strong>Consulter mon CV</strong><small>Aperçu du CV · PDF</small><i><ArrowUpRight /></i></Link>
       </div></section>
 
       <section id="contact" className="contact-section" hidden={!content.sections.contact}>

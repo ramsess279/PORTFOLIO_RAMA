@@ -1769,29 +1769,32 @@ html:not(.dark) .public-resume-band::before { inset: 0; width: auto; transform: 
 @media (max-width: 600px) { .pdf-reader-page { margin-bottom: .8rem; } .resume-page:has(.pdf-resume--readonly) .resume-toolbar a { font-size: .75rem; } }
 @media print { .resume-page:has(.pdf-resume--readonly) .resume-toolbar { display: none; } .pdf-reader-page { width: 100%; margin: 0; box-shadow: none; break-after: page; } .pdf-reader-page:last-child { break-after: auto; } }
 
-/* Keep the portrait in the first mobile screen, directly after the headline. */
+/* Mobile introduction: portrait first, dialogue above and technical card below. */
 .brand-mark img { width: 3.6rem; height: 3.1rem; }
+.portfolio-home .eyebrow { font-weight: 750; }
 @media (max-width: 760px) {
   .brand-mark img { width: 4.2rem; height: 3.4rem; }
-  .portfolio-home .hero { gap: .9rem; padding-top: 6.5rem; }
-  .portfolio-home .eyebrow { margin: .25rem 0 0; }
-  .portfolio-home .hero-title { font-size: clamp(2.8rem, 11.8vw, 4.25rem); }
-  .portfolio-home .hero-visual { order: 3; min-height: 310px; margin-top: 0; padding-top: 1rem; transform: none; }
-  .portfolio-home .portrait-stage { width: min(72%, 245px); }
-  .portfolio-home .hero-dialogue { top: .25rem; right: -1rem; width: min(11rem, 75%); padding: .8rem; }
+  .portfolio-home .hero { gap: 1rem; padding: 6rem 1rem 3.5rem; }
+  .portfolio-home .eyebrow { margin: 0; font-size: .73rem; line-height: 1.6; letter-spacing: .14em; color: hsl(var(--primary)); }
+  .portfolio-home .hero-watermark { top: 15rem; left: 50%; width: min(100%, 420px); max-width: 100%; transform: translateX(-50%); animation: none; opacity: .22; filter: saturate(1.15); }
+  .portfolio-home .hero-visual { order: 2; min-height: 0; margin-top: 0; padding: 1rem 0 0; transform: none; }
+  .portfolio-home .portrait-stage { width: min(88%, 300px); }
+  .portfolio-home .hero-dialogue { top: -.75rem; bottom: auto; right: -1rem; width: min(10.5rem, 65%); padding: .8rem; background: hsl(var(--card) / .96); border-color: hsl(var(--primary) / .23); box-shadow: 0 12px 28px hsl(var(--primary) / .13); }
   .portfolio-home .hero-dialogue p { font-size: .8rem; }
-  .portfolio-home .hero-code-card { width: min(13rem, 76%); bottom: 0; right: -1rem; }
-  .portfolio-home .hero-intro { order: 4; margin-top: 1rem; }
-  .portfolio-home .hero-actions { order: 5; }
-}
-@media (max-width: 760px) {
-  .portfolio-home .hero-title { font-size: clamp(2.45rem, 11.4vw, 3.5rem); }
-  .portfolio-home .hero-code-card { display: none; }
-  .portfolio-home .hero-dialogue { top: auto; bottom: -.5rem; }
+  .portfolio-home .hero-code-card { display: block; position: relative; right: auto; bottom: auto; width: 100%; margin: -.4rem 0 0; transform: none; border-radius: 1rem; }
+  .portfolio-home .hero-system-map__flow { padding: .8rem .85rem .55rem; }
+  .portfolio-home .hero-system-map__flow span { min-height: 3rem; font-size: .6rem; }
+  .portfolio-home .hero-system-map > p { font-size: .66rem; }
+  .portfolio-home .hero-code-card__status { flex-wrap: wrap; font-size: .56rem; }
+  .portfolio-home .hero-title { order: 3; margin-top: .75rem; font-size: clamp(2.45rem, 11.4vw, 3.5rem); }
+  .portfolio-home .hero-intro { order: 4; margin-top: .35rem; }
+  .portfolio-home .hero-actions { order: 5; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; align-items: stretch; width: 100%; }
+  .portfolio-home .hero-actions .button-primary { grid-column: 1 / -1; min-height: 3.25rem; justify-content: center; padding-inline: .8rem; }
+  .portfolio-home .hero-actions .text-link { min-width: 0; min-height: 3.1rem; justify-content: center; gap: .5rem; padding: .8rem .6rem; border: 1px solid hsl(var(--primary) / .22); border-radius: .8rem; background: hsl(var(--card)); color: hsl(var(--foreground)); font-size: .78rem; text-align: center; box-shadow: 0 5px 15px hsl(var(--primary) / .05); }
+  .portfolio-home .hero-actions .hero-cv-link { grid-column: 1 / -1; background: hsl(var(--primary) / .08); border-color: hsl(var(--primary) / .4); font-weight: 700; }
 }
 
+#consulter-cv { scroll-margin-top: 7rem; }
 @media (max-width: 760px) {
-  .portfolio-home .hero-visual { order: 2; min-height: 365px; }
-  .portfolio-home .hero-title { order: 3; }
-  .portfolio-home .portrait-stage { width: min(86%, 290px); }
+  .portfolio-home .hero-actions { grid-template-columns: minmax(0, 1fr); }
 }
